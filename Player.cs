@@ -2,7 +2,7 @@
 {
     private int _balance;
 
-    public Player(int balance = 0, string name, int maxHealth, int damage) 
+    public Player(string name, int maxHealth, int damage, int balance = 0) 
         : base(name, maxHealth, damage)
     {
         _balance = balance;
