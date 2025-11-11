@@ -19,7 +19,7 @@
 
         while (true)
         {
-            if (_player.CurrentHealth <= 0)
+            if (_player.IsDead)
             {
                 ShowMessage("You died. Game over.");
                 break;
@@ -41,9 +41,14 @@
             {
                 case GameCommands.Attack:
                     _player.Attack(_enemy);
-                    if (_enemy.CurrentHealth > 0)
+                    ShowMessage($"You hit an enemy for {_player.Damage} damage \n" +
+                        $"Enemy has {_enemy.CurrentHealth} health left");
+                    Console.Clear();
+                    if (!_enemy.IsDead)
                     {
                         _enemy.Attack(_player);
+                        ShowMessage($"Enemy hit you for {_enemy.Damage} damage");
+                        Console.Clear();
                     }
                     break;
                 case GameCommands.Potion:
