@@ -18,7 +18,7 @@
     public string Name => _name;
     public int MaxHealth => _maxHealth;
     public int CurrentHealth => _currentHealth;
-    public int Damage => _damage;
+    virtual public int Damage => _damage;
     public bool IsDead => _isDead;
 
     public void TakeDamage(int amount)
@@ -37,7 +37,7 @@
         }
     }
 
-    public void Attack(Unit unit)
+    virtual public void Attack(Unit unit)
     {
         unit.TakeDamage(_damage);
     }

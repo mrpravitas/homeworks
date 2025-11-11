@@ -3,6 +3,7 @@
     private Player _player;
     private Enemy _enemy;
     private Random _random = new Random();
+    private List<Weapon> _weapons;
 
     public void Run()
     {
@@ -55,7 +56,27 @@
                     _player.Heal(10);
                     break;
                 case GameCommands.ChangeWeapon:
-                    
+                    Console.Clear();
+                    ShowWeapons();
+                    Console.Write("Select weapon (-1 to unequip weapon): ");
+                    string selectedWeapon = Console.ReadLine();
+
+                    if (int.TryParse(selectedWeapon, out int index) && 
+                        index >= -1 && index < _weapons.Count)
+                    {
+                        if (index == -1)
+                        {
+                            _player.UnequipWeapon();
+                            ShowMessage($"You unequipped weapon");
+                        }
+                        else
+                        {
+                            Weapon weapon = _weapons[index];
+                            weapon.Use(_player);
+                            ShowMessage($"You equipped {weapon.Name} (+{weapon.DamageBonus} damage)");
+                        }
+                    }
+
                     break;
                 case GameCommands.ChangePotion:
 
@@ -84,6 +105,12 @@
     {
         SpawnPlayer();
         SpawnNewEnemy();
+
+        _weapons = new List<Weapon>
+        {
+            new Weapon("Wooden Sword", 0, 4),
+            new Weapon("Iron Sword", 0, 5)
+        };
     }
 
     private void SpawnPlayer()
@@ -117,12 +144,25 @@
 
         Console.WriteLine($"Player: {_player.Name}");
         Console.WriteLine($"Health: {_player.CurrentHealth}/{_player.MaxHealth}");
-        Console.WriteLine($"Damage: {_player.Damage}");
+        Console.WriteLine($"Weapon: {_player.EquippedWeapon?.Name ?? "none"}");
+        Console.WriteLine($"Damage: {_player.Damage} + {_player.EquippedWeapon?.DamageBonus ?? 0} bonus");
         Console.WriteLine($"Balance: {_player.Balance} coins\n");
 
         Console.WriteLine($"Enemy: {_enemy.Name}");
         Console.WriteLine($"Health: {_enemy.CurrentHealth}/{_enemy.MaxHealth}");
         Console.WriteLine($"Damage: {_enemy.Damage}");
         Console.ReadLine();
+    }
+
+    private void ShowWeapons()
+    {
+        Console.WriteLine("Avaible weapon:\n");
+
+        for (int i = 0; i < _weapons.Count; i++)
+        {
+            Weapon weapon = _weapons[i];
+            Console.WriteLine($"{i}: {weapon.Name}, +{weapon.DamageBonus} damage");
+        }
+        Console.WriteLine();
     }
 }
