@@ -2,67 +2,62 @@
 {
     static void Main(string[] args)
     {
-        const string attackCommand = "Attack";
-        const string potionCommand = "Use potion";
-        const string changeWeaponCommand = "Change weapon";
-        const string changePotionCommand = "Change potion";
-        const string statusCommand = "Status";
-        const string ExitCommand = "Exit";
-
         string input;
+
+        string[] commands = [
+            GameCommands.Attack,
+            GameCommands.Potion,
+            GameCommands.ChangeWeapon,
+            GameCommands.ChangePotion,
+            GameCommands.Status,
+            GameCommands.Exit
+        ];
 
         while (true)
         {
             Console.Clear();
 
-            Console.WriteLine("Enter the command:");
-            Console.Write("\n");
-            Console.WriteLine(attackCommand);
-            Console.WriteLine(potionCommand);
-            Console.WriteLine(changeWeaponCommand);
-            Console.WriteLine(changePotionCommand);
-            Console.WriteLine(statusCommand);
-            Console.WriteLine(ExitCommand);
-            Console.WriteLine("\n");
+            Console.WriteLine("Enter the command:\n");
+
+            foreach (var command in commands)
+            {
+                Console.WriteLine(command);
+            }
+            Console.WriteLine();
 
             input = Console.ReadLine();
 
             switch (input)
             {
-                case attackCommand:
-                    Console.Clear();
-                    Console.WriteLine("You attacked the enemy");
-                    Console.ReadLine();
+                case GameCommands.Attack:
+                    ShowMessage("You attacked the enemy");
                     break;
-                case potionCommand:
-                    Console.Clear();
-                    Console.WriteLine("You use the potion");
-                    Console.ReadLine();
+                case GameCommands.Potion:
+                    ShowMessage("You use the potion");
                     break;
-                case changeWeaponCommand:
-                    Console.Clear();
-                    Console.WriteLine("You changed the weapon");
-                    Console.ReadLine();
+                case GameCommands.ChangeWeapon:
+                    ShowMessage("You changed the weapon");
                     break;
-                case changePotionCommand:
-                    Console.Clear();
-                    Console.WriteLine("You changed the potion");
-                    Console.ReadLine();
+                case GameCommands.ChangePotion:
+                    ShowMessage("You changed the potion");
                     break;
-                case statusCommand:
-                    Console.Clear();
-                    Console.WriteLine("Your statistics will be here");
-                    Console.ReadLine();
+                case GameCommands.Status:
+                    ShowMessage("Your stats will be here");
                     break;
-                case ExitCommand:
+                case GameCommands.Exit:
                     Console.Clear();
                     return;
                 default:
-                    Console.Clear();
-                    Console.WriteLine("Wrong Command");
-                    Console.ReadLine();
+                    ShowMessage("Wrong Command");
                     break;
             }
         }
+    }
+
+    static void ShowMessage(string message)
+    {
+        Console.Clear();
+        Console.WriteLine(message);
+        Console.ReadLine();
     }
 }
