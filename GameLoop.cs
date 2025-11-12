@@ -145,8 +145,9 @@
 
         Console.WriteLine($"Player: {_player.Name}");
         Console.WriteLine($"Health: {_player.CurrentHealth}/{_player.MaxHealth}");
-        Console.WriteLine($"Weapon: {_player.EquippedWeapon?.Name ?? "none"}");
-        Console.WriteLine($"Damage: {_player.Damage} + {_player.EquippedWeapon?.DamageBonus ?? 0} bonus");
+        Console.WriteLine($"Weapon: {_player.EquippedWeapon?.Name ?? "none"}, " +
+            $"+{_player.EquippedWeapon?.DamageBonus ?? 0} damage bonus");
+        Console.WriteLine($"Damage: {_player.Damage}");
         Console.WriteLine($"Balance: {_player.Balance} coins\n");
 
         Console.WriteLine($"Enemy: {_enemy.Name}");

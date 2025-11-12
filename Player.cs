@@ -14,7 +14,7 @@
     public int Balance => _balance;
     public Weapon EquippedWeapon => _equippedWeapon;
     public int BonusDamage => _bonusDamage;
-    public int Damage => _damage + _bonusDamage;
+    override public int Damage => _damage + _bonusDamage;
 
     public void Heal(int amount)
     {
