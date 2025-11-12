@@ -58,22 +58,23 @@
                 case GameCommands.ChangeWeapon:
                     Console.Clear();
                     ShowWeapons();
-                    Console.Write("Select weapon (-1 to unequip weapon): ");
+                    Console.Write("Select weapon (choose equipped again to unequip): ");
                     string selectedWeapon = Console.ReadLine();
 
                     if (int.TryParse(selectedWeapon, out int index) && 
-                        index >= -1 && index < _weapons.Count)
+                        index >= 0 && index < _weapons.Count)
                     {
-                        if (index == -1)
+                        var equipable = _weapons[index];
+
+                        if (_player.EquippedWeapon != null && _player.EquippedWeapon == equipable)
                         {
-                            _player.UnequipWeapon();
-                            ShowMessage($"You unequipped weapon");
+                            equipable.Unequip(_player);
+                            ShowMessage($"You unequipped {equipable.Name}");
                         }
                         else
                         {
-                            Weapon weapon = _weapons[index];
-                            weapon.Use(_player);
-                            ShowMessage($"You equipped {weapon.Name} (+{weapon.DamageBonus} damage)");
+                            equipable.Equip(_player);
+                            ShowMessage($"You equipped {equipable.Name} (+{equipable.DamageBonus} damage)");
                         }
                     }
 

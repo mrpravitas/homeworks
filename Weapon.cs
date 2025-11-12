@@ -1,4 +1,4 @@
-﻿public class Weapon : Item
+﻿public class Weapon : Item, IEquipable
 {
     private int _damageBonus;
 
@@ -15,6 +15,16 @@
 
     public override void Use(Player player)
     {
+        // TODO: flex
+    }
+
+    public void Equip(Player player)
+    {
         player.EquipWeapon(this);
+    }
+
+    public void Unequip(Player player)
+    {
+        player.UnequipWeapon();
     }
 }
