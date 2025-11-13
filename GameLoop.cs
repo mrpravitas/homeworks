@@ -14,6 +14,7 @@
     {
         string[] commands = [
             GameCommands.Attack,
+            GameCommands.WeaponSpecialAbility,
             GameCommands.Potion,
             GameCommands.ChangeWeapon,
             GameCommands.ChangePotion,
@@ -44,6 +45,18 @@
                     Console.Clear();
                     AttackPlayer(_player);
                     NextTurn();
+                    break;
+                case GameCommands.WeaponSpecialAbility:
+                    if (_player.EquippedWeapon == null)
+                    {
+                        ShowMessage("You don't have a weapon");
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        _player.EquippedWeapon.Use(_player);
+                        AttackPlayer(_player);
+                    }
                     break;
                 case GameCommands.Potion:
                     if (UsePotion())

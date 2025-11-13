@@ -15,7 +15,8 @@
 
     public override void Use(Player player)
     {
-        // TODO: flex
+        Console.WriteLine($"{player.Name} flexes with his new weapon, {this.Name}. Cool, right?");
+        Console.ReadLine();
     }
 
     public void Equip(Player player)
