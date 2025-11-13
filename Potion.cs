@@ -1,4 +1,4 @@
-﻿public class Potion : Item
+﻿public class Potion : Item, IConsumable
 {
     private int _heal;
     private int _damageBoost;
@@ -19,9 +19,15 @@
     public int Duration => _duration;
     public int Cost => _cost;
 
+    public void Consume(Player player)
+    {
+        player.RemovePotion();
+    }
+
     public override void Use(Player player)
     {
         player.Heal(_heal);
         player.IncreaseDamage(_damageBoost);
+        this.Consume(player);
     }
 }

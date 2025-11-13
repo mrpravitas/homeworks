@@ -4,10 +4,8 @@
     private Enemy _enemy;
     private List<Weapon> _weapons;
     private List<Potion> _potions;
-    private Potion _selectedPotion;
     private Potion _activePotion;
 
-    private int _loop;
     private int _remainingPotionTurns;
 
     public void Run()
@@ -98,8 +96,8 @@
                     if (int.TryParse(selectedPotion, out index) &&
                         index >= 0 && index <= _potions.Count)
                     {
-                        _selectedPotion = _potions[index];
-                        ShowMessage($"You select {_selectedPotion.Name}");
+                        _player.AddPotion(_potions[index]);
+                        ShowMessage($"You select {_potions[index].Name}");
                     }
                     break;
                 case GameCommands.Status:
@@ -174,7 +172,7 @@
         Console.WriteLine($"Weapon: {_player.EquippedWeapon?.Name ?? "none"}, " +
             $"+{_player.EquippedWeapon?.DamageBonus ?? 0} damage bonus");
         Console.WriteLine($"Damage: {_player.Damage}");
-        Console.WriteLine($"Selected potion: {_selectedPotion?.Name ?? "none"}");
+        Console.WriteLine($"Potion: {_player.Potion?.Name ?? "none"}");
         Console.WriteLine($"Balance: {_player.Balance} coins\n");
 
         Console.WriteLine($"Enemy: {_enemy.Name}");
@@ -210,9 +208,9 @@
 
     private bool UsePotion()
     {
-        if (_selectedPotion == null)
+        if (_player.Potion == null)
         {
-            ShowMessage("No potion selected");
+            ShowMessage("You have no potion");
             return false;
         }
 
@@ -222,18 +220,15 @@
             return false;
         }
 
-        if (!_player.SpendCoins(_selectedPotion.Cost))
-        {
-            ShowMessage("Not enough balance to buy this potion");
-            return false;
-        }
+        _remainingPotionTurns = _player.Potion.Duration;
+        
+        ShowMessage($"You use {_player.Potion.Name}");
 
-        _selectedPotion.Use(_player);
+        _player.Potion.Use(_player);
 
-        if (_selectedPotion.Duration > 0)
+        if (_remainingPotionTurns > 0)
         {
-            _activePotion = _selectedPotion;
-            _remainingPotionTurns = _selectedPotion.Duration;
+            _activePotion = _player.Potion;
         }
 
         return true;
@@ -241,8 +236,6 @@
 
     private void NextTurn()
     {
-        _loop++;
-
         if (_enemy.CurrentHealth <= 0)
         {
             _player.AddCoins(_enemy.Reward);

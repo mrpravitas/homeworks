@@ -3,6 +3,7 @@
     private int _balance;
     private Weapon _equippedWeapon;
     private int _bonusDamage;
+    private Potion _potion;
 
     public Player(string name, int maxHealth, int damage, int balance = 0) 
         : base(name, maxHealth, damage)
@@ -15,6 +16,7 @@
     public Weapon EquippedWeapon => _equippedWeapon;
     public int BonusDamage => _bonusDamage;
     override public int Damage => _damage + _bonusDamage;
+    public Potion Potion => _potion;
 
     public void Heal(int amount)
     {
@@ -72,5 +74,15 @@
     public void DecreaseDamage(int amount)
     {
         _damage -= amount;
+    }
+
+    public void AddPotion(Potion potion)
+    {
+        _potion = potion;
+    }
+
+    public void RemovePotion()
+    {
+        _potion = null;
     }
 }
