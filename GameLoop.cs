@@ -2,8 +2,13 @@
 {
     private Player _player;
     private Enemy _enemy;
-    private Random _random = new Random();
     private List<Weapon> _weapons;
+    private List<Potion> _potions;
+    private Potion _selectedPotion;
+    private Potion _activePotion;
+
+    private int _loop;
+    private int _remainingPotionTurns;
 
     public void Run()
     {
@@ -26,14 +31,6 @@
                 break;
             }
 
-            if (_enemy.CurrentHealth <= 0)
-            {
-                _player.AddCoins(_enemy.Reward);
-                ShowMessage($"Enemy died. You get {_enemy.Reward} coins.");
-                SpawnNewEnemy();
-                continue;
-            }
-
             ShowMenu(commands);
 
             string input = Console.ReadLine();
@@ -45,15 +42,15 @@
                     ShowMessage($"You hit an enemy for {_player.Damage} damage \n" +
                         $"Enemy has {_enemy.CurrentHealth} health left");
                     Console.Clear();
-                    if (!_enemy.IsDead)
-                    {
-                        _enemy.Attack(_player);
-                        ShowMessage($"Enemy hit you for {_enemy.Damage} damage");
-                        Console.Clear();
-                    }
+                    AttackPlayer(_player);
+                    NextTurn();
                     break;
                 case GameCommands.Potion:
-                    _player.Heal(10);
+                    if (UsePotion())
+                    {
+                        AttackPlayer(_player);
+                        NextTurn();
+                    }
                     break;
                 case GameCommands.ChangeWeapon:
                     Console.Clear();
@@ -80,13 +77,23 @@
 
                     break;
                 case GameCommands.ChangePotion:
+                    Console.Clear();
+                    ShowPotions();
+                    Console.Write("Select potion:");
+                    string selectedPotion = Console.ReadLine();
 
+                    if (int.TryParse(selectedPotion, out index) &&
+                        index >= 0 && index <= _potions.Count)
+                    {
+                        _selectedPotion = _potions[index];
+                        ShowMessage($"You select {_selectedPotion.Name}");
+                    }
                     break;
                 case GameCommands.Status:
                     ShowStatus();
                     break;
                 case GameCommands.Exit:
-
+                    ShowMessage("Goodbye");
                     return;
                 default:
                     ShowMessage("Wrong command");
@@ -109,8 +116,14 @@
 
         _weapons = new List<Weapon>
         {
-            new Weapon("Wooden Sword", 0, 4),
-            new Weapon("Iron Sword", 0, 5)
+            new Weapon("Wooden Sword", cost: 0, damageBonus: 4),
+            new Weapon("Iron Sword", cost: 0, damageBonus: 5)
+        };
+
+        _potions = new List<Potion>
+        {
+            new Potion("Healing potion", heal: 15, damageBoost: 0, duration: 0, cost: 10),
+            new Potion("Strength potion", heal: 5, damageBoost: 10, duration: 3, cost: 20)
         };
     }
 
@@ -158,7 +171,7 @@
 
     private void ShowWeapons()
     {
-        Console.WriteLine("Avaible weapon:\n");
+        Console.WriteLine("Avaible weapons:\n");
 
         for (int i = 0; i < _weapons.Count; i++)
         {
@@ -166,5 +179,81 @@
             Console.WriteLine($"{i}: {weapon.Name}, +{weapon.DamageBonus} damage");
         }
         Console.WriteLine();
+    }
+
+    private void ShowPotions()
+    {
+        Console.WriteLine("Avaible potions:\n");
+
+        for (int i = 0; i < _potions.Count; i++)
+        {
+            Potion potion = _potions[i];
+            Console.WriteLine($"{i}: {potion.Name}, heal: {potion.Heal}, " +
+                $"damage boost: {potion.DamageBoost}, duration: {potion.Duration}");
+        }
+        Console.WriteLine();
+    }
+
+    private bool UsePotion()
+    {
+        if (_selectedPotion == null)
+        {
+            ShowMessage("No potion selected");
+            return false;
+        }
+
+        if (_activePotion != null)
+        {
+            ShowMessage("You cannot use another potion until the current one wears off");
+            return false;
+        }
+
+        _selectedPotion.Use(_player);
+
+        if (_selectedPotion.Duration > 0)
+        {
+            _activePotion = _selectedPotion;
+            _remainingPotionTurns = _selectedPotion.Duration;
+        }
+
+        return true;
+    }
+
+    private void NextTurn()
+    {
+        _loop++;
+
+        if (_enemy.CurrentHealth <= 0)
+        {
+            _player.AddCoins(_enemy.Reward);
+            ShowMessage($"Enemy died. You get {_enemy.Reward} coins.");
+            SpawnNewEnemy();
+        }
+
+        if (_activePotion != null)
+        {
+            _remainingPotionTurns--;
+
+            if (_remainingPotionTurns <= 0)
+            {
+                _player.DecreaseDamage(_activePotion.DamageBoost);
+                ShowMessage($"The effect of {_activePotion.Name} has worn off");
+                _activePotion = null;
+            }
+            else
+            {
+                ShowMessage($"Effect of {_activePotion.Name} active: {_remainingPotionTurns} turns remaining.");
+            }
+        }
+    }
+
+    private void AttackPlayer(Player player)
+    {
+        if (!_enemy.IsDead)
+        {
+            _enemy.Attack(player);
+            ShowMessage($"Enemy hit you for {_enemy.Damage} damage");
+            Console.Clear();
+        }
     }
 }

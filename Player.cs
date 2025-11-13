@@ -63,4 +63,14 @@
         _equippedWeapon = null;
         _bonusDamage = 0;
     }
+
+    public void IncreaseDamage(int amount)
+    {
+        _damage += amount;
+    }
+
+    public void DecreaseDamage(int amount)
+    {
+        _damage -= amount;
+    }
 }
