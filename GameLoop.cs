@@ -161,6 +161,7 @@
         Console.WriteLine($"Weapon: {_player.EquippedWeapon?.Name ?? "none"}, " +
             $"+{_player.EquippedWeapon?.DamageBonus ?? 0} damage bonus");
         Console.WriteLine($"Damage: {_player.Damage}");
+        Console.WriteLine($"Selected potion: {_selectedPotion?.Name ?? "none"}");
         Console.WriteLine($"Balance: {_player.Balance} coins\n");
 
         Console.WriteLine($"Enemy: {_enemy.Name}");
@@ -205,6 +206,12 @@
         if (_activePotion != null)
         {
             ShowMessage("You cannot use another potion until the current one wears off");
+            return false;
+        }
+
+        if (!_player.SpendCoins(_selectedPotion.Cost))
+        {
+            ShowMessage("Not enough balance to buy this potion");
             return false;
         }
 
