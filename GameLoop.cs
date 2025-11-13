@@ -96,8 +96,15 @@
                     if (int.TryParse(selectedPotion, out index) &&
                         index >= 0 && index <= _potions.Count)
                     {
-                        _player.AddPotion(_potions[index]);
-                        ShowMessage($"You select {_potions[index].Name}");
+                        if (_player.Potion != null)
+                        {
+                            ShowMessage($"You already have a potion");
+                        }
+                        else
+                        {
+                            _player.AddPotion(_potions[index]);
+                            ShowMessage($"You select {_potions[index].Name}");
+                        }
                     }
                     break;
                 case GameCommands.Status:
