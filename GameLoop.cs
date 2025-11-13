@@ -94,7 +94,7 @@
                     string selectedPotion = Console.ReadLine();
 
                     if (int.TryParse(selectedPotion, out index) &&
-                        index >= 0 && index <= _potions.Count)
+                        index >= 0 && index < _potions.Count)
                     {
                         if (_player.Potion != null)
                         {
@@ -102,8 +102,15 @@
                         }
                         else
                         {
-                            _player.AddPotion(_potions[index]);
-                            ShowMessage($"You select {_potions[index].Name}");
+                            if (_player.SpendCoins(_potions[index].Cost))
+                            {
+                                _player.AddPotion(_potions[index]);
+                                ShowMessage($"You buy {_potions[index].Name}");
+                            }
+                            else
+                            {
+                                ShowMessage("You don't have enough coins");
+                            }
                         }
                     }
                     break;
@@ -208,7 +215,8 @@
         {
             Potion potion = _potions[i];
             Console.WriteLine($"{i}: {potion.Name}, heal: {potion.Heal}, " +
-                $"damage boost: {potion.DamageBoost}, duration: {potion.Duration}");
+                $"damage boost: {potion.DamageBoost}, duration: {potion.Duration}, " +
+                $"price: {potion.Cost} coins" );
         }
         Console.WriteLine();
     }
