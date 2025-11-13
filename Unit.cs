@@ -21,7 +21,7 @@
     virtual public int Damage => _damage;
     public bool IsDead => _isDead;
 
-    public void TakeDamage(int amount)
+    virtual public void TakeDamage(int amount)
     {
         if (amount < 0)
         {

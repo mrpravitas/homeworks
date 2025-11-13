@@ -175,9 +175,42 @@
 
     private void SpawnNewEnemy()
     {
-        _enemy = new Enemy("Evil Bob", 15, 3, 10);
+        Random random = new Random();
+        int enemyType = random.Next(3);
+
+        switch (enemyType)
+        {
+            case 0:
+                _enemy = new Enemy(
+                    "Evil Bob",
+                    maxHealth: random.Next(12, 18),
+                    damage: random.Next(3, 5), 
+                    reward: random.Next(7, 10)
+                );
+                break;
+            case 1:
+                _enemy = new Assassin(
+                    "Assassin Bob",
+                    maxHealth: random.Next(9, 12),
+                    damage: random.Next(6, 8), 
+                    reward: random.Next(11, 16),
+                    dodgeChance: 0.2f
+                );
+                break;
+            case 2:
+                _enemy = new Tank(
+                    "Big Bob",
+                    maxHealth: random.Next(20, 25),
+                    damage: random.Next(1, 3),
+                    reward: random.Next(11, 16),
+                    defence: random.Next(2, 4)
+                    );
+                break;
+        }
+
         ShowMessage($"New enemy has been spawned! \n " +
-            $"{_enemy.Name} (HP: {_enemy.CurrentHealth}, Damage: {_enemy.Damage}, Reward: {_enemy.Reward} coins)");
+            $"{_enemy.Name} (HP: {_enemy.CurrentHealth}, Damage: {_enemy.Damage}," +
+            $" Reward: {_enemy.Reward} coins)");
     }
 
     private void ShowMenu(string[] commands)
