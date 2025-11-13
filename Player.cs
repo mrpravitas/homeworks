@@ -43,7 +43,7 @@
 
     public bool SpendCoins(int amount)
     {
-        if (amount < 0 || amount < _balance)
+        if (amount < 0 || _balance < amount)
         {
             return false;
         }
