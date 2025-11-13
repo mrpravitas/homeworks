@@ -1,6 +1,7 @@
 ﻿public class Weapon : Item, IEquipable
 {
     private int _damageBonus;
+    private bool _isPurchased;
 
     public Weapon(string name, int cost, int damageBonus) 
     {
@@ -12,6 +13,7 @@
     public int DamageBonus => _damageBonus;
     public string Name => _name;
     public int Cost => _cost;
+    public bool IsPurchased => _isPurchased;
 
     public override void Use(Player player)
     {
@@ -27,5 +29,10 @@
     public void Unequip(Player player)
     {
         player.UnequipWeapon();
+    }
+
+    public bool Buy(Player player)
+    {
+        return _isPurchased = player.SpendCoins(_cost);
     }
 }

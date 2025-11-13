@@ -72,18 +72,34 @@
                     if (int.TryParse(selectedWeapon, out int index) && 
                         index >= 0 && index < _weapons.Count)
                     {
-                        var equipable = _weapons[index];
+                        var weapon = _weapons[index];
 
-                        if (_player.EquippedWeapon != null && _player.EquippedWeapon == equipable)
+                        if (!weapon.IsPurchased)
                         {
-                            equipable.Unequip(_player);
-                            ShowMessage($"You unequipped {equipable.Name}");
+                            if (weapon.Buy(_player))
+                            {
+                                ShowMessage($"You bought {weapon.Name} for {weapon.Cost} coins");
+                            }
+                            else
+                            {
+                                ShowMessage("No enough money");
+                            }
                         }
                         else
                         {
-                            equipable.Equip(_player);
-                            ShowMessage($"You equipped {equipable.Name} (+{equipable.DamageBonus} damage)");
+                            if (_player.EquippedWeapon != null && _player.EquippedWeapon == weapon)
+                            {
+                                weapon.Unequip(_player);
+                                ShowMessage($"You unequipped {weapon.Name}");
+                            }
+                            else
+                            {
+                                weapon.Equip(_player);
+                                ShowMessage($"You equipped {weapon.Name} (+{weapon.DamageBonus} damage)");
+                            }
                         }
+
+                        
                     }
 
                     break;
@@ -141,8 +157,8 @@
 
         _weapons = new List<Weapon>
         {
-            new Weapon("Wooden Sword", cost: 0, damageBonus: 4),
-            new Weapon("Iron Sword", cost: 0, damageBonus: 5)
+            new Weapon("Wooden Sword", cost: 0, damageBonus: 3),
+            new Weapon("Iron Sword", cost: 20, damageBonus: 5)
         };
 
         _potions = new List<Potion>
@@ -202,7 +218,8 @@
         for (int i = 0; i < _weapons.Count; i++)
         {
             Weapon weapon = _weapons[i];
-            Console.WriteLine($"{i}: {weapon.Name}, +{weapon.DamageBonus} damage");
+            string costInfo = weapon.IsPurchased ? "" : $", cost: {weapon.Cost} coins";
+            Console.WriteLine($"{i}: {weapon.Name}, +{weapon.DamageBonus} damage{costInfo}");
         }
         Console.WriteLine();
     }
