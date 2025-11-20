@@ -286,12 +286,12 @@
         
         ShowMessage($"You use {_player.Potion.Name}");
 
-        _player.Potion.Use(_player);
-
         if (_remainingPotionTurns > 0)
         {
             _activePotion = _player.Potion;
         }
+
+        _player.Potion.Use(_player);
 
         return true;
     }
