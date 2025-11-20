@@ -13,6 +13,9 @@
     {
         if (_random.NextDouble() < _dodgeChance)
         {
+            Console.Clear();
+            Console.WriteLine("Assassin dodged the attack");
+            Console.ReadLine();
             return;
         }
 

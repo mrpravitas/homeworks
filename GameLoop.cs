@@ -31,9 +31,9 @@
                 switch (command)
                 {
                     case GameCommands.Attack:
+                        ShowMessage($"You hit an enemy for {_player.Damage} damage");
                         _player.Attack(_enemy);
-                        ShowMessage($"You hit an enemy for {_player.Damage} damage \n" +
-                            $"Enemy has {_enemy.CurrentHealth} health left");
+                        ShowMessage( $"Enemy has {_enemy.CurrentHealth} health left");
                         Console.Clear();
                         AttackPlayer(_player);
                         NextTurn();
@@ -184,6 +184,11 @@
                     damage: random.Next(3, 5), 
                     reward: random.Next(7, 10)
                 );
+
+                ShowMessage($"New enemy has been spawned! \n " +
+                    $"{_enemy.Name} (HP: {_enemy.CurrentHealth}, Damage: {_enemy.Damage}," +
+                    $" Reward: {_enemy.Reward} coins)");
+
                 break;
             case 1:
                 _enemy = new Assassin(
@@ -193,6 +198,13 @@
                     reward: random.Next(11, 16),
                     dodgeChance: 0.2f
                 );
+
+                ShowMessage($"New enemy has been spawned! \n " +
+                    $"{_enemy.Name} (HP: {_enemy.CurrentHealth}, Damage: {_enemy.Damage}," +
+                    $" Reward: {_enemy.Reward} coins)");
+
+                ShowMessage("This enemy has a chance to dodge attack!");
+
                 break;
             case 2:
                 _enemy = new Tank(
@@ -202,12 +214,15 @@
                     reward: random.Next(11, 16),
                     defence: random.Next(2, 4)
                     );
+
+                ShowMessage($"New enemy has been spawned! \n " +
+                    $"{_enemy.Name} (HP: {_enemy.CurrentHealth}, Damage: {_enemy.Damage}," +
+                    $" Reward: {_enemy.Reward} coins)");
+
+                ShowMessage("This enemy reduces incoming damage!");
+
                 break;
         }
-
-        ShowMessage($"New enemy has been spawned! \n " +
-            $"{_enemy.Name} (HP: {_enemy.CurrentHealth}, Damage: {_enemy.Damage}," +
-            $" Reward: {_enemy.Reward} coins)");
     }
 
     private void ShowMenu()
@@ -292,6 +307,8 @@
         }
 
         _player.Potion.Use(_player);
+
+        ShowMessage($"Now your health is {_player.CurrentHealth} and your damage is {_player.Damage}");
 
         return true;
     }
