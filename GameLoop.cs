@@ -10,16 +10,6 @@
 
     public void Run()
     {
-        string[] commands = [
-            GameCommands.Attack,
-            GameCommands.WeaponSpecialAbility,
-            GameCommands.Potion,
-            GameCommands.ChangeWeapon,
-            GameCommands.ChangePotion,
-            GameCommands.Status,
-            GameCommands.Exit
-        ];
-
         InitializeGame();
 
         while (true)
@@ -30,115 +20,122 @@
                 break;
             }
 
-            ShowMenu(commands);
+            ShowMenu();
 
             string input = Console.ReadLine();
 
-            switch (input)
+            if (int.TryParse(input, out int commandNumber))
             {
-                case GameCommands.Attack:
-                    _player.Attack(_enemy);
-                    ShowMessage($"You hit an enemy for {_player.Damage} damage \n" +
-                        $"Enemy has {_enemy.CurrentHealth} health left");
-                    Console.Clear();
-                    AttackPlayer(_player);
-                    NextTurn();
-                    break;
-                case GameCommands.WeaponSpecialAbility:
-                    if (_player.EquippedWeapon == null)
-                    {
-                        ShowMessage("You don't have a weapon");
-                    }
-                    else
-                    {
+                GameCommands command = (GameCommands)commandNumber;
+
+                switch (command)
+                {
+                    case GameCommands.Attack:
+                        _player.Attack(_enemy);
+                        ShowMessage($"You hit an enemy for {_player.Damage} damage \n" +
+                            $"Enemy has {_enemy.CurrentHealth} health left");
                         Console.Clear();
-                        _player.EquippedWeapon.Use(_player);
-                        AttackPlayer(_player);
-                    }
-                    break;
-                case GameCommands.Potion:
-                    if (UsePotion())
-                    {
                         AttackPlayer(_player);
                         NextTurn();
-                    }
-                    break;
-                case GameCommands.ChangeWeapon:
-                    Console.Clear();
-                    ShowWeapons();
-                    Console.Write("Select weapon (choose equipped again to unequip): ");
-                    string selectedWeapon = Console.ReadLine();
-
-                    if (int.TryParse(selectedWeapon, out int index) && 
-                        index >= 0 && index < _weapons.Count)
-                    {
-                        var weapon = _weapons[index];
-
-                        if (!weapon.IsPurchased)
+                        break;
+                    case GameCommands.UseSuperPower:
+                        if (_player.EquippedWeapon == null)
                         {
-                            if (weapon.Buy(_player))
-                            {
-                                ShowMessage($"You bought {weapon.Name} for {weapon.Cost} coins");
-                            }
-                            else
-                            {
-                                ShowMessage("No enough money");
-                            }
+                            ShowMessage("You don't have a weapon");
                         }
                         else
                         {
-                            if (_player.EquippedWeapon != null && _player.EquippedWeapon == weapon)
+                            Console.Clear();
+                            _player.EquippedWeapon.Use(_player);
+                            AttackPlayer(_player);
+                        }
+                        break;
+                    case GameCommands.UsePotion:
+                        if (UsePotion())
+                        {
+                            AttackPlayer(_player);
+                            NextTurn();
+                        }
+                        break;
+                    case GameCommands.ChangeWeapon:
+                        Console.Clear();
+                        ShowWeapons();
+                        Console.Write("Select weapon (choose equipped again to unequip): ");
+                        string selectedWeapon = Console.ReadLine();
+
+                        if (int.TryParse(selectedWeapon, out int index) &&
+                            index >= 0 && index < _weapons.Count)
+                        {
+                            var weapon = _weapons[index];
+
+                            if (!weapon.IsPurchased)
                             {
-                                weapon.Unequip(_player);
-                                ShowMessage($"You unequipped {weapon.Name}");
+                                if (weapon.Buy(_player))
+                                {
+                                    ShowMessage($"You bought {weapon.Name} for {weapon.Cost} coins");
+                                }
+                                else
+                                {
+                                    ShowMessage("No enough money");
+                                }
                             }
                             else
                             {
-                                weapon.Equip(_player);
-                                ShowMessage($"You equipped {weapon.Name} (+{weapon.DamageBonus} damage)");
+                                if (_player.EquippedWeapon != null && _player.EquippedWeapon == weapon)
+                                {
+                                    weapon.Unequip(_player);
+                                    ShowMessage($"You unequipped {weapon.Name}");
+                                }
+                                else
+                                {
+                                    weapon.Equip(_player);
+                                    ShowMessage($"You equipped {weapon.Name} (+{weapon.DamageBonus} damage)");
+                                }
                             }
                         }
 
-                        
-                    }
+                        break;
+                    case GameCommands.BuyPotion:
+                        Console.Clear();
+                        ShowPotions();
+                        Console.Write("Select potion:");
+                        string selectedPotion = Console.ReadLine();
 
-                    break;
-                case GameCommands.ChangePotion:
-                    Console.Clear();
-                    ShowPotions();
-                    Console.Write("Select potion:");
-                    string selectedPotion = Console.ReadLine();
-
-                    if (int.TryParse(selectedPotion, out index) &&
-                        index >= 0 && index < _potions.Count)
-                    {
-                        if (_player.Potion != null)
+                        if (int.TryParse(selectedPotion, out index) &&
+                            index >= 0 && index < _potions.Count)
                         {
-                            ShowMessage($"You already have a potion");
-                        }
-                        else
-                        {
-                            if (_player.SpendCoins(_potions[index].Cost))
+                            if (_player.Potion != null)
                             {
-                                _player.AddPotion(_potions[index]);
-                                ShowMessage($"You buy {_potions[index].Name}");
+                                ShowMessage($"You already have a potion");
                             }
                             else
                             {
-                                ShowMessage("You don't have enough coins");
+                                if (_player.SpendCoins(_potions[index].Cost))
+                                {
+                                    _player.AddPotion(_potions[index]);
+                                    ShowMessage($"You bought {_potions[index].Name}");
+                                }
+                                else
+                                {
+                                    ShowMessage("You don't have enough coins");
+                                }
                             }
                         }
-                    }
-                    break;
-                case GameCommands.Status:
-                    ShowStatus();
-                    break;
-                case GameCommands.Exit:
-                    ShowMessage("Goodbye");
-                    return;
-                default:
-                    ShowMessage("Wrong command");
-                    break;
+                        break;
+                    case GameCommands.Status:
+                        ShowStatus();
+                        break;
+                    case GameCommands.Exit:
+                        ShowMessage("Goodbye");
+                        return;
+                    default:
+                        ShowMessage("Wrong command");
+                        break;
+                }
+            }
+            else
+            {
+                ShowMessage("Wrong command");
             }
         }
     }
@@ -213,15 +210,15 @@
             $" Reward: {_enemy.Reward} coins)");
     }
 
-    private void ShowMenu(string[] commands)
+    private void ShowMenu()
     {
         Console.Clear();
 
         Console.WriteLine("Enter the command:\n");
 
-        foreach (var command in commands)
+        foreach (GameCommands command in Enum.GetValues(typeof(GameCommands)))
         {
-            Console.WriteLine(command);
+            Console.WriteLine($"{(int)command}: {command}");
         }
         Console.WriteLine();
     }
@@ -301,7 +298,7 @@
 
     private void NextTurn()
     {
-        if (_enemy.CurrentHealth <= 0)
+        if (_enemy.IsDead)
         {
             _player.AddCoins(_enemy.Reward);
             ShowMessage($"Enemy died. You get {_enemy.Reward} coins.");

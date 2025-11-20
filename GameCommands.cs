@@ -1,10 +1,10 @@
-﻿public static class GameCommands
+﻿public enum GameCommands
 {
-    public const string Attack = "Attack";
-    public const string WeaponSpecialAbility = "Use super power";
-    public const string Potion = "Use potion";
-    public const string ChangeWeapon = "Change weapon";
-    public const string ChangePotion = "Buy potion";
-    public const string Status = "Status";
-    public const string Exit = "Exit";
+    Attack = 0, 
+    UseSuperPower = 1,
+    UsePotion = 2,
+    ChangeWeapon = 3,
+    BuyPotion = 4,
+    Status = 5,
+    Exit = 6
 }
