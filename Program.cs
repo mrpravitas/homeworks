@@ -1,10 +1,8 @@
-﻿namespace exercise_1
+﻿internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
+        ProgramLoop programLoop = new ProgramLoop();
+        programLoop.Start();
     }
 }
