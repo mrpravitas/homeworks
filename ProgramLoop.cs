@@ -150,7 +150,8 @@
             for (int i = 0; i < _tasks.Count; i++)
             {
                 TaskItem task = _tasks[i];
-                Console.WriteLine($"{i+1}. {task.Name}: {task.Description}");
+                Console.WriteLine($"{i+1}. {task.Name}: {task.Description} | " +
+                    $"Category: {task.Category}, Priority: {task.Priority}, Status: {task.Status}");
             }
             Console.WriteLine();
         }
