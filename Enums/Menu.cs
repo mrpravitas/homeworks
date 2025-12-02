@@ -1,6 +1,6 @@
 ﻿internal enum Menu
 {
-    AddTaks = 1,
+    AddTask = 1,
     ShowTasks = 2,
     StatusFilter = 3,
     PriorityFilter = 4,
