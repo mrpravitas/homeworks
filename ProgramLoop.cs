@@ -173,6 +173,8 @@
     {
         if (_tasks.Count != 0)
         {
+            _tasks = _tasks.OrderByDescending(t => t.Priority).ToList();
+
             for (int i = 0; i < _tasks.Count; i++)
             {
                 TaskItem task = _tasks[i];
