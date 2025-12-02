@@ -68,13 +68,46 @@
                         Console.ReadLine();
                         break;
                     case Menu.StatusFilter:
-                        ShowMessage("Your tasks filtered by status");
-                        break;
-                    case Menu.PriorityFilter:
-                        ShowMessage("Your tasks filtered by priority");
+                        Console.Clear();
+                        Console.WriteLine("Select status to filter:");
+                        foreach (Status status in Enum.GetValues(typeof(Status)))
+                        {
+                            Console.WriteLine($"{(int)status}: {status}");
+                        }
+                        Console.WriteLine();
+                        string statusToFilterStr = Console.ReadLine();
+                        Status statusToFilter;
+                        if (!Status.TryParse(statusToFilterStr, out statusToFilter))
+                        {
+                            ShowMessage("Incorrect input");
+                            break;
+                        }
+                        Console.Clear();
+
+                        ShowTasksFilteredByStatus(statusToFilter);
+                        Console.ReadLine();
+
                         break;
                     case Menu.CategoryFilter:
-                        ShowMessage("Your tasks filtered by category");
+                        Console.Clear();
+                        Console.WriteLine("Select status to filter:");
+                        foreach (Category category in Enum.GetValues(typeof(Category)))
+                        {
+                            Console.WriteLine($"{(int)category}: {category}");
+                        }
+                        Console.WriteLine();
+                        string categoryToFilterStr = Console.ReadLine();
+                        Category categoryToFilter;
+                        if (!Category.TryParse(categoryToFilterStr, out categoryToFilter))
+                        {
+                            ShowMessage("Incorrect input");
+                            break;
+                        }
+                        Console.Clear();
+
+                        ShowTasksFilteredByCategory(categoryToFilter);
+                        Console.ReadLine();
+
                         break;
                     case Menu.MarkAsDone:
                         Console.Clear();
@@ -180,6 +213,54 @@
                 TaskItem task = _tasks[i];
                 Console.WriteLine($"{i+1}. {task.Name}: {task.Description} | " +
                     $"Category: {task.Category}, Priority: {task.Priority}, Status: {task.Status}");
+            }
+            Console.WriteLine();
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("You have no task");
+        }
+    }
+
+    private void ShowTasksFilteredByStatus(Status filter)
+    {
+        if (_tasks.Count != 0)
+        {
+            _tasks = _tasks.OrderByDescending(t => t.Priority).ToList();
+
+            for (int i = 0; i < _tasks.Count; i++)
+            {
+                TaskItem task = _tasks[i];
+                if (task.Status == filter)
+                {
+                    Console.WriteLine($"{i + 1}. {task.Name}: {task.Description} | " +
+                        $"Category: {task.Category}, Priority: {task.Priority}, Status: {task.Status}");
+                }
+            }
+            Console.WriteLine();
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("You have no task");
+        }
+    }
+
+    private void ShowTasksFilteredByCategory(Category filter)
+    {
+        if (_tasks.Count != 0)
+        {
+            _tasks = _tasks.OrderByDescending(t => t.Category).ToList();
+
+            for (int i = 0; i < _tasks.Count; i++)
+            {
+                TaskItem task = _tasks[i];
+                if (task.Category == filter)
+                {
+                    Console.WriteLine($"{i + 1}. {task.Name}: {task.Description} | " +
+                        $"Category: {task.Category}, Priority: {task.Priority}, Status: {task.Status}");
+                }
             }
             Console.WriteLine();
         }

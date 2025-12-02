@@ -3,9 +3,8 @@
     AddTask = 1,
     ShowTasks = 2,
     StatusFilter = 3,
-    PriorityFilter = 4,
-    CategoryFilter = 5,
-    MarkAsDone = 6,
-    DeleteTask = 7,
+    CategoryFilter = 4,
+    MarkAsDone = 5,
+    DeleteTask = 6,
     Exit = 0
 }
