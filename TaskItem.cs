@@ -25,4 +25,9 @@
     {
         _status = Status.Done;
     }
+
+    public void MarkAsInProgress()
+    {
+        _status = Status.InProgress;
+    }
 }

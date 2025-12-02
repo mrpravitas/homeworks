@@ -138,6 +138,35 @@
                             Console.ReadLine();
                         }
                         break;
+                    case Menu.MarkAsInProgress:
+                        Console.Clear();
+                        Console.WriteLine("Select task to mark as in progress (0 to cancel):");
+                        ShowTasks();
+                        if (_tasks.Count != 0)
+                        {
+                            string selectedTask = Console.ReadLine();
+
+                            if (int.TryParse(selectedTask, out int index) && index >= 0 && index <= _tasks.Count)
+                            {
+                                if (index == 0)
+                                {
+                                    break;
+                                }
+
+                                TaskItem task = _tasks[index - 1];
+                                task.MarkAsInProgress();
+                                ShowMessage($"Task \"{task.Name}\" has been marked as in progress");
+                            }
+                            else
+                            {
+                                ShowMessage("Incorrect input");
+                            }
+                        }
+                        else
+                        {
+                            Console.ReadLine();
+                        }
+                        break;
                     case Menu.DeleteTask:
                         Console.Clear();
                         Console.WriteLine("Select task to delete (0 to cancel):");

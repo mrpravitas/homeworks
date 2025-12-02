@@ -5,6 +5,7 @@
     StatusFilter = 3,
     CategoryFilter = 4,
     MarkAsDone = 5,
-    DeleteTask = 6,
+    MarkAsInProgress = 6,
+    DeleteTask = 7,
     Exit = 0
 }
