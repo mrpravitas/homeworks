@@ -63,19 +63,9 @@
                         break;
                     case Menu.ShowTasks:
                         Console.Clear();
-                        if (_tasks.Count != 0)
-                        {
-                            Console.WriteLine("Your tasks:");
-                            foreach (TaskItem task in _tasks)
-                            {
-                                Console.WriteLine($"{task.Name}: {task.Description}");
-                            }
-                            Console.ReadLine();
-                        }
-                        else
-                        {
-                            ShowMessage("You have no task");
-                        }
+                        Console.WriteLine("Your tasks:");
+                        ShowTasks();
+                        Console.ReadLine();
                         break;
                     case Menu.StatusFilter:
                         ShowMessage("Your tasks filtered by status");
@@ -90,7 +80,33 @@
                         ShowMessage("Mark task as done:");
                         break;
                     case Menu.DeleteTask:
-                        ShowMessage("Select task to delete:");
+                        Console.Clear();
+                        Console.WriteLine("Select task to delete (0 to cancel):");
+                        ShowTasks();
+                        if (_tasks.Count != 0)
+                        {
+                            string selectedTask = Console.ReadLine();
+
+                            if (int.TryParse(selectedTask, out int index) && index >= 0 && index <= _tasks.Count)
+                            {
+                                if (index == 0)
+                                {
+                                    break;
+                                }
+
+                                string name = _tasks[index - 1].Name;
+                                _tasks.RemoveAt(index - 1);
+                                ShowMessage($"Task \"{name}\" has been deleted");
+                            }
+                            else
+                            {
+                                ShowMessage("Incorrect input");
+                            }
+                        }
+                        else
+                        {
+                            Console.ReadLine();
+                        }
                         break;
                     case Menu.Exit:
                         ShowMessage("Goodbye");
@@ -125,5 +141,23 @@
         Console.Clear();
         Console.WriteLine(message);
         Console.ReadLine();
+    }
+
+    private void ShowTasks()
+    {
+        if (_tasks.Count != 0)
+        {
+            for (int i = 0; i < _tasks.Count; i++)
+            {
+                TaskItem task = _tasks[i];
+                Console.WriteLine($"{i+1}. {task.Name}: {task.Description}");
+            }
+            Console.WriteLine();
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("You have no task");
+        }
     }
 }
