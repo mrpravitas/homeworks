@@ -196,6 +196,9 @@
                             Console.ReadLine();
                         }
                         break;
+                    case Menu.ShowStatistics:
+                        ShowStatistics();
+                        break;
                     case Menu.Exit:
                         ShowMessage("Goodbye");
                         return;
@@ -298,5 +301,20 @@
             Console.Clear();
             Console.WriteLine("You have no task");
         }
+    }
+
+    private void ShowStatistics()
+    {
+        string statistics;
+
+        int tasksCount = _tasks.Count;
+        int newTasks = _tasks.Where(t => t.Status == Status.New).Count();
+        int inProgressTasks = _tasks.Where(t => t.Status == Status.InProgress).Count();
+        int doneTasks = _tasks.Where(t => t.Status == Status.Done).Count();
+
+        statistics = $"New tasks: {newTasks} | Tasks in progress: {inProgressTasks} | Done tasks: {doneTasks}" +
+            $" | All tasks: {tasksCount}";
+
+        ShowMessage(statistics);
     }
 }

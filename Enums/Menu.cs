@@ -7,5 +7,6 @@
     MarkAsDone = 5,
     MarkAsInProgress = 6,
     DeleteTask = 7,
+    ShowStatistics = 8,
     Exit = 0
 }
