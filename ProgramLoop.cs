@@ -1,10 +1,13 @@
-﻿internal class ProgramLoop
+﻿using System.Text.Json;
+
+internal class ProgramLoop
 {
     private List<TaskItem> _tasks;
+    private string _filepath = "tasks.json";
 
     internal void Start()
     {
-        _tasks = new List<TaskItem>();
+        LoadData(_filepath);
 
         while (true)
         {
@@ -209,6 +212,7 @@
                         ShowStatistics();
                         break;
                     case Menu.Exit:
+                        SaveData(_filepath);
                         ShowMessage("Goodbye");
                         return;
                     default:
@@ -327,5 +331,24 @@
             $" | All tasks: {tasksCount}";
 
         ShowMessage(statistics);
+    }
+
+    private void SaveData(string filepath)
+    {
+        string json = JsonSerializer.Serialize(_tasks);
+        File.WriteAllText(filepath, json);
+    }
+
+    private void LoadData(string filepath)
+    {
+        if (File.Exists(filepath))
+        {
+            string json = File.ReadAllText(filepath);
+            _tasks = JsonSerializer.Deserialize<List<TaskItem>>(json) ?? new List<TaskItem>();
+        }
+        else
+        {
+            _tasks = new List<TaskItem>();
+        }
     }
 }
