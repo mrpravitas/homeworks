@@ -29,8 +29,12 @@
                         }
                         Console.Clear();
 
-                        Console.WriteLine("Enter task description:\n");
-                        string taskDescription = Console.ReadLine();
+                        Console.WriteLine("Enter task description (optional):\n");
+                        string? taskDescription = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(taskDescription))
+                        {
+                            taskDescription = null;
+                        }
                         Console.Clear();
 
                         Console.WriteLine("Select category:");
@@ -248,7 +252,9 @@
             for (int i = 0; i < _tasks.Count; i++)
             {
                 TaskItem task = _tasks[i];
-                Console.WriteLine($"{i+1}. {task.Name}: {task.Description} | " +
+
+                string description = task.Description == null ? "" : $": {task.Description}";
+                Console.WriteLine($"{i+1}. {task.Name}{description} | " +
                     $"Category: {task.Category}, Priority: {task.Priority}, Status: {task.Status}");
             }
             Console.WriteLine();

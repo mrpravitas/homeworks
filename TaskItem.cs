@@ -1,7 +1,7 @@
 ﻿internal class TaskItem
 {
     private string _name;
-    private string _description;
+    private string? _description;
     private Priority _priority;
     private Category _category;
     private Status _status;
@@ -16,7 +16,7 @@
     }
 
     public string Name => _name;
-    public string Description => _description;
+    public string? Description => _description;
     public Priority Priority => _priority;
     public Category Category => _category;
     public Status Status => _status;
