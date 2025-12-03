@@ -20,8 +20,13 @@
                 {
                     case Menu.AddTask:
                         Console.Clear();
-                        Console.WriteLine("Enter task name:\n");
+                        Console.WriteLine("Enter task name (required):\n");
                         string taskName = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(taskName))
+                        {
+                            ShowMessage("Task name cannot be empty");
+                            break;
+                        }
                         Console.Clear();
 
                         Console.WriteLine("Enter task description:\n");
