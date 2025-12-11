@@ -7,17 +7,17 @@ public class Target : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Start() was called");
+        Debug.Log("Target created");
         Destroy(gameObject, 3f);
     }
 
     private void Update()
     {
-        Debug.Log("Update() was called");
+        Debug.Log("Target still alive");
     }
 
     private void OnDestroy()
     {
-        Debug.Log("OnDestroy() was called");
+        Debug.Log("Target destroyed");
     }
 }
