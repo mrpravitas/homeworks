@@ -8,7 +8,7 @@ public class Target : MonoBehaviour
     private void Start()
     {
         Debug.Log("Target created");
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, _lifetime);
     }
 
     private void Update()
