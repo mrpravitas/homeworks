@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _targetPrefab;
+    [SerializeField] private GameObject[] _targetPrefabs;
     [SerializeField] private float _spawnInterval;
     [SerializeField] private float _distanceFromCamera;
     [Range(0f, 0.5f)]
@@ -25,7 +25,9 @@ public class GameManager : MonoBehaviour
 
         Vector3 position = Camera.main.ViewportToWorldPoint(new Vector3(randomX, randomY, _distanceFromCamera));
 
-        GameObject.Instantiate(_targetPrefab, position, Quaternion.identity);
+        GameObject target = _targetPrefabs[Random.Range(0, _targetPrefabs.Length)];
+
+        GameObject.Instantiate(target, position, Quaternion.identity);
 
         _targetCount++;
         OnTargetSpawned.Invoke(_targetCount);

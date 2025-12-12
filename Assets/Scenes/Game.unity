@@ -166,7 +166,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e146189fff6e45b4dbd4a6fcc43d929c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetPrefab: {fileID: 8864806080436172861, guid: b77cce6aea750714b8de7b8a2cf4100c, type: 3}
+  _targetPrefabs:
+  - {fileID: 8864806080436172861, guid: b77cce6aea750714b8de7b8a2cf4100c, type: 3}
+  - {fileID: 4702650210921153549, guid: 5e8733dc8992c6f4e85de6e6d4a615c2, type: 3}
+  - {fileID: 3807623890955960748, guid: cbbbe8ace2ec5b3469285c803c169bb7, type: 3}
+  - {fileID: 5941863903125109713, guid: 7d92b8dc207022d449493d06b26e9529, type: 3}
   _spawnInterval: 4
   _distanceFromCamera: 10
   _margin: 0.15
