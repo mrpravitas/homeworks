@@ -24,9 +24,12 @@ public class GameManager : MonoBehaviour
 
     private void SpawnTarget()
     {
+        GameObject targetObject;
+
         if (_easyMode)
         {
-            Instantiate(GetRandomTarget(), Vector3.zero, Quaternion.identity);
+            targetObject = Instantiate(GetRandomTarget(), Vector3.zero, Quaternion.identity);
+            targetObject.GetComponent<Target>().OnHit += IncreaseHitCount;
             return;
         }
 
@@ -35,9 +38,8 @@ public class GameManager : MonoBehaviour
 
         Vector3 position = Camera.main.ViewportToWorldPoint(new Vector3(randomX, randomY, _distanceFromCamera));
 
-        GameObject targetObject = Instantiate(GetRandomTarget(), position, Quaternion.identity);
-        Target target = targetObject.GetComponent<Target>();
-        target.OnHit += IncreaseHitCount;
+        targetObject = Instantiate(GetRandomTarget(), position, Quaternion.identity);
+        targetObject.GetComponent<Target>().OnHit += IncreaseHitCount;
 
         _targetCount++;
         OnTargetSpawned.Invoke(_targetCount);

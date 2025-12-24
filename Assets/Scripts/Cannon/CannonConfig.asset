@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CannonConfig
   m_EditorClassIdentifier: 
   _shotForce: 1000
-  _reloadTime: 2
+  _reloadTime: 1.5
   _damage: 5
