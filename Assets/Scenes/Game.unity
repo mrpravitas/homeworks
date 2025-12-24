@@ -408,7 +408,7 @@ MonoBehaviour:
   _spawnInterval: 4
   _distanceFromCamera: 10
   _margin: 0.15
-  _isEasyMode: 1
+  _easyMode: 0
   OnTargetSpawned:
     m_PersistentCalls:
       m_Calls:
