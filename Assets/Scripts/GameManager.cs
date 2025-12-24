@@ -12,8 +12,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool _easyMode;
 
     private int _targetCount;
+    private int _hitCount;
 
     public UnityEvent<int> OnTargetSpawned;
+    public UnityEvent<int> OnHitTargetCountChanged;
 
     private void Start()
     {
@@ -33,7 +35,9 @@ public class GameManager : MonoBehaviour
 
         Vector3 position = Camera.main.ViewportToWorldPoint(new Vector3(randomX, randomY, _distanceFromCamera));
 
-        Instantiate(GetRandomTarget(), position, Quaternion.identity);
+        GameObject targetObject = Instantiate(GetRandomTarget(), position, Quaternion.identity);
+        Target target = targetObject.GetComponent<Target>();
+        target.OnHit += IncreaseHitCount;
 
         _targetCount++;
         OnTargetSpawned.Invoke(_targetCount);
@@ -44,5 +48,11 @@ public class GameManager : MonoBehaviour
     private GameObject GetRandomTarget()
     {
         return _targetPrefabs[Random.Range(0, _targetPrefabs.Length)];
+    }
+
+    private void IncreaseHitCount()
+    {
+        _hitCount++;
+        OnHitTargetCountChanged.Invoke(_hitCount);
     }
 }

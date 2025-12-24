@@ -1,8 +1,17 @@
+using System;
 using UnityEngine;
 
 public class Target : MonoBehaviour
 {
     [SerializeField] private float _lifetime;
+
+    public event Action OnHit;
+
+    public void Destroy()
+    {
+        OnHit.Invoke();
+        Destroy(gameObject);
+    }
 
     private void Start()
     {
@@ -24,7 +33,7 @@ public class Target : MonoBehaviour
 
     private void AddRandomBehaviour()
     {
-        int behaviour = Random.Range(0, 3);
+        int behaviour = UnityEngine.Random.Range(0, 3);
 
         switch (behaviour)
         {

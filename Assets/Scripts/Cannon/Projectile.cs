@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
         if (collision.collider.CompareTag("Target"))
         {
             Debug.Log("Target hit!");
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<Target>().Destroy();
             Destroy(gameObject);
         }
     }
