@@ -1,22 +1,23 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Target : MonoBehaviour
 {
     [SerializeField] private float _lifetime;
+    [SerializeField] private float _fadeDuration;
+
+    private bool _isDestroying;
+    private Renderer _renderer;
 
     public event Action OnHit;
-
-    public void Destroy()
-    {
-        OnHit.Invoke();
-        Destroy(gameObject);
-    }
 
     private void Start()
     {
         Debug.Log("Target created");
         Destroy(gameObject, _lifetime);
+
+        _renderer = GetComponent<Renderer>();
 
         AddRandomBehaviour();
     }
@@ -24,6 +25,25 @@ public class Target : MonoBehaviour
     private void Update()
     {
         Debug.Log("Target still alive");
+    }
+
+    public void Destroy()
+    {
+        if (_isDestroying)
+        {
+            return;
+        }
+
+        _isDestroying = true;
+
+        OnHit.Invoke();
+
+        if (GetComponent<ColorChange>() != null)
+        {
+            GetComponent<ColorChange>().enabled = false;
+        }
+
+        StartCoroutine("Fade");
     }
 
     private void OnDestroy()
@@ -47,5 +67,25 @@ public class Target : MonoBehaviour
                 gameObject.AddComponent<ColorChange>();
                 break;
         }
+    }
+
+    private IEnumerator Fade()
+    {
+        float time = 0f;
+        Color color = _renderer.material.color;
+
+        while (time < _fadeDuration)
+        {
+            float t = time / _fadeDuration;
+
+            Color newColor = color;
+            newColor.a = Mathf.Lerp(1f, 0f, t);
+            _renderer.material.color = newColor;
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 }

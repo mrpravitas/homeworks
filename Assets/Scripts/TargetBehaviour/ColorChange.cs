@@ -7,7 +7,12 @@ public class ColorChange : MonoBehaviour
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
-        InvokeRepeating(nameof(ChangeColor), 0f, 1f);
+        InvokeRepeating(nameof(ChangeColor), 0f, 0.5f);
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
     }
 
     private void ChangeColor()
