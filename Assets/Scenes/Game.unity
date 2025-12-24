@@ -257,7 +257,7 @@ MonoBehaviour:
   _verticalSpeed: 100
   _barrel: {fileID: 1503025268}
   _maxHorizontalDeviation: 45
-  _maxVerticalAngle: 30
+  _maxVerticalAngle: 35
   _minVerticalAngle: -15
 --- !u!114 &555082782
 MonoBehaviour:
@@ -353,9 +353,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3421bc117848c4697e5f05f678568e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: f1bc36f5be553564b8753e2aa7b072db, type: 2}
   _projectilePrefab: {fileID: 9106377111621759604, guid: 20e2b97a5c4a92149b1fe867badcd8c2, type: 3}
   _shotPoint: {fileID: 1447461873}
-  _shotForce: 1000
 --- !u!1 &660976976
 GameObject:
   m_ObjectHideFlags: 0
