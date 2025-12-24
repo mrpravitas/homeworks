@@ -2,13 +2,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class LoadSceneOnInput : MonoBehaviour
+public class SceneLoader : MonoBehaviour
 {
+    public void OpenMenuScene()
+    {
+        LoadMenu();
+    }
+
     public void OpenMenuScene(InputAction.CallbackContext callbackContext)
     {
         if (callbackContext.performed)
         {
-            SceneManager.LoadScene("MainMenu");
+            LoadMenu();
         }
     }
 
@@ -18,5 +23,10 @@ public class LoadSceneOnInput : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+    }
+
+    private void LoadMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
