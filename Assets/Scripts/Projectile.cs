@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.collider.CompareTag("Target"))
         {
+            Debug.Log("Target hit!");
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
