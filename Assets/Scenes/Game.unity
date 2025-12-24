@@ -257,8 +257,8 @@ MonoBehaviour:
   _verticalSpeed: 100
   _barrel: {fileID: 1503025268}
   _maxHorizontalDeviation: 45
-  _maxVerticalAngle: 45
-  _minVerticalAngle: -5
+  _maxVerticalAngle: 30
+  _minVerticalAngle: -15
 --- !u!114 &555082782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &660976977
 Transform:
   m_ObjectHideFlags: 0
@@ -408,6 +408,7 @@ MonoBehaviour:
   _spawnInterval: 4
   _distanceFromCamera: 10
   _margin: 0.15
+  _isEasyMode: 1
   OnTargetSpawned:
     m_PersistentCalls:
       m_Calls:
