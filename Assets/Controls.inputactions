@@ -7,9 +7,187 @@
             "id": "e43d296a-41cb-4fae-b794-956b1b18a4fb",
             "actions": [
                 {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "a1cfcde4-0f68-4b14-8ce2-2636ea955d2e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Horizontal Rotate",
+                    "type": "Value",
+                    "id": "01ab31f5-aff9-4531-be80-28b657dc5313",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Vertical Rotate",
+                    "type": "Value",
+                    "id": "890511a6-72a1-4349-a6c5-77bbab71d48f",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c34ebecd-7be9-49e4-850e-de793833fca6",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "02bdb00c-25c3-4e0b-9ce1-2d318bf69c08",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "6d71722e-5372-4b5f-a021-48d915c33b08",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "5658e31f-987c-4fc8-962b-ce1fd9c89e99",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "ff57ba50-f2d7-430c-88ec-38ed3bf411a8",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "0fb2f7ed-a703-421b-8c7a-e5f79987ec3d",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "16375813-d8ed-4490-8d0f-fc963a91575e",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "b026f08e-2bdc-49cc-84ec-df940e95f4a2",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "88cd0c21-75d5-429c-ad8f-77987d434c01",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "1f06602d-5f57-49cc-9d4b-723121ea31c8",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "d43624fa-27cd-42e3-9375-9326545073b7",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "4ffb5ed2-d066-4f6a-8818-76d231c8fbc5",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "9fa74510-fa78-4b13-baba-9176c6800ba8",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "3138c879-f4fd-4f39-82be-e627055ca07a",
+            "actions": [
+                {
                     "name": "Exit",
                     "type": "Button",
-                    "id": "0e5dba4a-c4e2-4f5a-b117-c51125e03ed8",
+                    "id": "ddb9ed18-0c09-4926-a026-3a152e183f74",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -19,7 +197,7 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "703371d8-da8f-4f23-adde-97b495793d73",
+                    "id": "d84c52a9-1626-44c9-8e90-b064da6f4422",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
