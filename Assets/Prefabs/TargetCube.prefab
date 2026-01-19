@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4622258929682026306}
   - component: {fileID: 7975498632247038648}
   - component: {fileID: 7925190854811124981}
+  - component: {fileID: 1581434498543871643}
   m_Layer: 0
   m_Name: TargetCube
   m_TagString: Target
@@ -119,4 +120,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifetime: 3
-  _fadeDuration: 1
+--- !u!95 &1581434498543871643
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8864806080436172861}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 48e2fd04c20fcd04d8f343b3856bb46d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
