@@ -27,6 +27,7 @@ public class SceneLoader : MonoBehaviour
 
     private void LoadMenu()
     {
+        PlayerPrefs.Save();
         SceneManager.LoadScene("MainMenu");
     }
 }

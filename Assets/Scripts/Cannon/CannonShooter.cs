@@ -13,6 +13,14 @@ public class CannonShooter : MonoBehaviour
 
     public UnityEvent<int> OnShooted;
 
+    private void Awake()
+    {
+        if (_config == null)
+        {
+            Debug.LogError("Cannon config is null");
+        }
+    }
+
     private void Update()
     {
         _timer -= Time.deltaTime;
@@ -20,15 +28,23 @@ public class CannonShooter : MonoBehaviour
 
     public void OnShoot(InputAction.CallbackContext callbackContext)
     {
-        if (callbackContext.started && _timer <= 0f)
+        if (callbackContext.started)
         {
-            GameObject projectile = Instantiate(_projectilePrefab, _shotPoint.position, _shotPoint.rotation);
-            projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * _config.ShotForce);
+            if (_timer <= 0f)
+            {
+                GameObject projectile = Instantiate(_projectilePrefab, _shotPoint.position, _shotPoint.rotation);
+                projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * _config.ShotForce);
 
-            _shotCount++;
-            OnShooted.Invoke(_shotCount);
+                _shotCount++;
+                PlayerPrefs.SetInt("shot count", PlayerPrefs.GetInt("shot count", 0) + 1);
+                OnShooted.Invoke(_shotCount);
 
-            _timer = _config.ReloadTime;
+                _timer = _config.ReloadTime;
+            }
+            else
+            {
+                Debug.LogWarning("On reload");
+            }
         }
     }
 }

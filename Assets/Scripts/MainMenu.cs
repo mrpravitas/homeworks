@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
 
     public void Exit()
     {
+        PlayerPrefs.Save();
+
         Application.Quit();
 
         #if UNITY_EDITOR

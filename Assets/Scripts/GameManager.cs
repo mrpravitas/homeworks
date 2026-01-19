@@ -13,12 +13,14 @@ public class GameManager : MonoBehaviour
 
     private int _targetCount;
     private int _hitCount;
+    private int _bestHitCount;
 
     public UnityEvent<int> OnTargetSpawned;
     public UnityEvent<int> OnHitTargetCountChanged;
 
     private void Start()
     {
+        _bestHitCount = PlayerPrefs.GetInt("best hit count", 0);
         InvokeRepeating(nameof(SpawnTarget), 0, _spawnInterval);
     }
 
@@ -55,6 +57,14 @@ public class GameManager : MonoBehaviour
     private void IncreaseHitCount()
     {
         _hitCount++;
+        PlayerPrefs.SetInt("destroyed targets", PlayerPrefs.GetInt("destroyed targets", 0) + 1);
+
+        if (_hitCount > _bestHitCount)
+        {
+            _bestHitCount = _hitCount;
+            PlayerPrefs.SetInt("best hit count", _bestHitCount);
+        }
+
         OnHitTargetCountChanged.Invoke(_hitCount);
     }
 }

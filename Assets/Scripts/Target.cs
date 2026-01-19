@@ -8,6 +8,7 @@ public class Target : MonoBehaviour
     [SerializeField] private float _fadeDuration;
 
     private bool _isDestroying;
+    private bool _wasHit;
     private Renderer _renderer;
 
     public event Action OnHit;
@@ -34,6 +35,7 @@ public class Target : MonoBehaviour
             return;
         }
 
+        _wasHit = true;
         _isDestroying = true;
 
         OnHit.Invoke();
@@ -48,6 +50,10 @@ public class Target : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (!_wasHit)
+        {
+            Debug.Log("Target was not hit");
+        }
         Debug.Log("Target destroyed");
     }
 
