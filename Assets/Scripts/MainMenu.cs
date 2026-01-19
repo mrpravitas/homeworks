@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     public void Exit()
     {
         PlayerPrefs.Save();
+        Debug.Log("Progress was saved");
 
         Application.Quit();
 

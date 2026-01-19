@@ -28,6 +28,7 @@ public class SceneLoader : MonoBehaviour
     private void LoadMenu()
     {
         PlayerPrefs.Save();
+        Debug.Log("Progress was saved");
         SceneManager.LoadScene("MainMenu");
     }
 }
