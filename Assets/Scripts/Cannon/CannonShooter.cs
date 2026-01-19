@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Animator))]
 public class CannonShooter : MonoBehaviour
 {
     [SerializeField] private CannonConfig _config;
@@ -10,6 +11,7 @@ public class CannonShooter : MonoBehaviour
 
     private int _shotCount = 0;
     private float _timer = 0f;
+    private Animator _animator;
 
     public UnityEvent<int> OnShooted;
 
@@ -19,6 +21,8 @@ public class CannonShooter : MonoBehaviour
         {
             Debug.LogError("Cannon config is null");
         }
+
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -32,6 +36,8 @@ public class CannonShooter : MonoBehaviour
         {
             if (_timer <= 0f)
             {
+                _animator.SetTrigger("Shoot");
+
                 GameObject projectile = Instantiate(_projectilePrefab, _shotPoint.position, _shotPoint.rotation);
                 projectile.GetComponent<Rigidbody>().AddForce(projectile.transform.forward * _config.ShotForce);
 
