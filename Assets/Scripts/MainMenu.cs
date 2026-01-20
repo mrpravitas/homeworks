@@ -3,9 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject _settingsPanel;
+
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    public void OpenSettings()
+    {
+        _settingsPanel.SetActive(true);
     }
 
     public void Exit()

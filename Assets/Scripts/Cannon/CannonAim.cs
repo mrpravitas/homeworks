@@ -13,11 +13,13 @@ public class CannonAim : MonoBehaviour
 
     private float _horizontalInput;
     private float _verticalInput;
+    private float _aimSpeed;
 
     private void Awake()
     {
         _maxVerticalAngle = -_maxVerticalAngle;
         _minVerticalAngle = -_minVerticalAngle;
+        _aimSpeed = PlayerPrefs.GetFloat("aim speed", 1f);
     }
 
     private void Update()
@@ -40,13 +42,13 @@ public class CannonAim : MonoBehaviour
 
         if (Mathf.Abs(currentHorizontalRotation + horizontalRotate) <= _maxHorizontalDeviation)
         {
-            transform.Rotate(0f, horizontalRotate, 0f);
+            transform.Rotate(0f, horizontalRotate * _aimSpeed, 0f);
         }
 
         if ((currentVerticalRotation + verticalRotate) <= _minVerticalAngle && 
             (currentVerticalRotation + verticalRotate) >= _maxVerticalAngle)
         {
-            _barrel.Rotate(verticalRotate, 0f, 0f);
+            _barrel.Rotate(verticalRotate * _aimSpeed, 0f, 0f);
         }
     }
 
