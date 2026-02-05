@@ -1,7 +1,7 @@
 public enum EventType
 { 
-    BattleStart,
-    ItemPicked,
-    WeatherCHanged,
-    EnemySpotted
+    WeatherChanged,
+    EnemySpotted,
+    EnemyDefeated,
+    EarthquakeStarted
 }
