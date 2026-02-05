@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GodPanel : MonoBehaviour
 {
@@ -12,6 +11,13 @@ public class GodPanel : MonoBehaviour
     public void ChangeWeather()
     {
         _weatherPanel.SetActive(!_weatherPanel.activeSelf);
+
+        GameEvent gameEvent = new GameEvent(
+            EventType.WeatherChanged,
+            Time.time,
+            "weather has changed");
+
+        EventManager.TriggerEvent(gameEvent);
     }
 
     public void SpawnEnemy()

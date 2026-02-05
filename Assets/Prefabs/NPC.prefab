@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8473697104364700452}
   - component: {fileID: 4155925237515007428}
   - component: {fileID: -4923786220437439756}
+  - component: {fileID: 7652833162717286730}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -100,6 +101,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stepDistance: 0.5
   _stepSpeed: 1
+--- !u!114 &7652833162717286730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980484427388657355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81c1f8e39ee288f42b603a146d03b5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _umbrella: {fileID: 2622174553974271251}
 --- !u!1 &2622174553974271251
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &880999526581017765
 Transform:
   m_ObjectHideFlags: 0
