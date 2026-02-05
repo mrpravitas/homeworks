@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _umbrella: {fileID: 2622174553974271251}
+  _stepAwaySpeed: 2
 --- !u!1 &2622174553974271251
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,6 +24,14 @@ public class GodPanel : MonoBehaviour
     {
         Vector2 spawnPosition = Random.insideUnitCircle * 4;
         Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
+
+        GameEvent gameEvent = new GameEvent(
+            EventType.EnemySpotted,
+            Time.time,
+            "enemy has spawned",
+            spawnPosition);
+
+        EventManager.TriggerEvent(gameEvent);
     }
 
     public void StartEarthquake()

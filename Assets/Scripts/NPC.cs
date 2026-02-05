@@ -1,9 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
     [Header("OnWeatherChanged")]
     [SerializeField] private GameObject _umbrella;
+
+    [Header("OnEnemySpotted")]
+    [SerializeField] private float _stepAwaySpeed;
 
     private void OnEnable()
     {
@@ -41,7 +45,12 @@ public class NPC : MonoBehaviour
 
     private void OnEnemySpotted(object enemyPosition)
     {
+        Vector2 npcPosition = transform.position; 
+        Vector2 stepDirection = (npcPosition - (Vector2)enemyPosition).normalized; 
 
+        Vector2 newPosition = npcPosition + stepDirection * 1.5f;
+
+        StartCoroutine(StepAway(newPosition));
     }
 
     private void OnEnemyDefeated()
@@ -52,5 +61,27 @@ public class NPC : MonoBehaviour
     private void OnEarthquakeStarted(object duration)
     {
 
+    }
+
+    private IEnumerator StepAway(Vector2 targetPosition)
+    {
+        NPCWander wander = GetComponent<NPCWander>();
+        if (wander != null)
+        {
+            wander.enabled = false;
+        }
+
+        while (Vector2.Distance(transform.position, targetPosition) > 0.01f)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, targetPosition, 
+                _stepAwaySpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        if (wander != null)
+        {
+            wander.enabled = true;
+        }
     }
 }
