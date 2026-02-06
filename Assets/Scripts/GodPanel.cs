@@ -49,6 +49,8 @@ public class GodPanel : MonoBehaviour
             Time.time,
             $"earthquake has started. duration: {_duration}, magnitude: {_magnitude}",
             parameters);
+
+        EventManager.TriggerEvent(gameEvent);
     }
 
     private GameEvent CreateGameEvent(EventType eventType, float time, string description, object parameter = null)

@@ -18,6 +18,13 @@ public class NPC : MonoBehaviour
     private float _particleRiseHeight = 0.5f;
     private float _stepToEnemyLength = 0.75f;
 
+    private Transform _transform;
+
+    private void Awake()
+    {
+        _transform = transform;
+    }
+
     private void OnEnable()
     {
         EventManager.OnGameEvent += HandleEvent;
@@ -54,7 +61,7 @@ public class NPC : MonoBehaviour
 
     private void OnEnemySpotted(object enemyPosition)
     {
-        Vector2 npcPosition = transform.position; 
+        Vector2 npcPosition = _transform.position; 
         Vector2 stepDirection = (npcPosition - (Vector2)enemyPosition).normalized; 
 
         Vector2 newPosition = npcPosition + stepDirection * _stepAwayLength;
@@ -64,7 +71,7 @@ public class NPC : MonoBehaviour
 
     private void OnEnemyDefeated(object enemyPosition)
     {
-        Vector2 npcPosition = transform.position;
+        Vector2 npcPosition = _transform.position;
         Vector2 stepDirection = ((Vector2)enemyPosition - npcPosition).normalized;
 
         Vector2 newPosition = npcPosition + stepDirection * _stepToEnemyLength;
@@ -73,9 +80,12 @@ public class NPC : MonoBehaviour
         StartCoroutine(Joy());
     }
 
-    private void OnEarthquakeStarted(object duration)
+    private void OnEarthquakeStarted(object parameters)
     {
+        float[] f = (float[])parameters;
+        float duration = f[0];
 
+        StartCoroutine(BendDown(duration));
     }
 
     private IEnumerator StepTo(Vector2 targetPosition)
@@ -86,9 +96,9 @@ public class NPC : MonoBehaviour
             wander.enabled = false;
         }
 
-        while (Vector2.Distance(transform.position, targetPosition) > 0.01f)
+        while (Vector2.Distance(_transform.position, targetPosition) > 0.01f)
         {
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, 
+            _transform.position = Vector2.MoveTowards(_transform.position, targetPosition, 
                 _stepSpeed * Time.deltaTime);
 
             yield return null;
@@ -124,5 +134,16 @@ public class NPC : MonoBehaviour
 
         _joyParticles.SetActive(false);
         particles.localPosition = startParticlesPosition;
+    }
+
+    private IEnumerator BendDown(float duration)
+    {
+        Vector3 startScale = _transform.localScale;
+
+        _transform.localScale = new Vector3(startScale.x, startScale.y / 2f, startScale.z);
+
+        yield return new WaitForSeconds(duration);
+
+        _transform.localScale = startScale;
     }
 }
