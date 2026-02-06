@@ -7,7 +7,16 @@ public class NPC : MonoBehaviour
     [SerializeField] private GameObject _umbrella;
 
     [Header("OnEnemySpotted")]
-    [SerializeField] private float _stepAwaySpeed;
+    [SerializeField] private float _stepSpeed;
+
+    private float _stepAwayLength = 1.5f;
+
+    [Header("OnEnemyDefeated")]
+    [SerializeField] private GameObject _joyParticles;
+
+    private float _particleRiseSpeed = 0.5f;
+    private float _particleRiseHeight = 0.5f;
+    private float _stepToEnemyLength = 0.75f;
 
     private void OnEnable()
     {
@@ -30,7 +39,7 @@ public class NPC : MonoBehaviour
                 OnEnemySpotted(gameEvent.Parameter);
                 break;
             case EventType.EnemyDefeated:
-                OnEnemyDefeated();
+                OnEnemyDefeated(gameEvent.Parameter);
                 break;
             case EventType.EarthquakeStarted:
                 OnEarthquakeStarted(gameEvent.Parameter);
@@ -40,7 +49,7 @@ public class NPC : MonoBehaviour
 
     private void OnWeatherChanged()
     {
-        _umbrella.SetActive(!_umbrella.activeSelf);
+        _umbrella?.SetActive(!_umbrella.activeSelf);
     }
 
     private void OnEnemySpotted(object enemyPosition)
@@ -48,14 +57,20 @@ public class NPC : MonoBehaviour
         Vector2 npcPosition = transform.position; 
         Vector2 stepDirection = (npcPosition - (Vector2)enemyPosition).normalized; 
 
-        Vector2 newPosition = npcPosition + stepDirection * 1.5f;
+        Vector2 newPosition = npcPosition + stepDirection * _stepAwayLength;
 
-        StartCoroutine(StepAway(newPosition));
+        StartCoroutine(StepTo(newPosition));
     }
 
-    private void OnEnemyDefeated()
+    private void OnEnemyDefeated(object enemyPosition)
     {
+        Vector2 npcPosition = transform.position;
+        Vector2 stepDirection = ((Vector2)enemyPosition - npcPosition).normalized;
 
+        Vector2 newPosition = npcPosition + stepDirection * _stepToEnemyLength;
+
+        StartCoroutine(StepTo(newPosition));
+        StartCoroutine(Joy());
     }
 
     private void OnEarthquakeStarted(object duration)
@@ -63,7 +78,7 @@ public class NPC : MonoBehaviour
 
     }
 
-    private IEnumerator StepAway(Vector2 targetPosition)
+    private IEnumerator StepTo(Vector2 targetPosition)
     {
         NPCWander wander = GetComponent<NPCWander>();
         if (wander != null)
@@ -74,7 +89,7 @@ public class NPC : MonoBehaviour
         while (Vector2.Distance(transform.position, targetPosition) > 0.01f)
         {
             transform.position = Vector2.MoveTowards(transform.position, targetPosition, 
-                _stepAwaySpeed * Time.deltaTime);
+                _stepSpeed * Time.deltaTime);
 
             yield return null;
         }
@@ -83,5 +98,31 @@ public class NPC : MonoBehaviour
         {
             wander.enabled = true;
         }
+    }
+
+    private IEnumerator Joy()
+    {
+        if (_joyParticles == null)
+        {
+            yield break;
+        }
+
+        Transform particles = _joyParticles.transform;
+
+        Vector2 startParticlesPosition = particles.localPosition;
+        Vector2 endParticlesPosition = startParticlesPosition + Vector2.up * _particleRiseHeight;
+
+        _joyParticles.SetActive(true);
+
+        while (Vector2.Distance(particles.localPosition, endParticlesPosition) > 0.01f)
+        {
+            particles.localPosition = Vector2.MoveTowards(particles.localPosition, endParticlesPosition,
+                _particleRiseSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        _joyParticles.SetActive(false);
+        particles.localPosition = startParticlesPosition;
     }
 }
