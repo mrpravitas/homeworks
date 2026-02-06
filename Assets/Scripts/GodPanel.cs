@@ -33,7 +33,7 @@ public class GodPanel : MonoBehaviour
         GameEvent gameEvent = CreateGameEvent(
             EventType.EnemySpotted,
             Time.time,
-            "enemy has spawned. cick on the enemy to defeat",
+            "enemy has spawned",
             spawnPosition);
 
         EventManager.TriggerEvent(gameEvent);
@@ -47,7 +47,7 @@ public class GodPanel : MonoBehaviour
         GameEvent gameEvent = CreateGameEvent(
             EventType.EarthquakeStarted,
             Time.time,
-            $"earthquake has started. duration: {_duration}, magnitude: {_magnitude}",
+            $"earthquake has started",
             parameters);
 
         EventManager.TriggerEvent(gameEvent);
