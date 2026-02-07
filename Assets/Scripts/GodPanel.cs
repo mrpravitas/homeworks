@@ -1,7 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GodPanel : MonoBehaviour
 {
+    [Header("Buttons")]
+    [SerializeField] private Button _startEarthquakeButton;
+    [SerializeField] private Button _spawnEnemyButton;
+    [SerializeField] private Button _changeWeatherButton;
+
     [Header("Weather")]
     [SerializeField] private GameObject _weatherPanel;
 
@@ -12,6 +18,20 @@ public class GodPanel : MonoBehaviour
     [SerializeField] private CameraShaker _cameraShaker;
     [SerializeField] private float _duration;
     [SerializeField] private float _magnitude;
+
+    private void OnEnable()
+    {
+        _startEarthquakeButton.onClick.AddListener(StartEarthquake);
+        _spawnEnemyButton.onClick.AddListener(SpawnEnemy);
+        _changeWeatherButton.onClick.AddListener(ChangeWeather);
+    }
+
+    private void OnDisable()
+    {
+        _startEarthquakeButton.onClick.RemoveListener(StartEarthquake);
+        _spawnEnemyButton.onClick.RemoveListener(SpawnEnemy);
+        _changeWeatherButton.onClick.RemoveListener(ChangeWeather);
+    }
 
     public void ChangeWeather()
     {

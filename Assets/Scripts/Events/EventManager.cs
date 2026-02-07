@@ -15,6 +15,11 @@ public static class EventManager
         OnGameEvent?.Invoke(gameEvent);
     }
 
+    public static IEnumerable<GameEvent> GetAllEvents()
+    {
+        return _gameEvents;
+    }
+
     public static IEnumerable<GameEvent> GetEventsByType(EventType eventType)
     {
         return _gameEvents.Where(e => e.EventType == eventType);
