@@ -15,24 +15,34 @@ public class UINewsManager : MonoBehaviour
     private string _newsSource;
     private List<NewsItem> _news;
 
+    private Coroutine _showNewsCoroutine;
+
     private async Task Start()
     {
         _newsSource = Application.streamingAssetsPath + "/news.json";
         _newsLoader = new NewsLoader(_newsSource);
 
         _news = await _newsLoader.LoadNewsAsync();
-
-        StartCoroutine(ShowNewsCoroutine());
     }
 
     private void OnEnable()
     {
-        
+        _showNewsButton.onClick.AddListener(ShowNews);
     }
 
     private void OnDisable()
     {
-        
+        _showNewsButton.onClick.RemoveListener(ShowNews);
+    }
+
+    private void ShowNews()
+    {
+        if (_showNewsCoroutine != null)
+        {
+            return;
+        }
+
+        _showNewsCoroutine = StartCoroutine(ShowNewsCoroutine());
     }
 
     private IEnumerator ShowNewsCoroutine()
