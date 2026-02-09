@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,7 +28,15 @@ public class UINewsManager : MonoBehaviour
         _newsSource = Application.streamingAssetsPath + "/news.json";
         _newsLoader = new NewsLoader(_newsSource);
 
-        _news = await _newsLoader.LoadNewsAsync();
+        try
+        {
+            _news = await _newsLoader.LoadNewsAsync();
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError($"Filed to load news: {exception.Message}\n News list is empty");
+            _news = new List<NewsItem>();
+        }
     }
 
     private void OnEnable()
@@ -65,7 +74,15 @@ public class UINewsManager : MonoBehaviour
 
         ClearContent();
 
-        _news = await _newsLoader.LoadNewsAsync();
+        try
+        {
+            _news = await _newsLoader.LoadNewsAsync();
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError($"Filed to load news: {exception.Message}\n News list is empty");
+            _news = new List<NewsItem>();
+        }
 
         ShowNews();
     }

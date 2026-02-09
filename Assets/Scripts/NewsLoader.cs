@@ -16,12 +16,25 @@ public class NewsLoader
 
     public async Task<List<NewsItem>> LoadNewsAsync()
     {
-        string json = await File.ReadAllTextAsync(_filePath);
-        string wrapped = "{\"Items\":" + json + "}";
+        try
+        {
+            string json = await File.ReadAllTextAsync(_filePath);
+            string wrapped = "{\"Items\":" + json + "}";
 
-        NewsWrapper wrappedNews = JsonUtility.FromJson<NewsWrapper>(wrapped);
+            NewsWrapper wrappedNews = JsonUtility.FromJson<NewsWrapper>(wrapped);
 
-        return wrappedNews.Items;
+            if (wrappedNews?.Items == null)
+            {
+                return new List<NewsItem>();
+            }
+
+            return wrappedNews.Items;
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError($"Failed to load json: {exception.Message}");
+            throw exception;
+        }
     }
 
     [Serializable]
