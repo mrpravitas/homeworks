@@ -14,6 +14,8 @@ public class UINewsManager : MonoBehaviour
     [SerializeField] private TMP_Text _TMPNewsPrefab;
     [SerializeField] private GameObject _loadingSpinner;
 
+    [SerializeField] private NewsDisplaySettings _settings;
+
     private NewsLoader _newsLoader;
     private string _newsSource;
     private List<NewsItem> _news;
@@ -83,20 +85,17 @@ public class UINewsManager : MonoBehaviour
     {
         int newsCount = _news.Count;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_settings.DelayBetweenNews);
 
         for (int i = 0; i < newsCount; i++) 
         {
+            yield return new WaitForSeconds(_settings.DelayBetweenNews);
+
             var item = _news[i];
 
             TMP_Text news = Instantiate(_TMPNewsPrefab, _viewportContent);
             news.text = NewsToString(item);
             _loadingSpinner.transform.SetAsLastSibling();
-
-            if (i < newsCount - 1)
-            {
-                yield return new WaitForSeconds(2f);
-            }
         }
 
         _loadingSpinner.SetActive(false);
@@ -124,13 +123,22 @@ public class UINewsManager : MonoBehaviour
     private string NewsToString(NewsItem item)
     {
         string itemTitle = item.Title;
-        string title = string.IsNullOrEmpty(itemTitle) ? "no title" : itemTitle;
+
+        if (string.IsNullOrEmpty(itemTitle))
+        {
+            string color = ColorUtility.ToHtmlStringRGB(_settings.NoTitleContentTextColor);
+            itemTitle = $"<color=#{color}>{_settings.NoTitleText}</color>";
+        }
 
         string itemContent = item.Content;
-        string content = string.IsNullOrEmpty(itemContent) ? "no content" : itemContent;
+        if (string.IsNullOrEmpty(itemContent))
+        {
+            string color = ColorUtility.ToHtmlStringRGB(_settings.NoTitleContentTextColor);
+            itemContent = $"<color=#{color}>{_settings.NoContentText}</color>";
+        }
 
         string timestamp = item.Timestamp.ToString("yyyy-MM-dd");
 
-        return $"{timestamp}: {title}\n{content}";
+        return $"{timestamp}: {itemTitle}\n{itemContent}";
     }
 }

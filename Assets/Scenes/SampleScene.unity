@@ -916,10 +916,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _showNewsButton: {fileID: 1203096821}
   _reloadButton: {fileID: 1888608019}
-  _showNewsImmediately: {fileID: 0}
+  _showNewsImmediately: {fileID: 280298078}
   _viewportContent: {fileID: 475867058}
   _TMPNewsPrefab: {fileID: 2117145798067999909, guid: 452d34d27d2145b4fbd53f2867f2774e, type: 3}
   _loadingSpinner: {fileID: 2092240437}
+  _settings: {fileID: 11400000, guid: 95e10b8fcc7fdaf469bdb007acd54056, type: 2}
 --- !u!1 &882055221
 GameObject:
   m_ObjectHideFlags: 0
