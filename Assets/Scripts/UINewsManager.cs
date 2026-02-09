@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UINewsManager : MonoBehaviour
 {
+    [SerializeField] private Button _showNewsButton;
+    [SerializeField] private Transform _viewportContent;
+    [SerializeField] private TMP_Text _TMPNewsPrefab;
+
     private NewsLoader _newsLoader;
     private string _newsSource;
     private List<NewsItem> _news;
@@ -15,14 +21,27 @@ public class UINewsManager : MonoBehaviour
         _newsLoader = new NewsLoader(_newsSource);
 
         _news = await _newsLoader.LoadNewsAsync();
+
         StartCoroutine(ShowNewsCoroutine());
+    }
+
+    private void OnEnable()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        
     }
 
     private IEnumerator ShowNewsCoroutine()
     {
         foreach (var item in _news)
         {
-            Debug.Log(NewsToString(item));
+            TMP_Text news = Instantiate(_TMPNewsPrefab, _viewportContent);
+            news.text = NewsToString(item);
+
             yield return new WaitForSeconds(2f);
         }
     }
@@ -36,6 +55,6 @@ public class UINewsManager : MonoBehaviour
 
         string timestamp = item.Timestamp.ToString("yyyy-MM-dd");
 
-        return $"{timestamp}: {title} - {content}";
+        return $"{timestamp}: {title}\n{content}";
     }
 }
