@@ -9,6 +9,7 @@ public class UINewsManager : MonoBehaviour
 {
     [SerializeField] private Button _showNewsButton;
     [SerializeField] private Button _reloadButton;
+    [SerializeField] private Button _showNewsImmediately;
     [SerializeField] private Transform _viewportContent;
     [SerializeField] private TMP_Text _TMPNewsPrefab;
     [SerializeField] private GameObject _loadingSpinner;
@@ -31,12 +32,14 @@ public class UINewsManager : MonoBehaviour
     {
         _showNewsButton.onClick.AddListener(ShowNews);
         _reloadButton.onClick.AddListener(ReloadNews);
+        _showNewsImmediately.onClick.AddListener(ShowNewsImmediately);
     }
 
     private void OnDisable()
     {
         _showNewsButton.onClick.RemoveListener(ShowNews);
         _reloadButton.onClick.RemoveListener(ReloadNews);
+        _showNewsImmediately.onClick.RemoveListener(ShowNewsImmediately);
     }
 
     private void ShowNews()
@@ -58,6 +61,15 @@ public class UINewsManager : MonoBehaviour
             _showNewsCoroutine = null;
         }
 
+        ClearContent();
+
+        _news = await _newsLoader.LoadNewsAsync();
+
+        ShowNews();
+    }
+
+    private void ClearContent()
+    {
         foreach (Transform child in _viewportContent)
         {
             if (child.gameObject != _loadingSpinner)
@@ -65,10 +77,6 @@ public class UINewsManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
-
-        _news = await _newsLoader.LoadNewsAsync();
-
-        ShowNews();
     }
 
     private IEnumerator ShowNewsCoroutine()
@@ -92,6 +100,25 @@ public class UINewsManager : MonoBehaviour
         }
 
         _loadingSpinner.SetActive(false);
+    }
+
+    private void ShowNewsImmediately()
+    {
+        if (_showNewsCoroutine != null)
+        {
+            StopCoroutine(_showNewsCoroutine);
+            _showNewsCoroutine = null;
+        }
+
+        _loadingSpinner.SetActive(false);
+
+        ClearContent();
+
+        foreach (var item in _news)
+        {
+            TMP_Text news = Instantiate(_TMPNewsPrefab, _viewportContent);
+            news.text = NewsToString(item);
+        }
     }
 
     private string NewsToString(NewsItem item)
