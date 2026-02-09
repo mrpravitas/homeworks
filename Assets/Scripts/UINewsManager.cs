@@ -11,6 +11,7 @@ public class UINewsManager : MonoBehaviour
     [SerializeField] private Button _reloadButton;
     [SerializeField] private Transform _viewportContent;
     [SerializeField] private TMP_Text _TMPNewsPrefab;
+    [SerializeField] private GameObject _loadingSpinner;
 
     private NewsLoader _newsLoader;
     private string _newsSource;
@@ -45,6 +46,7 @@ public class UINewsManager : MonoBehaviour
             return;
         }
 
+        _loadingSpinner.SetActive(true);
         _showNewsCoroutine = StartCoroutine(ShowNewsCoroutine());
     }
 
@@ -58,7 +60,10 @@ public class UINewsManager : MonoBehaviour
 
         foreach (Transform child in _viewportContent)
         {
-            Destroy(child.gameObject);
+            if (child.gameObject != _loadingSpinner)
+            {
+                Destroy(child.gameObject);
+            }
         }
 
         _news = await _newsLoader.LoadNewsAsync();
@@ -68,14 +73,27 @@ public class UINewsManager : MonoBehaviour
 
     private IEnumerator ShowNewsCoroutine()
     {
-        foreach (var item in _news)
+        int newsCount = _news.Count;
+
+        yield return new WaitForSeconds(2f);
+
+        for (int i = 0; i < newsCount; i++) 
         {
+            var item = _news[i];
+
             TMP_Text news = Instantiate(_TMPNewsPrefab, _viewportContent);
             news.text = NewsToString(item);
+            _loadingSpinner.transform.SetAsLastSibling();
 
-            yield return new WaitForSeconds(2f);
+            if (i < newsCount - 1)
+            {
+                yield return new WaitForSeconds(2f);
+            }
         }
+
+        _loadingSpinner.SetActive(false);
     }
+
     private string NewsToString(NewsItem item)
     {
         string itemTitle = item.Title;
