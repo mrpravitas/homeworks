@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UINewsManager : MonoBehaviour
 {
     [SerializeField] private Button _showNewsButton;
+    [SerializeField] private Button _reloadButton;
     [SerializeField] private Transform _viewportContent;
     [SerializeField] private TMP_Text _TMPNewsPrefab;
 
@@ -28,11 +29,13 @@ public class UINewsManager : MonoBehaviour
     private void OnEnable()
     {
         _showNewsButton.onClick.AddListener(ShowNews);
+        _reloadButton.onClick.AddListener(ReloadNews);
     }
 
     private void OnDisable()
     {
         _showNewsButton.onClick.RemoveListener(ShowNews);
+        _reloadButton.onClick.RemoveListener(ReloadNews);
     }
 
     private void ShowNews()
@@ -43,6 +46,24 @@ public class UINewsManager : MonoBehaviour
         }
 
         _showNewsCoroutine = StartCoroutine(ShowNewsCoroutine());
+    }
+
+    private async void ReloadNews()
+    {
+        if (_showNewsCoroutine != null)
+        {
+            StopCoroutine(_showNewsCoroutine);
+            _showNewsCoroutine = null;
+        }
+
+        foreach (Transform child in _viewportContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        _news = await _newsLoader.LoadNewsAsync();
+
+        ShowNews();
     }
 
     private IEnumerator ShowNewsCoroutine()
