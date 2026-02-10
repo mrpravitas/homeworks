@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -17,16 +18,25 @@ public class UINewsManager : MonoBehaviour
 
     [SerializeField] private NewsDisplaySettings _settings;
 
-    private NewsLoader _newsLoader;
-    private string _newsSource;
-    private List<NewsItem> _news;
+    [SerializeField] private bool _simulateServer;
+
+    private INewsLoader _newsLoader;
+    private List<NewsItem> _news = new List<NewsItem>();
+    private bool _newsLoaded;
 
     private Coroutine _showNewsCoroutine;
 
     private async Task Start()
     {
-        _newsSource = Application.streamingAssetsPath + "/news.json";
-        _newsLoader = new NewsLoader(_newsSource);
+        if (_simulateServer)
+        {
+            _newsLoader = new NewsLoaderServer(NewsPath.ResourcesNews);
+        }
+        else
+        {
+            string path = Path.Combine(Application.streamingAssetsPath, NewsPath.StreamingAssetsNews);
+            _newsLoader = new NewsLoader(path);
+        }
 
         try
         {
@@ -36,6 +46,10 @@ public class UINewsManager : MonoBehaviour
         {
             Debug.LogError($"Filed to load news: {exception.Message}\n News list is empty");
             _news = new List<NewsItem>();
+        }
+        finally
+        {
+            _newsLoaded = true;
         }
     }
 
@@ -73,6 +87,7 @@ public class UINewsManager : MonoBehaviour
         }
 
         ClearContent();
+        _loadingSpinner.SetActive(true);
 
         try
         {
@@ -100,6 +115,11 @@ public class UINewsManager : MonoBehaviour
 
     private IEnumerator ShowNewsCoroutine()
     {
+        while (!_newsLoaded)
+        {
+            yield return null;
+        }
+
         int newsCount = _news.Count;
 
         yield return new WaitForSeconds(_settings.DelayBetweenNews);

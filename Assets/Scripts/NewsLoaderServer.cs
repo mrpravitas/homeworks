@@ -1,26 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class NewsLoader : INewsLoader
+public class NewsLoaderServer : INewsLoader
 {
     private string _filePath;
 
-    public NewsLoader(string filePath)
+    public NewsLoaderServer(string filePath)
     { 
-        _filePath = filePath;
+        _filePath = filePath; 
     }
 
     public async Task<List<NewsItem>> LoadNewsAsync()
     {
+        await Task.Delay(2000);
+
         try
         {
-            string json = await File.ReadAllTextAsync(_filePath);
-            string wrapped = "{\"Items\":" + json + "}";
+            TextAsset jsonAsset =  Resources.Load<TextAsset>(_filePath);
+            string wrapped = "{\"Items\":" + jsonAsset.text + "}";
 
             NewsWrapper wrappedNews = JsonUtility.FromJson<NewsWrapper>(wrapped);
+
+            await Task.Delay(1000);
 
             return wrappedNews.Items;
         }
