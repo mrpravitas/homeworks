@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4acce684a9423845924f33a40e9ea5d, type: 3}
-  m_Name: GameConfig
+  m_Script: {fileID: 11500000, guid: 6ce520f3938c919488e5d9c659ad9cb8, type: 3}
+  m_Name: New Coin Config
   m_EditorClassIdentifier: 
-  _playerSpeed: 10
-  _enemySpawnInterval: 2
-  _targetScore: 10
+  _respawnDelay: 2

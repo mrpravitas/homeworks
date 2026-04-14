@@ -6,10 +6,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 _direction;
     private Transform _transform;
+    private Rigidbody _rigidbody;
 
     private void Awake()
     {
         _transform = transform;
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -18,6 +20,16 @@ public class PlayerMovement : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         _direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
-        _transform.position += _direction * (Time.deltaTime * _gameConfig.PlayerSpeed);
+    }
+
+    private void FixedUpdate()
+    {
+        if (_direction.sqrMagnitude < 0.01f)
+            return;
+
+        Vector3 newPosition = _transform.position +
+                              _direction * (_gameConfig.PlayerSpeed * Time.fixedDeltaTime);
+
+        _rigidbody.MovePosition(newPosition);
     }
 }

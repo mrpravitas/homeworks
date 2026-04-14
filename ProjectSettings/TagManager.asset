@@ -16,10 +16,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Coin
+  - Enemy
+  - Wall
   - 
   - 
   - 
