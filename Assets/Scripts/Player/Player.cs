@@ -2,9 +2,9 @@
 
 public class Player : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent<Enemy>(out Enemy enemy))
+        if (collision.collider.TryGetComponent<Enemy>(out Enemy enemy))
         {
             EventBus.Raise(new GameEvent(EventType.GameLosed));
         }
