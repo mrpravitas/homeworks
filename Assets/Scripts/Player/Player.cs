@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     {
         if (collision.collider.TryGetComponent<Enemy>(out Enemy enemy))
         {
-            EventBus.Raise(new GameEvent(EventType.GameLosed));
+            EventBus.Raise(new GameEvent(EventType.PlayerDamaged));
         }
     }
 }

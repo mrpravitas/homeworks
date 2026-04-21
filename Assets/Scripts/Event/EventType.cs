@@ -6,5 +6,6 @@
     GameWon,
     GameLosed,
     GameStateChanged,
-    GamePaused
+    GamePaused,
+    PlayerDamaged
 }

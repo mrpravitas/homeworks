@@ -51,7 +51,7 @@
             }
         }
 
-        if (gameEvent.EventType == EventType.GameLosed)
+        if (gameEvent.EventType == EventType.PlayerDamaged)
         {
             SetState(GameState.Lose);
         }
