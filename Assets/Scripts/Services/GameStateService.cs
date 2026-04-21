@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class GameStateService
+﻿public class GameStateService
 {
     private GameConfig _gameConfig;
     private int _score;
@@ -15,33 +13,58 @@ public class GameStateService
     public void Init()
     {
         _score = 0;
-        _gameState = GameState.Init;
+        SetState(GameState.Init);
     }
+
+    public void Dispose()
+    {
+        EventBus.OnGameEvent -= HandleEvent;
+    }
+
 
     private void HandleEvent(GameEvent gameEvent)
     {
-        if (gameEvent.EventType != EventType.ItemPicked)
+        if (gameEvent.EventType == EventType.ItemPicked)
+        {
+            _score++;
+            EventBus.Raise(new GameEvent(EventType.ScoreChanged, _score));
+            SetState(GameState.Playing);
+
+            if (_score >= _gameConfig.TargetScore)
+            {
+                SetState(GameState.Win);
+            }
+        }
+
+        if (gameEvent.EventType == EventType.GamePaused)
+        {
+            if (_gameState == GameState.Playing || _gameState == GameState.Init)
+            {
+                SetState(GameState.Paused);
+                return;
+            }
+
+            if (_gameState == GameState.Paused)
+            {
+                SetState(GameState.Playing);
+                return;
+            }
+        }
+
+        if (gameEvent.EventType == EventType.GameLosed)
+        {
+            SetState(GameState.Lose);
+        }
+    }
+
+    private void SetState(GameState gameState)
+    {
+        if (_gameState == gameState)
         {
             return;
         }
 
-        if (_gameState == GameState.Win)
-        {
-            return;
-        }
-
-        if (_gameState == GameState.Init)
-        {
-            _gameState = GameState.Playing;
-        }
-
-        _score++;
-        EventBus.Raise(new GameEvent(EventType.ScoreChanged, _score));
-
-        if (_score >= _gameConfig.TargetScore)
-        {
-            _gameState = GameState.Win;
-            EventBus.Raise(new GameEvent(EventType.GameWon));
-        }
+        _gameState = gameState;
+        EventBus.Raise(new GameEvent(EventType.GameStateChanged, _gameState));
     }
 }

@@ -9,10 +9,16 @@ public class Bootstrapper : MonoBehaviour
 
     private void Awake()
     {
-        _gameStateService = new GameStateService(_gameConfig);
-        _gameStateService.Init();
-
         _spawnService = new SpawnService(_gameConfig);
         _spawnService.Init();
+
+        _gameStateService = new GameStateService(_gameConfig);
+        _gameStateService.Init();
+    }
+
+    private void OnDestroy()
+    {
+        _gameStateService.Dispose();
+        _spawnService.Dispose();
     }
 }

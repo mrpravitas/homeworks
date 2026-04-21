@@ -3,5 +3,8 @@
     ItemPicked,
     EnemySpawned,
     ScoreChanged,
-    GameWon
+    GameWon,
+    GameLosed,
+    GameStateChanged,
+    GamePaused
 }
