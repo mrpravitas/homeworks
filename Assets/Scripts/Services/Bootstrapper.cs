@@ -1,24 +1,37 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Bootstrapper : MonoBehaviour
 {
     [SerializeField] private GameConfig _gameConfig;
 
-    private GameStateService _gameStateService;
-    private SpawnService _spawnService;
+    private List<IDisposable> _services = new List<IDisposable>();
 
     private void Awake()
     {
-        _spawnService = new SpawnService(_gameConfig);
-        _spawnService.Init();
+        SpawnService spawnService = new SpawnService(_gameConfig);
+        _services.Add(spawnService);
+        spawnService.Init();
 
-        _gameStateService = new GameStateService(_gameConfig);
-        _gameStateService.Init();
+        GameStateService gameStateService = new GameStateService(_gameConfig);
+        _services.Add(gameStateService);
+        gameStateService.Init();
+
+        EventLogService eventLogService = new EventLogService();
+        _services.Add(eventLogService);
+        eventLogService.Init();
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        _gameStateService.Dispose();
-        _spawnService.Dispose();
+        DisposeAllServices();
+    }
+
+    private void DisposeAllServices()
+    {
+        foreach (var service in _services)
+        {
+            service.Dispose();
+        }
     }
 }

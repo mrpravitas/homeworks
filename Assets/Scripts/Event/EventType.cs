@@ -7,5 +7,6 @@
     GameLosed,
     GameStateChanged,
     GamePaused,
-    PlayerDamaged
+    PlayerDamaged,
+    LogRequested
 }

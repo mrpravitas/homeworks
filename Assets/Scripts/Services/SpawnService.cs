@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-public class SpawnService
+public class SpawnService : IDisposable
 {
     private GameConfig _gameConfig;
     private bool _isRunning;
@@ -24,7 +24,6 @@ public class SpawnService
         _isRunning = false;
         _isPaused = false;
     }
-
 
     private void HandleEvent(GameEvent gameEvent)
     {

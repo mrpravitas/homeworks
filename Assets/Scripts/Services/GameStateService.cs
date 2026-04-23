@@ -1,4 +1,4 @@
-﻿public class GameStateService
+﻿public class GameStateService : IDisposable
 {
     private GameConfig _gameConfig;
     private int _score;
