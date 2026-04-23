@@ -7,23 +7,48 @@ public class Enemy : MonoBehaviour
     private Transform _target;
     private Transform _transform;
     private Rigidbody _rigidbody;
+    private IEnemyStrategy _strategy;
 
     public void Init(Transform target)
     {
         _target = target;
     }
 
-    private void Awake()
+    private void Start()
     {
         _transform = transform;
         _rigidbody = GetComponent<Rigidbody>();
+        CreateStrategy();
     }
 
     private void FixedUpdate()
     {
-        Vector3 direction = (_target.position - _transform.position).normalized;
-        Vector3 newPosition = _transform.position + direction * (_enemyConfig.Speed * Time.fixedDeltaTime);
+        _strategy.Tick(Time.fixedDeltaTime);
+    }
 
-        _rigidbody.MovePosition(newPosition);
+    private void CreateStrategy()
+    {
+        switch (_enemyConfig.StrategyType)
+        {
+            case EnemyStrategyType.Chase:
+            {
+                _strategy = new ChaseStrategy(
+                    _transform,
+                    _rigidbody,
+                    _target,
+                    _enemyConfig.Speed
+                );
+                break;
+            }
+            case EnemyStrategyType.RandomWalk:
+            {
+                _strategy = new RandomWalkStrategy(
+                    _transform,
+                    _rigidbody,
+                    _enemyConfig.Speed
+                );
+                break;
+            }
+        }
     }
 }
