@@ -2,7 +2,14 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] private int _health;
+    [SerializeField] private int _maxHealth;
+
+    private float _currentHealth;
+
+    private void Awake()
+    {
+        _currentHealth = _maxHealth;
+    }
 
     public void TakeDamage(int amount)
     {
@@ -11,9 +18,9 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
 
-        _health -= amount;
+        _currentHealth -= amount;
 
-        if (_health <= 0)
+        if (_currentHealth <= 0)
         {
             Die();
         }
