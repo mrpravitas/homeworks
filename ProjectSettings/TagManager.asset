@@ -15,11 +15,11 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - PlayerProjectile
+  - Enemy
+  - EnemyProjectile
+  - Wall
   - 
   - 
   - 
