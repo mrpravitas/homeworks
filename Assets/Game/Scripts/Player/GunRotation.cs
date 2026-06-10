@@ -14,7 +14,7 @@ public class GunRotation : MonoBehaviour
     private void Update()
     {
         Rotate();
-    }
+    } 
 
     private void Rotate()
     {

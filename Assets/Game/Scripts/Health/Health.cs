@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public abstract class Health : MonoBehaviour
 {
     [SerializeField] private int _maxHealth;
 
-    private float _currentHealth;
+    private int _currentHealth;
 
     private void Awake()
     {
@@ -26,8 +26,5 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    private void Die()
-    {
-
-    }
+    protected abstract void Die();
 }

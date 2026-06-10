@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
         _transform.position += transform.forward * (_speed * Time.deltaTime);
     }
 
-    public virtual void SetSpeed(float speed)
+    public virtual void SetSpeed(float speed) 
     {
         _speed = speed;
     }

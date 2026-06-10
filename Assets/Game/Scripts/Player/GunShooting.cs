@@ -17,7 +17,7 @@ public class GunShooting : MonoBehaviour
         {
             Shoot();
             _shootTimer = 1f / _fireRate;
-        }
+        } 
     }
 
     private void Shoot()
