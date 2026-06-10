@@ -6,12 +6,15 @@ public abstract class Health : MonoBehaviour
 
     private int _currentHealth;
 
+    public int MaxHealth => _maxHealth;
+    public int CurrentHealth => _currentHealth;
+
     private void Awake()
     {
         _currentHealth = _maxHealth;
     }
 
-    public void TakeDamage(int amount)
+    public virtual void TakeDamage(int amount)
     {
         if (amount <= 0)
         {

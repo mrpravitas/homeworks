@@ -22,4 +22,11 @@ public class Projectile : MonoBehaviour
     {
         _speed = speed;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        collision.gameObject.GetComponent<Health>()?.TakeDamage(1);
+
+        Destroy(gameObject);
+    }
 }
