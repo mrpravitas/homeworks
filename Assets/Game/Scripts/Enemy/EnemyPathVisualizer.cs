@@ -5,8 +5,6 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyPathVisualizer : MonoBehaviour
 {
-    [SerializeField] private bool _path;
-
     private LineRenderer _lineRenderer;
     private NavMeshAgent _navMeshAgent;
 
@@ -20,10 +18,7 @@ public class EnemyPathVisualizer : MonoBehaviour
 
     private void Update()
     {
-        if (_path)
-        {
-            DrawPath();
-        }
+        DrawPath();
     }
 
     private void DrawPath()
