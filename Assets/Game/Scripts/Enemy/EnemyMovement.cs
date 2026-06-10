@@ -4,15 +4,20 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyMovement : MonoBehaviour
-{
-    [SerializeField] private Transform _target;
+{   
     [SerializeField] private float _stopDistance = 2f;
 
     private NavMeshAgent _agent;
+    private Transform _target;
 
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Start()
+    {
+        _target = G.PlayerTransform;
     }
 
     private void Update()

@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        G.PlayerTransform = transform;
         _rigidbody = GetComponent<Rigidbody>();
     }
 
