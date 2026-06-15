@@ -8,7 +8,7 @@ public class GunShooting : MonoBehaviour
     
     private int _currentWeaponIndex = 0;
 
-    private void Awake()
+    private void Start()
     {
         ApplySelectedConfig();
     }
