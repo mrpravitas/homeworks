@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private float _waveInterval;
+
+    private bool _firstWaveSpawned = false;
+
+    public static event Action OnFirstWaveSpawned;
 
     private void Awake()
     {
@@ -33,11 +38,17 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnWave()
     {
-        int firstPoint = Random.Range(0, _spawnPoints.Length);
+        if (!_firstWaveSpawned)
+        {
+            _firstWaveSpawned = true;
+            OnFirstWaveSpawned.Invoke();
+        }
+
+        int firstPoint = UnityEngine.Random.Range(0, _spawnPoints.Length);
         int secondPoint;
         do
         {
-            secondPoint = Random.Range(0, _spawnPoints.Length);
+            secondPoint = UnityEngine.Random.Range(0, _spawnPoints.Length);
         } 
         while (firstPoint == secondPoint);
 

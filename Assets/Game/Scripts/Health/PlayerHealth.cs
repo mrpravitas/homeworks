@@ -1,9 +1,9 @@
 using System;
-using UnityEngine.SceneManagement;
 
 public class PlayerHealth : Health
 {
     public static event Action<int> OnHealthChanged;
+    public static event Action OnPlayerDeath;
 
     private void Start()
     {
@@ -19,6 +19,6 @@ public class PlayerHealth : Health
 
     protected override void Die()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        OnPlayerDeath?.Invoke();
     }
 }
