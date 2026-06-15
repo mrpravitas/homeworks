@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378b04e766ce6474db5a05fbb3c8446e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 1
+  _maxHealth: 10
 --- !u!120 &-1295446054327406710
 LineRenderer:
   serializedVersion: 2
