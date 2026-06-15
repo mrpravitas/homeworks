@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -9,9 +10,14 @@ public class Weapon : MonoBehaviour
     private float _cooldown;
     private int _ammoInMagazine;
     private bool _isReloading = false;
-    private Coroutine _reloadingCoroutine;
+
+    public bool IsReloading => _isReloading;
 
     private bool CanShoot => _cooldown <= 0f && !_isReloading && _ammoInMagazine > 0;
+
+    public static event Action<string, int, int> OnWeaponSwitched;
+    public static event Action<int> OnShot;
+    public static event Action OnReloadStarted;
 
     private void Start()
     {
@@ -36,6 +42,8 @@ public class Weapon : MonoBehaviour
         _ammoInMagazine--; 
         _cooldown = 1 / _weaponConfig.FireRate;
 
+        OnShot?.Invoke(_ammoInMagazine);
+
         if (_ammoInMagazine <= 0)
         {
             StartReload();
@@ -48,12 +56,13 @@ public class Weapon : MonoBehaviour
         {
             float halfSpread = _weaponConfig.SpreadAngle / 2f;
 
-            float randomY = Random.Range(-halfSpread, halfSpread);
+            float randomY = UnityEngine.Random.Range(-halfSpread, halfSpread);
 
             spreadDirection = baseDirection * Quaternion.Euler(0f, randomY, 0f);
         }
 
-        GameObject projectileObject = Instantiate(_weaponConfig.ProjectilePrefab, _firePoint.position, spreadDirection);
+        GameObject projectileObject = Instantiate(_weaponConfig.ProjectilePrefab, 
+            _firePoint.position, spreadDirection);
         
         Projectile projectile = projectileObject.GetComponent<Projectile>();
         projectile.SetSpeed(_weaponConfig.ProjectileSpeed);
@@ -66,6 +75,8 @@ public class Weapon : MonoBehaviour
         _ammoInMagazine = _weaponConfig.MagazineSize;
         _isReloading = false;
         _cooldown = 0f;
+
+        OnWeaponSwitched?.Invoke(_weaponConfig.name, _ammoInMagazine, _weaponConfig.MagazineSize);
     }
 
     private void StartReload()
@@ -75,18 +86,20 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        _reloadingCoroutine = StartCoroutine(Reloading());
+        StartCoroutine(Reloading());
     }
 
     private IEnumerator Reloading()
     {
         _isReloading = true;
-        Debug.Log("Reloading started");
+        
+        OnReloadStarted?.Invoke();
 
         yield return new WaitForSeconds(_weaponConfig.ReloadTime);
 
         _ammoInMagazine = _weaponConfig.MagazineSize;
         _isReloading = false;
-        Debug.Log("Reloading finished");
+
+        OnShot?.Invoke(_ammoInMagazine);
     }
 }

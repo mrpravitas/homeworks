@@ -5,7 +5,8 @@ public class GunShooting : MonoBehaviour
 {
     [SerializeField] private Weapon _weapon;
     [SerializeField] private List<WeaponConfig> _weaponConfigs;
-    [SerializeField] private int _selectedIndex;
+    
+    private int _currentWeaponIndex = 0;
 
     private void Awake()
     {
@@ -18,16 +19,34 @@ public class GunShooting : MonoBehaviour
         {
             _weapon.Shoot();
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SwitchWeapon();
+        }
     }
 
     private void ApplySelectedConfig()
     {
-        if (_weapon == null || _weaponConfigs == null || _weaponConfigs.Count == 0)
+        _weapon.SetConfig(_weaponConfigs[_currentWeaponIndex]);
+
+        Debug.Log($"Weapon switched to: {_weaponConfigs[_currentWeaponIndex].name}");
+    }
+
+    private void SwitchWeapon()
+    {
+        if (_weapon.IsReloading)
+        {
             return;
+        }
 
-        if (_selectedIndex < 0 || _selectedIndex >= _weaponConfigs.Count)
-            _selectedIndex = 0;
+        _currentWeaponIndex++;
 
-        _weapon.SetConfig(_weaponConfigs[_selectedIndex]);
+        if (_currentWeaponIndex >= _weaponConfigs.Count)
+        {
+            _currentWeaponIndex = 0;
+        }
+
+        ApplySelectedConfig();
     }
 }
