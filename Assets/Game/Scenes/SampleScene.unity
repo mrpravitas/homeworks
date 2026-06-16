@@ -704,7 +704,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712f2cfd4e63dda4f919ec7523e54845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 2932590036912186406, guid: 9d87bfe4d4e5875449859e8f03cb00d1, type: 3}
+  _enemyPrefab: {fileID: 8087837565442023176, guid: 9d87bfe4d4e5875449859e8f03cb00d1, type: 3}
+  _enemyPrefab2: {fileID: 2185678190626045720, guid: 6dbd3deba22fc9a4683ade930e54c5df, type: 3}
+  _enemy2Chance: 0.3
   _spawnPoints:
   - {fileID: 368065531}
   - {fileID: 1840482170}

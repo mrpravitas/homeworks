@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyPrefab2;
+    [SerializeField] [Range(0f, 1f)] private float _enemy2Chance;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private float _waveInterval;
 
@@ -58,6 +60,17 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(int spawnpoint)
     {
-        Instantiate(_enemyPrefab, _spawnPoints[spawnpoint].position, Quaternion.identity);
+        GameObject enemyToSpawn;
+
+        if (_enemyPrefab2 != null && UnityEngine.Random.Range(0f, 1f) < _enemy2Chance)
+        {
+            enemyToSpawn = _enemyPrefab2;
+        }
+        else
+        {
+            enemyToSpawn = _enemyPrefab;
+        }
+
+        Instantiate(enemyToSpawn, _spawnPoints[spawnpoint].position, Quaternion.identity);
     }
 }
