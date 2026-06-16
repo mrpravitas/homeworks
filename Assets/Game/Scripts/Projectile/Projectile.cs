@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     private float _speed;
     private int _damage;
 
+    public int Damage => _damage;
+
     private void Awake()
     {
         _transform = transform;
