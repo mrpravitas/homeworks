@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Text;
 using UnityEngine;
 
 public class GameStateMachine : MonoBehaviour
 {
     private GameState _currentState;
+    private StringBuilder _stringBuilder;
 
     public static event Action<GameState> OnGameStateChanged;
+
+    private void Awake()
+    {
+        _stringBuilder = new StringBuilder();
+    }
 
     private void Start()
     {
@@ -48,7 +55,12 @@ public class GameStateMachine : MonoBehaviour
     {
         _currentState = newState;
 
-        Debug.Log($"Game state changed to: {_currentState}");
+        _stringBuilder.Clear();
+        _stringBuilder.Append("Game state changed to: ");
+        _stringBuilder.Append(_currentState);
+
+        Debug.Log(_stringBuilder.ToString());
+
         OnGameStateChanged?.Invoke(_currentState);
     }
 }

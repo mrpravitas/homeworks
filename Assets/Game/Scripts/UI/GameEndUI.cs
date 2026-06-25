@@ -1,3 +1,4 @@
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +13,12 @@ public class GameEndUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _loseScoreText;
 
     private int _finalScore;
+    private StringBuilder _stringBuilder;
+
+    private void Awake()
+    {
+        _stringBuilder = new StringBuilder();
+    }
 
     private void OnEnable()
     {
@@ -36,13 +43,21 @@ public class GameEndUI : MonoBehaviour
         {
             Time.timeScale = 0f;
             _winScreen.SetActive(true);
-            _winScoreText.text = $"Score: {_finalScore}";
+            _winScoreText.text = GetFinalScoreString();
         }
         else if (state == GameState.Lose)
         {
             Time.timeScale = 0f;
             _loseScreen.SetActive(true);
-            _loseScoreText.text = $"Score: {_finalScore}";
+            _loseScoreText.text = GetFinalScoreString();
         }
+    }
+
+    private string GetFinalScoreString()
+    {
+        _stringBuilder.Clear();
+        _stringBuilder.Append("Score: ");
+        _stringBuilder.Append(_finalScore);
+        return _stringBuilder.ToString();
     }
 }

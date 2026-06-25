@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class GunShooting : MonoBehaviour
@@ -7,6 +8,12 @@ public class GunShooting : MonoBehaviour
     [SerializeField] private List<WeaponConfig> _weaponConfigs;
     
     private int _currentWeaponIndex = 0;
+    private StringBuilder _stringBuilder;
+
+    private void Awake()
+    {
+        _stringBuilder = new StringBuilder();
+    }
 
     private void Start()
     {
@@ -30,7 +37,11 @@ public class GunShooting : MonoBehaviour
     {
         _weapon.SetConfig(_weaponConfigs[_currentWeaponIndex]);
 
-        Debug.Log($"Weapon switched to: {_weaponConfigs[_currentWeaponIndex].name}");
+        _stringBuilder.Clear();
+        _stringBuilder.Append("Weapon switched to: ");
+        _stringBuilder.Append(_weaponConfigs[_currentWeaponIndex].name);
+
+        Debug.Log(_stringBuilder.ToString());
     }
 
     private void SwitchWeapon()

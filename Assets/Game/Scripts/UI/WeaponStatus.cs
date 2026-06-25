@@ -1,3 +1,4 @@
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,12 @@ public class WeaponStat : MonoBehaviour
 
     private int _currentWeaponMagazineSize;
     private string _currentWeaponName;
+    private StringBuilder _stringBuilder;
+
+    private void Awake()
+    {
+        _stringBuilder = new StringBuilder();
+    }
 
     private void OnEnable()
     {
@@ -36,11 +43,22 @@ public class WeaponStat : MonoBehaviour
 
     private void HandleReloadStarted()
     {
-        _weaponStatus.text = $"{_currentWeaponName} | reloading...";
+        _stringBuilder.Clear();
+        _stringBuilder.Append(_currentWeaponName);
+        _stringBuilder.Append(" | reloading...");
+
+        _weaponStatus.text = _stringBuilder.ToString();
     }
 
     private void UpdateWeaponStatus(string weaponName, int ammo, int maxAmmo)
     {
-        _weaponStatus.text = $"{weaponName} | {ammo}/{maxAmmo}";
+        _stringBuilder.Clear();
+        _stringBuilder.Append(weaponName);
+        _stringBuilder.Append(" | ");
+        _stringBuilder.Append(ammo);
+        _stringBuilder.Append("/");
+        _stringBuilder.Append(maxAmmo);
+
+        _weaponStatus.text = _stringBuilder.ToString();
     }
 }

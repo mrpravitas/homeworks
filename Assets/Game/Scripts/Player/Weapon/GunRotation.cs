@@ -5,6 +5,8 @@ public class GunRotation : MonoBehaviour
     private Camera _camera;
     private Transform _transform;
 
+    private static readonly Plane _plane = new Plane(Vector3.up, Vector3.zero);
+
     private void Awake()
     {
         _camera = Camera.main;
@@ -20,9 +22,7 @@ public class GunRotation : MonoBehaviour
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-
-        if (plane.Raycast(ray, out float distance))
+        if (_plane.Raycast(ray, out float distance))
         {
             Vector3 point = ray.GetPoint(distance);
             Vector3 direction = point - _transform.position;
