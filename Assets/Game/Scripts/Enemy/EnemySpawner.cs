@@ -12,6 +12,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject _enemyProjectilePrefab;
 
     private bool _firstWaveSpawned = false;
+
+    private EnemyPool _pool1;
+    private EnemyPool _pool2;
     private ProjectilePool _enemyProjectilePool;
 
     public static event Action OnFirstWaveSpawned;
@@ -21,6 +24,9 @@ public class EnemySpawner : MonoBehaviour
         Debug.Log($"New wave of enemy every {_waveInterval} seconds!");
 
         _enemyProjectilePool = new ProjectilePool(_enemyProjectilePrefab, 2);
+
+        _pool1 = new EnemyPool(_enemyPrefab, 2);
+        _pool2 = new EnemyPool(_enemyPrefab2, 2);
     }
 
     private void OnEnable()
@@ -68,17 +74,17 @@ public class EnemySpawner : MonoBehaviour
 
         if (_enemyPrefab2 != null && UnityEngine.Random.Range(0f, 1f) < _enemy2Chance)
         {
-            enemyToSpawn = _enemyPrefab2;
+            enemyToSpawn = _pool2.Get();
         }
         else
         {
-            enemyToSpawn = _enemyPrefab;
+            enemyToSpawn = _pool1.Get();
         }
 
+        enemyToSpawn.transform.position = _spawnPoints[spawnpoint].position;
+        enemyToSpawn.transform.rotation = Quaternion.identity;
 
-        GameObject enemy = Instantiate(enemyToSpawn, _spawnPoints[spawnpoint].position, Quaternion.identity);
-
-        EnemyShooting enemyShooting = enemy.GetComponent<EnemyShooting>();
-        enemyShooting.SetPool(_enemyProjectilePool);
+        EnemyShooting shooting = enemyToSpawn.GetComponent<EnemyShooting>();
+        shooting.SetPool(_enemyProjectilePool);
     }
 }

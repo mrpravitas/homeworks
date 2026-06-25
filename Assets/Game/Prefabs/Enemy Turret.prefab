@@ -131,6 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6925557001011002668}
   - component: {fileID: 4788189146772190897}
+  - component: {fileID: 2076850519275507582}
   m_Layer: 0
   m_Name: Enemy Turret
   m_TagString: Untagged
@@ -170,6 +171,19 @@ MonoBehaviour:
   _projectileSpeed: 10
   _projectileLifeTime: 5
   _fireRate: 1
+--- !u!114 &2076850519275507582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2185678190626045720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c931deec88c0f7142b41bec6b10a0be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: {fileID: 7861050288076566611}
 --- !u!1 &2797420867336490589
 GameObject:
   m_ObjectHideFlags: 0

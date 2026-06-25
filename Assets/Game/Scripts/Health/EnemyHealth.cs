@@ -3,10 +3,16 @@
 public class EnemyHealth : Health
 {
     public static event Action OnEnemyKilled;
+    public event Action OnDied;
 
     protected override void Die()
     {
         OnEnemyKilled?.Invoke();
-        Destroy(gameObject);
+        OnDied?.Invoke();
+    }
+
+    public void Reset()
+    {
+        _currentHealth = MaxHealth;
     }
 }
