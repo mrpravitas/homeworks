@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
 {   
     [SerializeField] private float _stopDistance = 2f;
 
+    private float _updateInterval = 0.33f;
     private NavMeshAgent _agent;
     private Transform _target;
 
@@ -15,22 +17,36 @@ public class EnemyMovement : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         _target = G.PlayerTransform;
+        StartCoroutine(Move());
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        float distance = Vector3.Distance(transform.position, _target.position);
+        StopAllCoroutines();
+    }
 
-        if (distance <= _stopDistance && HasLineOfSight())
+    private IEnumerator Move()
+    {
+        yield return null;
+
+        while (true)
         {
-            _agent.ResetPath();
-            return;
-        }
+            float distance = Vector3.Distance(transform.position, _target.position);
 
-        _agent.SetDestination(_target.position);
+            if (distance <= _stopDistance && HasLineOfSight())
+            {
+                _agent.ResetPath();
+            }
+            else
+            {
+                _agent.SetDestination(_target.position);
+            }
+
+            yield return new WaitForSeconds(_updateInterval);
+        }
     }
 
     private bool HasLineOfSight()
