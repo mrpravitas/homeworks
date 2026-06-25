@@ -10,6 +10,7 @@ public class WeaponConfig : ScriptableObject
     [SerializeField] private int _damage;
     [SerializeField] private int _magazineSize;
     [SerializeField] private float _reloadTime;
+    [SerializeField] private float _projectileLifeTime;
 
     public GameObject ProjectilePrefab => _projectilePrefab;
     public float ProjectileSpeed => _projectileSpeed;
@@ -18,4 +19,5 @@ public class WeaponConfig : ScriptableObject
     public int Damage => _damage;
     public int MagazineSize => _magazineSize;
     public float ReloadTime => _reloadTime;
+    public float ProjectileLifeTime => _projectileLifeTime;
 }

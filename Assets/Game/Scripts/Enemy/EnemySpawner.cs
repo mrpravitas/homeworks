@@ -9,14 +9,18 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float _enemy2Chance;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private float _waveInterval;
+    [SerializeField] private GameObject _enemyProjectilePrefab;
 
     private bool _firstWaveSpawned = false;
+    private ProjectilePool _enemyProjectilePool;
 
     public static event Action OnFirstWaveSpawned;
 
     private void Awake()
     {
-        Debug.Log($"New wave of enemy every {_waveInterval} seconds!");        
+        Debug.Log($"New wave of enemy every {_waveInterval} seconds!");
+
+        _enemyProjectilePool = new ProjectilePool(_enemyProjectilePrefab, 2);
     }
 
     private void OnEnable()
@@ -71,6 +75,10 @@ public class EnemySpawner : MonoBehaviour
             enemyToSpawn = _enemyPrefab;
         }
 
-        Instantiate(enemyToSpawn, _spawnPoints[spawnpoint].position, Quaternion.identity);
+
+        GameObject enemy = Instantiate(enemyToSpawn, _spawnPoints[spawnpoint].position, Quaternion.identity);
+
+        EnemyShooting enemyShooting = enemy.GetComponent<EnemyShooting>();
+        enemyShooting.SetPool(_enemyProjectilePool);
     }
 }

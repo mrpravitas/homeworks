@@ -838,6 +838,7 @@ MonoBehaviour:
   - {fileID: 186262435}
   - {fileID: 1424793932}
   _waveInterval: 5
+  _enemyProjectilePrefab: {fileID: 4461240257958450373, guid: 5d0f929b13e3df9438033df31e1b8b0d, type: 3}
 --- !u!1 &296125501
 GameObject:
   m_ObjectHideFlags: 0

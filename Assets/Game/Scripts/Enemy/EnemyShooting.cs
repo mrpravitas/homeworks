@@ -2,11 +2,12 @@
 
 public class EnemyShooting : MonoBehaviour
 {
-    [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePoint;
     [SerializeField] private float _projectileSpeed;
+    [SerializeField] private float _projectileLifeTime;
     [SerializeField] private float _fireRate;
 
+    private ProjectilePool _pool;
     private Transform _target;
     private float _shootTimer;
 
@@ -26,13 +27,21 @@ public class EnemyShooting : MonoBehaviour
         }
     }
 
+    public void SetPool(ProjectilePool pool)
+    {
+        _pool = pool;
+    }
+
     private void Shoot()
     {
-        GameObject projectile = Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
+        GameObject projectileObject = _pool.Get();
+
+        projectileObject.transform.position = _firePoint.position;
 
         Vector3 direction = (_target.position - _firePoint.position).normalized;
-        projectile.transform.forward = direction;
+        projectileObject.transform.forward = direction;
 
-        projectile.GetComponent<Projectile>().SetSpeed(_projectileSpeed);
+        Projectile projectile = projectileObject.GetComponent<Projectile>();
+        projectile.Initialize(_projectileLifeTime, _projectileSpeed);
     }
 }

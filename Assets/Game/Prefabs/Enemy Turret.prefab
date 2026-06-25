@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6610856649711973740}
   - component: {fileID: 4853648763755072245}
   - component: {fileID: 1507651246694326326}
-  - component: {fileID: 3700119789164050148}
   - component: {fileID: 7861050288076566611}
   m_Layer: 12
   m_Name: Enemy Turret
@@ -109,22 +108,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3700119789164050148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 156735134909531940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 129f3c0a62302e64493b96f3879361a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: 4461240257958450373, guid: 5d0f929b13e3df9438033df31e1b8b0d, type: 3}
-  _firePoint: {fileID: 3536054613479187254}
-  _projectileSpeed: 10
-  _fireRate: 1
 --- !u!114 &7861050288076566611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6925557001011002668}
+  - component: {fileID: 4788189146772190897}
   m_Layer: 0
   m_Name: Enemy Turret
   m_TagString: Untagged
@@ -170,6 +154,22 @@ Transform:
   - {fileID: 6676743627262663632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4788189146772190897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2185678190626045720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129f3c0a62302e64493b96f3879361a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firePoint: {fileID: 3536054613479187254}
+  _projectileSpeed: 10
+  _projectileLifeTime: 5
+  _fireRate: 1
 --- !u!1 &2797420867336490589
 GameObject:
   m_ObjectHideFlags: 0

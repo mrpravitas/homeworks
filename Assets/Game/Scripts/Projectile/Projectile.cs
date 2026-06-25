@@ -2,33 +2,39 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float _lifeTime;
-
     private Transform _transform;
     private float _speed;
     private int _damage;
+    private float _lifeTime;
+    private ProjectilePool _pool;
 
     public int Damage => _damage;
 
     private void Awake()
     {
         _transform = transform;
-        _damage = 1;
-        Destroy(gameObject, _lifeTime);
     }
 
     private void Update()
     {
         _transform.position += transform.forward * (_speed * Time.deltaTime);
+
+        _lifeTime -= Time.deltaTime;
+        if (_lifeTime <= 0f)
+        {
+            _pool.Return(gameObject);
+        }
     }
 
-    public void SetSpeed(float speed) 
+    public void SetPool(ProjectilePool pool)
     {
+        _pool = pool;
+    }
+
+    public void Initialize(float lifeTime, float speed, int damage = 1)
+    {
+        _lifeTime = lifeTime;
         _speed = speed;
-    }
-
-    public void SetDamage(int damage)
-    {
         _damage = damage;
     }
 
@@ -36,6 +42,6 @@ public class Projectile : MonoBehaviour
     {
         collision.gameObject.GetComponent<Health>()?.TakeDamage(_damage);
 
-        Destroy(gameObject);
+        _pool.Return(gameObject);
     }
 }

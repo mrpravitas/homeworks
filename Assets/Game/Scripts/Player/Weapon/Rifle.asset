@@ -19,3 +19,4 @@ MonoBehaviour:
   _damage: 10
   _magazineSize: 5
   _reloadTime: 2
+  _projectileLifeTime: 5

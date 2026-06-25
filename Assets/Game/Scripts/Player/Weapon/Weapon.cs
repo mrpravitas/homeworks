@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour
 {
     [SerializeField] private Transform _firePoint;
 
+    private ProjectilePool _projectilePool;
     private WeaponConfig _weaponConfig;
     private float _cooldown;
     private int _ammoInMagazine;
@@ -22,6 +23,8 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         _ammoInMagazine = _weaponConfig.MagazineSize;
+
+        _projectilePool = new ProjectilePool(_weaponConfig.ProjectilePrefab, _weaponConfig.MagazineSize * 2);
     }
 
     private void Update()
@@ -39,7 +42,7 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        _ammoInMagazine--; 
+        _ammoInMagazine--;
         _cooldown = 1 / _weaponConfig.FireRate;
 
         OnShot?.Invoke(_ammoInMagazine);
@@ -50,23 +53,21 @@ public class Weapon : MonoBehaviour
         }
 
         Quaternion baseDirection = _firePoint.rotation;
-        Quaternion spreadDirection = baseDirection; 
+        Quaternion spreadDirection = baseDirection;
 
         if (_weaponConfig.SpreadAngle > 0f)
         {
             float halfSpread = _weaponConfig.SpreadAngle / 2f;
-
             float randomY = UnityEngine.Random.Range(-halfSpread, halfSpread);
-
             spreadDirection = baseDirection * Quaternion.Euler(0f, randomY, 0f);
         }
 
-        GameObject projectileObject = Instantiate(_weaponConfig.ProjectilePrefab, 
-            _firePoint.position, spreadDirection);
-        
+        GameObject projectileObject = _projectilePool.Get();
+        projectileObject.transform.position = _firePoint.position;
+        projectileObject.transform.rotation = spreadDirection;
+
         Projectile projectile = projectileObject.GetComponent<Projectile>();
-        projectile.SetSpeed(_weaponConfig.ProjectileSpeed);
-        projectile.SetDamage(_weaponConfig.Damage);
+        projectile.Initialize(_weaponConfig.ProjectileLifeTime, _weaponConfig.ProjectileSpeed, _weaponConfig.Damage);
     }
 
     public void SetConfig(WeaponConfig config)
