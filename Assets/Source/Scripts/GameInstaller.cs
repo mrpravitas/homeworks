@@ -5,6 +5,7 @@ public class GameInstaller : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
     [SerializeField] private Button _switchInputButton;
+    [SerializeField] private UITextHealthPresenter _healthPresenter;
 
     private IInputService _keyboardInput;
     private IInputService _mouseInput;
@@ -40,7 +41,7 @@ public class GameInstaller : MonoBehaviour
         movementService.Init(_player.transform);
         _movementService = movementService;
 
-        _healthService = new HealthService();
+        _healthService = new HealthService(_healthPresenter);
     }
 
     private void InitGame()

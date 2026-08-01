@@ -1,16 +1,63 @@
-﻿public class HealthService : IHealthService
+﻿using UnityEngine.SceneManagement;
+
+public class HealthService : IHealthService
 {
-    public int Current => throw new System.NotImplementedException();
+    private int _max = 100;
+    private int _current;
 
-    public int Max => throw new System.NotImplementedException();
+    private IHealthPresenter _healthPresenter;
 
-    public void Heal(int amout)
+    public int Current => _current;
+    public int Max => _max;
+
+    public HealthService(IHealthPresenter healthPresenter = null)
     {
-        throw new System.NotImplementedException();
+        _current = _max;
+        _healthPresenter = healthPresenter;
     }
 
     public void TakeDamage(int amout)
     {
-        throw new System.NotImplementedException();
+        if (amout <= 0)
+        {
+            return;
+        }
+
+        _current -= amout;
+
+        if (_current <= 0)
+        {
+            _current = 0;
+            RestartScene();
+        }
+
+        UpdatePresent();
+    }
+
+    public void Heal(int amout)
+    {
+        if (amout <= 0)
+        {
+            return;
+        }
+
+        _current += amout;
+
+        if (_current > _max)
+        {
+            _current = _max;
+        }
+
+        UpdatePresent();
+    }
+
+    private void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void UpdatePresent()
+    {
+        _healthPresenter?.OnHealthChanged(_current, _max);
     }
 }
