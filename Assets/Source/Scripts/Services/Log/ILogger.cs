@@ -1,4 +1,5 @@
-﻿public interface ILogger
+﻿public interface ILogger : IDisposable
 {
-
+    void Init();
+    void Log(string message);
 }

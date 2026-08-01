@@ -15,6 +15,8 @@ public class GameInstaller : MonoBehaviour
 
     private IHealthService _healthService;
 
+    private ILogger _logger;
+
     private void Awake()
     {
         CreateServices();
@@ -29,6 +31,7 @@ public class GameInstaller : MonoBehaviour
     private void OnDisable()
     {
         _switchInputButton.onClick.RemoveListener(SwitchInput);
+        _logger.Dispose();
     }
 
     private void CreateServices()
@@ -41,12 +44,17 @@ public class GameInstaller : MonoBehaviour
         movementService.Init(_player.transform);
         _movementService = movementService;
 
-        _healthService = new HealthService(_healthPresenter);
+        _logger = new ConsoleLogger();
+
+        _healthService = new HealthService(_logger, _healthPresenter);
     }
 
     private void InitGame()
     {
+        _logger.Init();
         _player.Init(_currentInput, _movementService, _healthService);
+
+        _logger.Log("Game has started");
     }
 
     private void SwitchInput()
@@ -56,5 +64,7 @@ public class GameInstaller : MonoBehaviour
             : _keyboardInput;
 
         _player.SetInputService(_currentInput);
+
+        _logger.Log("Input method switched");
     }
 }

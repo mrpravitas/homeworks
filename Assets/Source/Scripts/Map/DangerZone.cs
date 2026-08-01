@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class DangerZone : MonoBehaviour
 {
+    public static event Action<string> OnEvent;
+
     [SerializeField] private int _damagePerTick;
     [SerializeField] private float _timePerTick;
 
@@ -14,6 +17,7 @@ public class DangerZone : MonoBehaviour
         
         if (player != null )
         {
+            OnEvent?.Invoke("You enter danger zone");
             _damageCoroutine = StartCoroutine(DamageCoroutine(player));
         }
     }
@@ -24,6 +28,8 @@ public class DangerZone : MonoBehaviour
 
         if (player != null && _damageCoroutine != null)
         {
+            OnEvent?.Invoke("You exit danger zone");
+
             StopCoroutine(_damageCoroutine);
             _damageCoroutine = null;
         }
