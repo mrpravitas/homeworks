@@ -1,11 +1,12 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameInstaller : MonoBehaviour
 {
     [SerializeField] private PlayerController _player;
-    [SerializeField] private Button _switchInputButton;
+    [SerializeField] private SwitchInputButton _switchInputCommand;
     [SerializeField] private UITextHealthPresenter _healthPresenter;
+
+    [SerializeField] private MainMenuView _mainMenuView;
 
     private IInputService _keyboardInput;
     private IInputService _mouseInput;
@@ -17,20 +18,17 @@ public class GameInstaller : MonoBehaviour
 
     private ILogger _logger;
 
+    private GameStateMachine _stateMachine;
+
     private void Awake()
     {
         CreateServices();
         InitGame();
-    }
-
-    private void OnEnable()
-    {
-        _switchInputButton.onClick.AddListener(SwitchInput);
+        InitStates();
     }
 
     private void OnDisable()
     {
-        _switchInputButton.onClick.RemoveListener(SwitchInput);
         _logger.Dispose();
     }
 
@@ -53,6 +51,7 @@ public class GameInstaller : MonoBehaviour
     {
         _logger.Init();
         _player.Init(_currentInput, _movementService, _healthService);
+        _switchInputCommand.SetHandler(SwitchInput);
 
         _logger.Log("Game has started");
     }
@@ -66,5 +65,17 @@ public class GameInstaller : MonoBehaviour
         _player.SetInputService(_currentInput);
 
         _logger.Log("Input method switched");
+    }
+
+    private void InitStates()
+    {
+        _stateMachine = new GameStateMachine();
+
+        _stateMachine.Register(new MainMenuState(_stateMachine, _mainMenuView));
+        _stateMachine.Register(new GameplayState(_stateMachine));
+        _stateMachine.Register(new PauseState(_stateMachine));
+        _stateMachine.Register(new GameOverState(_stateMachine));
+
+        _stateMachine.ChangeState<MainMenuState>();
     }
 }
