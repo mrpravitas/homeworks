@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class GameStateMachine
+public class GameStateMachine : IDisposable
 {
     private readonly Dictionary<Type, IGameState> _states = new Dictionary<Type, IGameState>();
     private IGameState _current;
     private ILogger _logger;
+    private IHealthService _healthService;
 
-    public void Init(ILogger logger)
+    public void Init(ILogger logger, IHealthService healthService)
     { 
         _logger = logger; 
+        _healthService = healthService;
+        _healthService.OnDied += GameOver;
     }
 
     public void Register<TState>(TState state) where TState : IGameState
@@ -36,5 +39,15 @@ public class GameStateMachine
         {
             updatable.Tick(deltaTime); 
         }
+    }
+
+    public void Dispose()
+    {
+        _healthService.OnDied -= GameOver;
+    }
+
+    private void GameOver()
+    {
+        ChangeState<GameOverState>();
     }
 }

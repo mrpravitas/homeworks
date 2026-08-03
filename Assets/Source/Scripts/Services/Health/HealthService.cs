@@ -1,4 +1,4 @@
-﻿using UnityEngine.SceneManagement;
+﻿using System;
 
 public class HealthService : IHealthService
 {
@@ -7,6 +7,8 @@ public class HealthService : IHealthService
     private HealthConfig _healthConfig;
 
     private int _current;
+
+    public event Action OnDied;
 
     public int Current => _current;
     public int Max => _healthConfig.MaxHealth;
@@ -32,8 +34,8 @@ public class HealthService : IHealthService
         if (_current <= 0)
         {
             _current = 0;
-            _logger.Log("You died. Restarting...");
-            RestartScene();
+            _logger.Log("You died.");
+            OnDied?.Invoke();
         }
 
         UpdatePresent();
@@ -55,11 +57,6 @@ public class HealthService : IHealthService
         }
 
         UpdatePresent();
-    }
-
-    private void RestartScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void UpdatePresent()

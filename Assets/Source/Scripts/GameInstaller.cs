@@ -19,6 +19,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
     [SerializeField] private PauseView _pauseView;
+    [SerializeField] private GameOverView _gameOverView;
 
     private IInputService _keyboardInput;
     private IInputService _mouseInput;
@@ -88,14 +89,14 @@ public class GameInstaller : MonoBehaviour
     private void InitStates()
     {
         _stateMachine = new GameStateMachine();
-        _stateMachine.Init(_logger);
+        _stateMachine.Init(_logger, _healthService);
 
         _stateMachine.Register(new MainMenuState(_stateMachine, _mainMenuView));
         _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView, 
             _gameplayConfig, _factories));
 
         _stateMachine.Register(new PauseState(_stateMachine, _pauseView));
-        _stateMachine.Register(new GameOverState(_stateMachine));
+        _stateMachine.Register(new GameOverState(_stateMachine, _gameOverView));
 
         _stateMachine.ChangeState<MainMenuState>();
     }
