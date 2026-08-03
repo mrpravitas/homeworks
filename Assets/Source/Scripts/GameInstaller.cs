@@ -7,6 +7,8 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private UITextHealthPresenter _healthPresenter;
 
     [SerializeField] private MainMenuView _mainMenuView;
+    [SerializeField] private GameplayInputView _gameplayInputView;
+    [SerializeField] private PauseView _pauseView;
 
     private IInputService _keyboardInput;
     private IInputService _mouseInput;
@@ -72,8 +74,8 @@ public class GameInstaller : MonoBehaviour
         _stateMachine = new GameStateMachine();
 
         _stateMachine.Register(new MainMenuState(_stateMachine, _mainMenuView));
-        _stateMachine.Register(new GameplayState(_stateMachine));
-        _stateMachine.Register(new PauseState(_stateMachine));
+        _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView));
+        _stateMachine.Register(new PauseState(_stateMachine, _pauseView));
         _stateMachine.Register(new GameOverState(_stateMachine));
 
         _stateMachine.ChangeState<MainMenuState>();

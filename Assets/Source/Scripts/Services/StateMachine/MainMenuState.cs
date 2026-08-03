@@ -1,4 +1,6 @@
-﻿public class MainMenuState : IGameState
+﻿using UnityEngine;
+
+public class MainMenuState : IGameState
 {
     private GameStateMachine _stateMashine;
     private IMainMenuView _mainMenuView;
@@ -11,6 +13,7 @@
 
     public void Enter()
     {
+        Time.timeScale = 0f;
         _mainMenuView.SetStartHandler(OnStartGame);
         _mainMenuView.SetExitHandler(OnExitGame);
     }
