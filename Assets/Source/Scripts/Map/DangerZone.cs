@@ -2,12 +2,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class DangerZone : MonoBehaviour
+public class DangerZone : MonoBehaviour, IEntityWithConfig
 {
     public static event Action<string> OnEvent;
 
-    [SerializeField] private int _damagePerTick;
-    [SerializeField] private float _timePerTick;
+    private int _damagePerTick; 
+    private float _timePerTick;
 
     private Coroutine _damageCoroutine;
 
@@ -42,5 +42,15 @@ public class DangerZone : MonoBehaviour
             yield return new WaitForSeconds(_timePerTick);
             player.TakeDamage(_damagePerTick);
         }
+    }
+
+    public void Init(ScriptableObject config)
+    {
+        DangerZoneConfig dangerZoneConfig = config as DangerZoneConfig;
+
+        _damagePerTick = dangerZoneConfig.DamagePerTick;
+        _timePerTick = dangerZoneConfig.TimePerTick;
+
+        transform.localScale *= dangerZoneConfig.ScaleMultiplier;
     }
 }

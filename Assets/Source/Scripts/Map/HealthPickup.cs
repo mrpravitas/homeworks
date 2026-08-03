@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class HealthPickup : MonoBehaviour
+public class HealthPickup :  MonoBehaviour, IEntityWithConfig
 {
     public static event Action<string> OnEvent;
 
-    [SerializeField] private int _healthAmount;
+    private int _healthAmount;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,5 +17,11 @@ public class HealthPickup : MonoBehaviour
             player.Heal(_healthAmount);
             Destroy(gameObject);
         }
+    }
+
+    public void Init(ScriptableObject config)
+    {
+        HealthPickupConfig healthPickupConfig = config as HealthPickupConfig;
+        _healthAmount = healthPickupConfig.HealthAmount;
     }
 }

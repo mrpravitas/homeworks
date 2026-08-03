@@ -2,18 +2,19 @@
 
 public class HealthService : IHealthService
 {
-    private int _max = 100;
-    private int _current;
-
     private IHealthPresenter _healthPresenter;
     private ILogger _logger;
+    private HealthConfig _healthConfig;
+
+    private int _current;
 
     public int Current => _current;
-    public int Max => _max;
+    public int Max => _healthConfig.MaxHealth;
 
-    public HealthService(ILogger logger, IHealthPresenter healthPresenter = null)
+    public HealthService(HealthConfig healthConfig, ILogger logger, IHealthPresenter healthPresenter = null)
     {
-        _current = _max;
+        _healthConfig = healthConfig;
+        _current = _healthConfig.MaxHealth;
         _healthPresenter = healthPresenter;
         _logger = logger;
     }
@@ -40,7 +41,7 @@ public class HealthService : IHealthService
 
     public void Heal(int amout)
     {
-        if (amout <= 0 || _current == _max)
+        if (amout <= 0 || _current == _healthConfig.MaxHealth)
         {
             return;
         }
@@ -48,9 +49,9 @@ public class HealthService : IHealthService
         _current += amout;
         _logger.Log("You healed");
 
-        if (_current > _max)
+        if (_current > _healthConfig.MaxHealth)
         {
-            _current = _max;
+            _current = _healthConfig.MaxHealth;
         }
 
         UpdatePresent();
@@ -63,6 +64,6 @@ public class HealthService : IHealthService
 
     private void UpdatePresent()
     {
-        _healthPresenter?.OnHealthChanged(_current, _max);
+        _healthPresenter?.OnHealthChanged(_current, _healthConfig.MaxHealth);
     }
 }

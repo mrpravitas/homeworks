@@ -2,10 +2,20 @@ using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
 {
+    [Header("Configs")]
+    [SerializeField] private HealthConfig healthConfig;
+    [SerializeField] private MovementConfig movementConfig;
+    [SerializeField] private GameplayConfig _gameplayConfig;
+
+    [Header("Entity")]
+    [SerializeField] private EntitySpawnEntry[] _spawnEntries;
+
+    [Header("Player")]
     [SerializeField] private PlayerController _player;
+
+    [Header("UI")]
     [SerializeField] private SwitchInputButton _switchInputCommand;
     [SerializeField] private UITextHealthPresenter _healthPresenter;
-
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
     [SerializeField] private PauseView _pauseView;
@@ -15,18 +25,24 @@ public class GameInstaller : MonoBehaviour
     private IInputService _currentInput;
 
     private IMovementService _movementService;
-
     private IHealthService _healthService;
-
     private ILogger _logger;
 
     private GameStateMachine _stateMachine;
 
+    private IEntityFactory<Object>[] _factories;
+
     private void Awake()
     {
         CreateServices();
+        CreateFactories();
         InitGame();
         InitStates();
+    }
+
+    private void Update()
+    {
+        _stateMachine.Tick(Time.deltaTime);
     }
 
     private void OnDisable()
@@ -41,12 +57,12 @@ public class GameInstaller : MonoBehaviour
         _currentInput = _keyboardInput;
 
         TransformMovementService movementService = new TransformMovementService();
-        movementService.Init(_player.transform);
+        movementService.Init(movementConfig, _player.transform);
         _movementService = movementService;
 
         _logger = new ConsoleLogger();
 
-        _healthService = new HealthService(_logger, _healthPresenter);
+        _healthService = new HealthService(healthConfig, _logger, _healthPresenter);
     }
 
     private void InitGame()
@@ -72,12 +88,30 @@ public class GameInstaller : MonoBehaviour
     private void InitStates()
     {
         _stateMachine = new GameStateMachine();
+        _stateMachine.Init(_logger);
 
         _stateMachine.Register(new MainMenuState(_stateMachine, _mainMenuView));
-        _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView));
+        _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView, 
+            _gameplayConfig, _factories));
+
         _stateMachine.Register(new PauseState(_stateMachine, _pauseView));
         _stateMachine.Register(new GameOverState(_stateMachine));
 
         _stateMachine.ChangeState<MainMenuState>();
+    }
+
+    private void CreateFactories()
+    {
+        _factories = new IEntityFactory<Object>[_spawnEntries.Length];
+
+        for (int i = 0; i < _factories.Length; i++)
+        {
+            var entry = _spawnEntries[i];
+
+            _factories[i] = new EntityFactory<Object>(
+                entry.Prefab,
+                entry.Config,
+                entry.SpawnChance);
+        }
     }
 }
