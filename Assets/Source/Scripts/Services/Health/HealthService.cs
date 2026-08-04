@@ -13,6 +13,8 @@ public class HealthService : IHealthService
     public int Current => _current;
     public int Max => _healthConfig.MaxHealth;
 
+    public float DamageMultiplier { get; set; } = 1f;
+
     public HealthService(HealthConfig healthConfig, ILogger logger, IHealthPresenter healthPresenter = null)
     {
         _healthConfig = healthConfig;
@@ -28,7 +30,9 @@ public class HealthService : IHealthService
             return;
         }
 
-        _current -= amout;
+        int finalAmount = (int)(amout * DamageMultiplier);
+
+        _current -= finalAmount;
         _logger.Log("You took damage");
 
         if (_current <= 0)

@@ -1148,6 +1148,7 @@ MonoBehaviour:
   _gameplayInputView: {fileID: 748063937}
   _pauseView: {fileID: 1741395763}
   _gameOverView: {fileID: 1271251241}
+  _enableDoubleDamage: 1
 --- !u!1 &843677855
 GameObject:
   m_ObjectHideFlags: 0

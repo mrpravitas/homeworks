@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
@@ -21,6 +22,9 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private PauseView _pauseView;
     [SerializeField] private GameOverView _gameOverView;
 
+    [Header("Modifiers")]
+    [SerializeField] private bool _enableDoubleDamage;
+
     private IInputService _keyboardInput;
     private IInputService _mouseInput;
     private IInputService _currentInput;
@@ -32,6 +36,8 @@ public class GameInstaller : MonoBehaviour
     private GameStateMachine _stateMachine;
 
     private IEntityFactory<Object>[] _factories;
+
+    private List<IGameModifier> _gameModifiers;
 
     private void Awake()
     {
@@ -92,8 +98,10 @@ public class GameInstaller : MonoBehaviour
         _stateMachine.Init(_logger, _healthService);
 
         _stateMachine.Register(new MainMenuState(_stateMachine, _mainMenuView));
+
+        CreateModifiers();
         _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView, 
-            _gameplayConfig, _factories));
+            _gameplayConfig, _factories, _gameModifiers));
 
         _stateMachine.Register(new PauseState(_stateMachine, _pauseView));
         _stateMachine.Register(new GameOverState(_stateMachine, _gameOverView));
@@ -113,6 +121,16 @@ public class GameInstaller : MonoBehaviour
                 entry.Prefab,
                 entry.Config,
                 entry.SpawnChance);
+        }
+    }
+
+    private void CreateModifiers()
+    {
+        _gameModifiers = new List<IGameModifier>();
+
+        if (_enableDoubleDamage)
+        {
+            _gameModifiers.Add(new DoubleDamageModifier(_healthService, _logger));
         }
     }
 }

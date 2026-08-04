@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameplayState : IUpdatableState
 {
@@ -7,27 +8,39 @@ public class GameplayState : IUpdatableState
     private GameplayConfig _config;
 
     private IEntityFactory<Object>[] _factories;
+    private List<IGameModifier> _modifiers;
 
     private float _timer;
 
     public GameplayState(GameStateMachine stateMashine, IGameplayInput gameplayInput, 
-        GameplayConfig config, IEntityFactory<Object>[] factories)
+        GameplayConfig config, IEntityFactory<Object>[] factories, List<IGameModifier> gameModifiers)
     {
         _stateMashine = stateMashine;
         _gameplayInput = gameplayInput;
         _config = config;
         _factories = factories;
+        _modifiers = gameModifiers;
     }
 
     public void Enter()
     {
         Time.timeScale = 1f;
         _gameplayInput.SetPauseHandler(OnPause);
+
+        for (int i = 0; i < _modifiers?.Count; i++)
+        {
+            _modifiers[i].OnEnterGameplay();
+        }
     }
 
     public void Exit()
     {
         _gameplayInput.SetPauseHandler(null);
+
+        for (int i = 0; i < _modifiers?.Count;  ++i)
+        {
+            _modifiers[i].OnExitGameplay();
+        }
     }
 
     public void Tick(float deltaTime)
