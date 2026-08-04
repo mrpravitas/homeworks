@@ -25,6 +25,7 @@ public class GameInstaller : MonoBehaviour
     [Header("Modifiers")]
     [SerializeField] private bool _enableDoubleDamage;
     [SerializeField] private bool _enableHighSpeed;
+    [SerializeField] private bool _enabledHighSpawn;
 
     private IInputService _keyboardInput;
     private IInputService _mouseInput;
@@ -136,6 +137,10 @@ public class GameInstaller : MonoBehaviour
         if (_enableHighSpeed)
         {
             _gameModifiers.Add(new HighSpeedModifier(_movementService, _logger));
+        }
+        if (_enabledHighSpawn)
+        {
+            _gameModifiers.Add(new HighSpawnMultiplier(_factories, _logger));
         }
     }
 }

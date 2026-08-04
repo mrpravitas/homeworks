@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 6547063632138147051, guid: 6710ddd067bf5b0448b4170067d88ce6, type: 3}
   _config: {fileID: 11400000, guid: 7386af2d553430d4ebc16f7841d461be, type: 2}
-  _spawnChance: 0.5
+  _spawnChance: 0.3

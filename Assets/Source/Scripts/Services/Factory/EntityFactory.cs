@@ -4,18 +4,19 @@ public class EntityFactory<T> : IEntityFactory<T> where T : Object
 {
     private T _prefab;
     private ScriptableObject _config;
-    private float _spawnChance;
+
+    public float SpawnChance { get; set; }
 
     public EntityFactory(T prefab, ScriptableObject config, float spawnChance)
     {
         _prefab = prefab;
         _config = config;
-        _spawnChance = spawnChance;
+        SpawnChance = spawnChance;
     }
 
     public void Create(Vector3 position)
     {
-        if (Random.value < _spawnChance)
+        if (Random.value > SpawnChance)
         {
             return;
         }

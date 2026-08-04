@@ -1150,6 +1150,7 @@ MonoBehaviour:
   _gameOverView: {fileID: 1271251241}
   _enableDoubleDamage: 1
   _enableHighSpeed: 1
+  _enabledHighSpawn: 1
 --- !u!1 &843677855
 GameObject:
   m_ObjectHideFlags: 0
