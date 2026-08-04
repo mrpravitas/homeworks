@@ -5,6 +5,7 @@ public class GameplayState : IUpdatableState
 {
     private GameStateMachine _stateMashine;
     private IGameplayInput _gameplayInput;
+    private IGameplayHud _gameplayHud;
     private GameplayConfig _config;
 
     private IEntityFactory<Object>[] _factories;
@@ -13,13 +14,15 @@ public class GameplayState : IUpdatableState
     private float _timer;
 
     public GameplayState(GameStateMachine stateMashine, IGameplayInput gameplayInput, 
-        GameplayConfig config, IEntityFactory<Object>[] factories, List<IGameModifier> gameModifiers)
+        GameplayConfig config, IEntityFactory<Object>[] factories, 
+        List<IGameModifier> gameModifiers, IGameplayHud hud)
     {
         _stateMashine = stateMashine;
         _gameplayInput = gameplayInput;
         _config = config;
         _factories = factories;
         _modifiers = gameModifiers;
+        _gameplayHud = hud;
     }
 
     public void Enter()
@@ -31,6 +34,8 @@ public class GameplayState : IUpdatableState
         {
             _modifiers[i].OnEnterGameplay();
         }
+
+        _gameplayHud.ShowModifiers(_modifiers);
     }
 
     public void Exit()
@@ -41,6 +46,8 @@ public class GameplayState : IUpdatableState
         {
             _modifiers[i].OnExitGameplay();
         }
+
+        _gameplayHud.HideModifiers();
     }
 
     public void Tick(float deltaTime)

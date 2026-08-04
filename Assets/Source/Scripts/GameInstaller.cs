@@ -19,6 +19,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private UITextHealthPresenter _healthPresenter;
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
+    [SerializeField] private GameplayHud _hud;
     [SerializeField] private PauseView _pauseView;
     [SerializeField] private GameOverView _gameOverView;
 
@@ -103,7 +104,7 @@ public class GameInstaller : MonoBehaviour
 
         CreateModifiers();
         _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView, 
-            _gameplayConfig, _factories, _gameModifiers));
+            _gameplayConfig, _factories, _gameModifiers, _hud));
 
         _stateMachine.Register(new PauseState(_stateMachine, _pauseView));
         _stateMachine.Register(new GameOverState(_stateMachine, _gameOverView));
