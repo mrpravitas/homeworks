@@ -6,6 +6,8 @@ public class TransformMovementService : IMovementService
 
     private Transform _transform;
 
+    public float SpeedMultiplier { get; set; } = 1f;
+
     public void Init(MovementConfig movementConfig, Transform transform)
     {
         _transform = transform;
@@ -20,6 +22,6 @@ public class TransformMovementService : IMovementService
         }
 
         Vector3 move = new Vector3(direction.x, direction.y, 0f);
-        _transform.Translate(move * (_movementConfig.MovementSpeed * Time.deltaTime));
+        _transform.Translate(move * (_movementConfig.MovementSpeed * SpeedMultiplier * Time.deltaTime));
     }
 }
