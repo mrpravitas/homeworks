@@ -1,0 +1,109 @@
+using Mirror;
+using System;
+using TMPro;
+using UnityEngine;
+
+public class NetworkPlayer : NetworkBehaviour
+{
+    [SerializeField] private TextMeshPro _nicknameLabel;
+    [SerializeField] private MeshRenderer _playerRenderer;
+
+    [SyncVar(hook = nameof(OnNicknameChanged))]
+    private string _nickname;
+    [SyncVar(hook = nameof(OnColorChanged))]
+    private Color _color;
+    [SyncVar(hook = nameof(OnReadyChanged))]
+    private bool _isReady;
+
+    public bool IsReady => _isReady;
+
+    public static event Action<uint, PlayerInfo> OnPlayerUpdated;
+    public static event Action<uint> OnPlayerRemoved;
+
+    public override void OnStartClient()
+    {
+        OnNicknameChanged("", _nickname);
+        OnColorChanged(Color.white, _color);
+        Broadcast();
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        CmdSetNickname("Player" + UnityEngine.Random.Range(1000, 9999));
+        CmdSetColor(Color.black); 
+    }
+
+    private void OnDisable()
+    {
+        OnPlayerRemoved?.Invoke(netId);
+    }
+
+    public void SetNickname(string nickname)
+    {
+        CmdSetNickname(nickname);
+    }
+
+    public void SetColor(Color color)
+    {
+        CmdSetColor(color);
+    }
+
+    public void SetReady(bool flag)
+    {
+        CmdSetReady(flag);
+    }
+
+    private void OnNicknameChanged(string oldNickname, string newNickname)
+    {
+        _nicknameLabel.text = newNickname;
+        Broadcast();
+    }
+
+    private void OnColorChanged(Color oldColor, Color newColor)
+    {
+        _nicknameLabel.color = newColor;
+        _playerRenderer.material.color = newColor;
+        Broadcast();
+    }
+
+    private void OnReadyChanged(bool oldFlag, bool newFlag)
+    {
+        Broadcast();
+    }
+
+    private void Broadcast()
+    {
+        PlayerInfo info = new PlayerInfo
+        {
+            Nickname = _nickname,
+            Color = _color,
+            IsReady = _isReady,
+        };
+        OnPlayerUpdated?.Invoke(netId, info);
+    }
+
+    [Command]
+    private void CmdSetNickname(string nickname)
+    {
+        _nickname = nickname;
+    }
+
+    [Command]
+    private void CmdSetColor(Color color)
+    {
+        _color = color;
+    }
+
+    [Command]
+    private void CmdSetReady(bool flag)
+    {
+        _isReady = flag;
+    }
+}
+
+public struct PlayerInfo
+{
+    public string Nickname;
+    public Color Color;
+    public bool IsReady;
+}
