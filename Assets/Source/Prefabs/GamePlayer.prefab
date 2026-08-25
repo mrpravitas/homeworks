@@ -408,6 +408,7 @@ MonoBehaviour:
   _characterController: {fileID: -1351375698438560475}
   _mouseSensitivity: 2
   _maxLookAngle: 75
+  _jumpForce: 5
 --- !u!114 &9033358233130396048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,7 +442,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   target: {fileID: 8313652951909392481}
-  syncPosition: 1
+  syncPosition: 0
   syncRotation: 1
   syncScale: 0
   onlySyncOnChange: 1
