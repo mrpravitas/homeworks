@@ -483,7 +483,7 @@ MonoBehaviour:
     dynamicAdjustment: 1
     dynamicAdjustmentTolerance: 1
     deliveryTimeEmaDuration: 2
-  evaluationMethod: 0
+  evaluationMethod: 1
   evaluationInterval: 3
   timeInterpolationGui: 0
 --- !u!1 &278468869
