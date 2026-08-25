@@ -7,9 +7,14 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _gravity;
     [SerializeField] private CharacterController _characterController;
+    [SerializeField] private float _mouseSensitivity = 2f;
+    [SerializeField] private float _maxLookAngle = 80f;
 
     private Transform _transform;
     private Vector3 _serverMoveDirection;
+    private float _serverRotationY;
+    private float _cameraXRotation;
+    private float _targetRotationY;
 
     private void Awake()
     {
@@ -21,21 +26,28 @@ public class PlayerController : NetworkBehaviour
         if (isOwned)
         {
             _camera.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
     private void Update()
     {
         if (!isOwned)
-        {
             return;
-        }
 
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-
         Vector3 move = _transform.right * horizontal + _transform.forward * vertical;
         CmdSetMoveDirection(move);
+
+        float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity;
+        _targetRotationY += mouseX;
+        CmdSetRotation(_targetRotationY);
+
+        float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity;
+        _cameraXRotation -= mouseY;
+        _cameraXRotation = Mathf.Clamp(_cameraXRotation, -_maxLookAngle, _maxLookAngle);
+        _camera.transform.localEulerAngles = new Vector3(_cameraXRotation, 0, 0);
     }
 
     [Command]
@@ -44,8 +56,16 @@ public class PlayerController : NetworkBehaviour
         _serverMoveDirection = direction.normalized;
     }
 
+    [Command]
+    private void CmdSetRotation(float rotationY)
+    {
+        _serverRotationY = rotationY;
+    }
+
     private void FixedUpdate()
     {
+        _transform.rotation = Quaternion.Euler(0, _serverRotationY, 0);
+
         Vector3 velocity = _serverMoveDirection * _moveSpeed;
         velocity.y += _gravity;
         _characterController.Move(velocity * Time.fixedDeltaTime);

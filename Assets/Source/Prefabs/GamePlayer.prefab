@@ -404,8 +404,10 @@ MonoBehaviour:
   syncInterval: 0
   _camera: {fileID: 7316475927191494120}
   _moveSpeed: 7.5
-  _gravity: 0
+  _gravity: -9.81
   _characterController: {fileID: -1351375698438560475}
+  _mouseSensitivity: 2
+  _maxLookAngle: 75
 --- !u!114 &9033358233130396048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,8 +457,8 @@ MonoBehaviour:
   onlySyncOnChangeCorrectionMultiplier: 2
   useFixedUpdate: 0
   rotationSensitivity: 0.01
-  positionPrecision: 0.01
-  scalePrecision: 0.01
+  positionPrecision: 0.0001
+  scalePrecision: 0.0001
 --- !u!1 &7056334145027793999
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,13 +484,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7056334145027793999}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8313652951909392481}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 2.5}
