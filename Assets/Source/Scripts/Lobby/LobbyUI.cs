@@ -92,7 +92,7 @@ public class LobbyUI : MonoBehaviour
 
         if (hasLocalPlayer)
         {
-            NetworkPlayer local = NetworkClient.localPlayer.GetComponent<NetworkPlayer>();
+            LobbyPlayer local = NetworkClient.localPlayer.GetComponent<LobbyPlayer>();
             _readyButtonText.text = local.IsReady ? "Unready" : "Ready";
         }
 
@@ -111,7 +111,7 @@ public class LobbyUI : MonoBehaviour
 
     private void OnApplyClicked()
     {
-        NetworkPlayer local = NetworkClient.localPlayer?.GetComponent<NetworkPlayer>();
+        LobbyPlayer local = NetworkClient.localPlayer?.GetComponent<LobbyPlayer>();
         if (local == null)
         {
             return;
@@ -128,7 +128,7 @@ public class LobbyUI : MonoBehaviour
 
     public void OnReadyClicked()
     {
-        NetworkPlayer local = NetworkClient.localPlayer?.GetComponent<NetworkPlayer>();
+        LobbyPlayer local = NetworkClient.localPlayer?.GetComponent<LobbyPlayer>();
         if (local != null)
         {
             local.SetReady(!local.IsReady);

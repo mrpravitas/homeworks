@@ -15,14 +15,14 @@ public class LobbyManager : MonoBehaviour
 
     private void OnEnable()
     {
-        NetworkPlayer.OnPlayerUpdated += HandlePlayerUpdated;
-        NetworkPlayer.OnPlayerRemoved += HandlePlayerRemoved;
+        LobbyPlayer.OnPlayerUpdated += HandlePlayerUpdated;
+        LobbyPlayer.OnPlayerRemoved += HandlePlayerRemoved;
     }
 
     private void OnDisable()
     {
-        NetworkPlayer.OnPlayerUpdated -= HandlePlayerUpdated;
-        NetworkPlayer.OnPlayerRemoved -= HandlePlayerRemoved;
+        LobbyPlayer.OnPlayerUpdated -= HandlePlayerUpdated;
+        LobbyPlayer.OnPlayerRemoved -= HandlePlayerRemoved;
     }
 
     private void HandlePlayerUpdated(uint id, PlayerInfo data)

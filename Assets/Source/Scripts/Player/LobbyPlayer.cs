@@ -1,10 +1,11 @@
 using Mirror;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NetworkPlayer : NetworkBehaviour
+public class LobbyPlayer : NetworkBehaviour
 {
     [SerializeField] private TextMeshPro _nicknameLabel;
     [SerializeField] private MeshRenderer _playerRenderer;
@@ -35,6 +36,11 @@ public class NetworkPlayer : NetworkBehaviour
     public override void OnStartServer()
     {
         DontDestroyOnLoad(gameObject);
+
+        if (IsGameScene())
+        {
+            SpawnGamePlayer();
+        }
     }
 
     public override void OnStartClient()
@@ -95,24 +101,41 @@ public class NetworkPlayer : NetworkBehaviour
         OnPlayerUpdated?.Invoke(netId, info);
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private bool IsGameScene()
     {
-        if (!isServer) return;
-
-        Transform start = NetworkManager.singleton.GetStartPosition();
-        if (start != null)
-        {
-            transform.position = start.position;
-            transform.rotation = start.rotation;
-            RpcRelocate(start.position, start.rotation);
-        }
+        return SceneManager.GetActiveScene().name == "Game";
     }
 
-    [ClientRpc]
-    private void RpcRelocate(Vector3 position, Quaternion rotation)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        transform.position = position;
-        transform.rotation = rotation;
+        if (!IsGameScene())
+        {
+            return;
+        }
+
+        if (isServer)
+        {
+            SpawnGamePlayer();
+        }
+
+        gameObject.SetActive(false);
+    }
+
+    private void SpawnGamePlayer()
+    {
+        GameObject prefab = NetworkManager.singleton.spawnPrefabs
+            .FirstOrDefault(p => p.name == "GamePlayer");
+
+        Transform start = NetworkManager.singleton.GetStartPosition();
+        Vector3 pos = start.position;
+        Quaternion rot = start.rotation;
+
+        GameObject go = Instantiate(prefab, pos, rot);
+
+        GamePlayer gp = go.GetComponent<GamePlayer>();
+        gp.SetData(_nickname, _color);
+
+        NetworkServer.Spawn(go, connectionToClient);
     }
 
     [Command]
