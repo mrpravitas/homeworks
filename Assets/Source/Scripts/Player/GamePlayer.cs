@@ -21,6 +21,12 @@ public class GamePlayer : NetworkBehaviour
     public override void OnStartClient()
     {
         ApplyData();
+        Debug.Log($"GamePlayer spawned: nickname={_nickname}");
+    }
+
+    public override void OnStopClient()
+    {
+        Debug.Log($"LobbyPlayer disconnected: nickname={_nickname}");
     }
 
     private void ApplyData()

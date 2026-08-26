@@ -75,11 +75,6 @@ public class PlayerController : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (isOwned)
-        {
-            Debug.Log($"dir={_serverMoveDirection} vel={_serverMoveDirection * _moveSpeed} grounded={_characterController.isGrounded} pos={transform.position}");
-        }
-
         _transform.rotation = Quaternion.Euler(0, _serverRotationY, 0);
 
         if (_characterController.isGrounded && _verticalVelocity < 0)

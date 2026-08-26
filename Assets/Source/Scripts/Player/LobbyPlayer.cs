@@ -45,6 +45,7 @@ public class LobbyPlayer : NetworkBehaviour
 
     public override void OnStartClient()
     {
+        Debug.Log($"Player connected: netId={netId}");
         DontDestroyOnLoad(gameObject);
         OnNicknameChanged("", _nickname);
         OnColorChanged(Color.white, _color);

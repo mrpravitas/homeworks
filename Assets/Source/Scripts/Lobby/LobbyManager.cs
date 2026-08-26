@@ -53,6 +53,7 @@ public class LobbyManager : MonoBehaviour
     {
         if (CanStartGame())
         {
+            Debug.Log("Game started");
             NetworkManager.singleton.ServerChangeScene(_gameScene);
         }
     }
