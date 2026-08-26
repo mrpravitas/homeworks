@@ -109,7 +109,7 @@ public class PlayerController : NetworkBehaviour
     [ClientRpc]
     private void RpcJump()
     {
-        if (isOwned) return; // владелец уже прыгнул локально
+        if (isOwned) return; 
         if (_characterController.isGrounded)
             _verticalVelocity = _jumpForce;
     }
