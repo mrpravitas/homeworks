@@ -27,6 +27,8 @@ public class NetworkStatusUI : MonoBehaviour
     {
         string role = NetworkServer.active ? "Host" : "Client";
         int players = NetworkManager.singleton.numPlayers;
-        _statusText.text = $"{role} | Players: {players}";
+        _statusText.text = NetworkServer.active ? 
+            $"{role} | Players: {players}" : 
+            role;
     }
 }
