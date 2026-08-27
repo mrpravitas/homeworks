@@ -20,6 +20,8 @@ public class Health : NetworkBehaviour
     [SyncVar(hook = nameof(OnHpChanged))]
     private int _currentHealth;
 
+    public bool IsFull => _currentHealth >= _maxHealth;
+
     public override void OnStartServer()
     {
         _currentHealth = _maxHealth;
@@ -38,6 +40,22 @@ public class Health : NetworkBehaviour
         if (_currentHealth <= 0)
         {
             RpcRespawn();
+        }
+    }
+
+    [Server]
+    public void Heal(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        _currentHealth += amount;
+
+        if (_currentHealth >  _maxHealth)
+        {
+            _currentHealth = _maxHealth;
         }
     }
 
@@ -72,6 +90,12 @@ public class Health : NetworkBehaviour
         _characterController.enabled = true;
         _meshRenderer.enabled = true;
 
+        CmdResetHealth();
+    }
+
+    [Command]
+    private void CmdResetHealth()
+    {
         _currentHealth = _maxHealth;
     }
 
