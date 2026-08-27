@@ -45,6 +45,15 @@ public class Weapon : NetworkBehaviour
         bool hasHit = Physics.Raycast(origin, direction, out RaycastHit hitInfo, _range);
         Vector3 endPoint = hasHit ? hitInfo.point : origin + direction * _range;
 
+        if (hasHit)
+        {
+            Health health = hitInfo.collider.GetComponentInParent<Health>();
+            if (health != null)
+            {
+                health.TakeDamage(_damage);
+            }
+        }
+
         RpcShotEffect(origin, endPoint);
     }
 
