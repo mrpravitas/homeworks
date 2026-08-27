@@ -1,12 +1,21 @@
 ﻿using UnityEngine;
 using Mirror;
 using TMPro;
+using System.Collections;
 
 public class Health : NetworkBehaviour
 {
     [SerializeField] private int _maxHealth;
+
+    [Header("UI")]
     [SerializeField] private TextMeshPro _healthLabel;
     [SerializeField] private TextMeshProUGUI _healthBar;
+    [Header("Respawn")]
+    [SerializeField] private float _respawnDelay;
+    [SerializeField] private PlayerController _controller;
+    [SerializeField] private CharacterController _characterController;
+    [SerializeField] private Weapon _weapon;
+    [SerializeField] private MeshRenderer _meshRenderer;
 
     [SyncVar(hook = nameof(OnHpChanged))]
     private int _currentHealth;
@@ -28,7 +37,6 @@ public class Health : NetworkBehaviour
 
         if (_currentHealth <= 0)
         {
-            _currentHealth = _maxHealth;
             RpcRespawn();
         }
     }
@@ -36,12 +44,35 @@ public class Health : NetworkBehaviour
     [ClientRpc]
     private void RpcRespawn()
     {
-        Transform start = NetworkManager.singleton.GetStartPosition();
+        StartCoroutine(RespawnCoroutine());
+    }
 
-        CharacterController cc = GetComponent<CharacterController>();
-        cc.enabled = false;
+    private IEnumerator RespawnCoroutine()
+    {
+        if (isOwned)
+        {
+            _controller.enabled = false;
+            _weapon.enabled = false;
+        }
+
+        _characterController.enabled = false;
+        _meshRenderer.enabled = false;
+
+        yield return new WaitForSeconds(_respawnDelay);
+
+        Transform start = NetworkManager.singleton.GetStartPosition();
         transform.position = start.position;
-        cc.enabled = true;
+
+        if (isOwned)
+        {
+            _controller.enabled = true;
+            _weapon.enabled = true;
+        }
+
+        _characterController.enabled = true;
+        _meshRenderer.enabled = true;
+
+        _currentHealth = _maxHealth;
     }
 
     private void OnHpChanged(int oldHp, int newHp)
