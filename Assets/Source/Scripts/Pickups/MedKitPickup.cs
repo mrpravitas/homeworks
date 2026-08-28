@@ -6,11 +6,14 @@ public class MedKitPickup : NetworkBehaviour
 {
     [SerializeField] private MeshRenderer _renderer;
     [SerializeField] private float _respawnTime;
+    [SerializeField] private bool _respawnable;
+    [SerializeField] private int _amount;
 
     [SyncVar(hook = nameof(OnAvailabilityChanged))]
     private bool _isAvailable = true;
 
     public bool IsAvailable => _isAvailable;
+    public int Amount => _amount;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -29,7 +32,11 @@ public class MedKitPickup : NetworkBehaviour
     public void SetUnavailable()
     {
         _isAvailable = false;
-        StartCoroutine(RespawnCoroutine());
+
+        if (_respawnable)
+        { 
+            StartCoroutine(RespawnCoroutine());
+        }
     }
 
     [Server]

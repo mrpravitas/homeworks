@@ -890,7 +890,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _maxHealth: 10
+  _maxHealth: 15
   _healthLabel: {fileID: 4368012186644368070}
   _healthBar: {fileID: 3410056776907980572}
   _respawnDelay: 3
@@ -968,6 +968,7 @@ MonoBehaviour:
   _health: {fileID: 668181428437012672}
   _healAmount: 8
   _medKitText: {fileID: 8361419428947455634}
+  _healCooldown: 3
 --- !u!1 &7056334145027793999
 GameObject:
   m_ObjectHideFlags: 0

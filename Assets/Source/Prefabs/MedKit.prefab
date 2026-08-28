@@ -169,3 +169,5 @@ MonoBehaviour:
   syncInterval: 0
   _renderer: {fileID: 1008181471825662061}
   _respawnTime: 10
+  _respawnable: 1
+  _amount: 1

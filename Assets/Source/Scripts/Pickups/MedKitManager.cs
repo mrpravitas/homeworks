@@ -8,9 +8,16 @@ public class MedKitManager : NetworkBehaviour
     [SerializeField] private Health _health;
     [SerializeField] private int _healAmount;
     [SerializeField] private TextMeshProUGUI _medKitText;
+    [SerializeField] private float _healCooldown;
 
     [SyncVar(hook = nameof(OnMedKitsChanged))]
     private int _medKits;
+    private float _lastHealTime;
+
+    private void Awake()
+    {
+        _lastHealTime = -_healCooldown;
+    }
 
     public void TryPickup(MedKitPickup pickup)
     {
@@ -29,7 +36,7 @@ public class MedKitManager : NetworkBehaviour
             return;
         }
 
-        _medKits++;
+        _medKits = Mathf.Min(_maxMedKits, _medKits + pickup.Amount);
         pickup.SetUnavailable();
     }
 
@@ -59,7 +66,13 @@ public class MedKitManager : NetworkBehaviour
             return;
         }
 
+        if (Time.time - _lastHealTime <= _healCooldown)
+        {
+            return;
+        }
+
         _medKits--;
         _health.Heal(_healAmount);
+        _lastHealTime = Time.time;
     }
 }
