@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MedKitPickup : Pickup
+public class GrenadePickup : Pickup
 {
     private void OnTriggerEnter(Collider other)
     {
@@ -15,12 +15,12 @@ public class MedKitPickup : Pickup
             return;
         }
 
-        MedKitManager medKitManager = player.GetComponent<MedKitManager>();
-        if (medKitManager == null)
+        GrenadeManager grenadeManager = player.GetComponent<GrenadeManager>();
+        if (grenadeManager == null)
         {
             return;
         }
 
-        medKitManager.TryPickup(this);  
+        grenadeManager.TryPickup(this);
     }
 }

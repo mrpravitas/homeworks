@@ -12,6 +12,8 @@ public class GamePlayer : NetworkBehaviour
     [SyncVar]
     private Color _color;
 
+    public string Nickname => _nickname;
+
     public void SetData(string nickname, Color color)
     {
         _nickname = nickname;
