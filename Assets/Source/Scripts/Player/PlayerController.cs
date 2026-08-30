@@ -61,6 +61,11 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    public void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     [Command]
     private void CmdSetMoveDirection(Vector3 direction)
     {

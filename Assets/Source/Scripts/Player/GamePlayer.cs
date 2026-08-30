@@ -11,6 +11,8 @@ public class GamePlayer : NetworkBehaviour
     private string _nickname;
     [SyncVar]
     private Color _color;
+    [SyncVar(hook = nameof(OnGameOverChanged))]
+    private bool _isGameOver;
 
     public string Nickname => _nickname;
 
@@ -34,6 +36,12 @@ public class GamePlayer : NetworkBehaviour
     public override void OnStartServer()
     {
         LeaderBoard.Instance?.RegisterPlayer(this);
+        MatchTimer.OnGameFinished += OnGameFinished;
+    }
+
+    public override void OnStopServer()
+    {
+        MatchTimer.OnGameFinished -= OnGameFinished;
     }
 
     private void ApplyData()
@@ -42,5 +50,28 @@ public class GamePlayer : NetworkBehaviour
         _nicknameLabel.color = _color;
 
         _playerRenderer.material.color = _color;
+    }
+
+    [Server]
+    private void OnGameFinished()
+    {
+        _isGameOver = true;
+    }
+
+    private void OnGameOverChanged(bool oldValue, bool newValue)
+    {
+        if (!_isGameOver)
+        {
+            return;
+        }
+
+        PlayerController controller = GetComponent<PlayerController>();
+        controller.UnlockCursor();
+        controller.enabled = false;
+        
+        GetComponent<Health>().enabled = false;
+        GetComponent<GrenadeManager>().enabled = false;
+        GetComponent<MedKitManager>().enabled = false;
+        GetComponentInChildren<Weapon>().enabled = false;
     }
 }

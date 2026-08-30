@@ -199,6 +199,7 @@ MonoBehaviour:
   _score: {fileID: 792812551917648900}
   _kills: {fileID: 1830649492712981888}
   _deaths: {fileID: 4159674695343345341}
+  _winnerColor: {r: 1, g: 0.69457716, b: 0, a: 1}
 --- !u!1 &5170540120692013573
 GameObject:
   m_ObjectHideFlags: 0

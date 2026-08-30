@@ -34,13 +34,11 @@ public class LeaderBoard : NetworkBehaviour
     private void OnEnable()
     {
         Health.OnPlayerDied += OnPlayerDied;
-        MatchTimer.OnGameFinished += OnGameFinished;
     }
 
     private void OnDisable()
     {
         Health.OnPlayerDied -= OnPlayerDied;
-        MatchTimer.OnGameFinished -= OnGameFinished;
     }
 
     private void OnPlayerDied(uint victimNetId, uint killerNetId)
@@ -55,19 +53,11 @@ public class LeaderBoard : NetworkBehaviour
         if (killerNetId != 0 && killerNetId != victimNetId && _entries.TryGetValue(killerNetId, out var killer))
         {
             killer.Kills++;
-            killer.Score = CalculateScore(killer);   // было victim.Score — баг, исправляем
+            killer.Score = CalculateScore(killer); 
             _entries[killerNetId] = killer;
         }
 
         SortEntries();
-    }
-
-    private void OnGameFinished()
-    {
-        foreach (var e in _synced)
-        {
-            Debug.Log($"Leaderboard: {e.Nickname} — Kills {e.Kills}, Deaths {e.Deaths}, Score {e.Score}");
-        }
     }
 
     private int CalculateScore(PlayerScoreEntry entry)

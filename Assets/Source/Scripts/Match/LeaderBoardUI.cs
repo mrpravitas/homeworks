@@ -1,27 +1,26 @@
 ﻿using Mirror;
 using UnityEngine;
 
-public class LeaderBoardUI : MonoBehaviour
+public class LeaderBoardUI : NetworkBehaviour
 {
     [SerializeField] private LeaderBoard _leaderBoard;
     [SerializeField] private GameObject _panel;
     [SerializeField] private Transform _rowParent;
     [SerializeField] private GameObject _rowPrefab;
 
+    [SyncVar(hook = nameof(OnGameOverChanged))]
+    private bool _isGameOver;
+
     private void OnEnable()
     {
-        if (_leaderBoard != null)
-        {
-            _leaderBoard.Leaderboard.Callback += OnLeaderboardChanged;
-        }
+        _leaderBoard.Leaderboard.Callback += OnLeaderboardChanged;
+        MatchTimer.OnGameFinished += OnGameFinished;
     }
 
     private void OnDisable()
     {
-        if (_leaderBoard != null)
-        {
-            _leaderBoard.Leaderboard.Callback -= OnLeaderboardChanged;
-        }
+        _leaderBoard.Leaderboard.Callback -= OnLeaderboardChanged;
+        MatchTimer.OnGameFinished -= OnGameFinished;
     }
 
     private void Start()
@@ -31,6 +30,11 @@ public class LeaderBoardUI : MonoBehaviour
 
     private void Update()
     {
+        if (_isGameOver)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             _panel.SetActive(true);
@@ -39,6 +43,12 @@ public class LeaderBoardUI : MonoBehaviour
         {
             _panel.SetActive(false);
         }
+    }
+
+    [Server]
+    private void OnGameFinished()
+    {
+        _isGameOver = true;
     }
 
     private void OnLeaderboardChanged(SyncList<PlayerScoreEntry>.Operation op, int index,
@@ -61,7 +71,13 @@ public class LeaderBoardUI : MonoBehaviour
         for (int i = 0; i < rows.Count; i++)
         {
             GameObject row = Instantiate(_rowPrefab, _rowParent);
-            row.GetComponent<LeaderBoardRow>().Set(rows[i]);
+            row.GetComponent<LeaderBoardRow>().Set(rows[i], i == 0 && _isGameOver);
         }
+    }
+
+    private void OnGameOverChanged(bool oldValue, bool newValue)
+    {
+        _panel.SetActive(true);
+        Rebuild();
     }
 }
