@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using Mirror;
-using TMPro;
+﻿using Mirror;
+using System;
 using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class Health : NetworkBehaviour
 {
@@ -22,13 +23,15 @@ public class Health : NetworkBehaviour
 
     public bool IsFull => _currentHealth >= _maxHealth;
 
+    public static event Action<uint, uint> OnPlayerDied;
+
     public override void OnStartServer()
     {
         _currentHealth = _maxHealth;
     }
 
     [Server]
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, uint attackerNetId = 0)
     {
         if (damageAmount <= 0)
         {
@@ -39,6 +42,7 @@ public class Health : NetworkBehaviour
 
         if (_currentHealth <= 0)
         {
+            OnPlayerDied?.Invoke(netId, attackerNetId);
             RpcRespawn();
         }
     }

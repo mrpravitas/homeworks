@@ -14,9 +14,12 @@ public class Grenade : NetworkBehaviour
     [SerializeField] private float _explosionVisualDuration;
     [SerializeField] private AudioClip _explosionSound;
 
+    private uint _ownerNetId;
+
     [Server]
-    public void Launch(Vector3 velocity)
+    public void Launch(Vector3 velocity, uint ownerNetId)
     {
+        _ownerNetId = ownerNetId;
         _rigidbody.velocity = velocity;
         StartCoroutine(LaunchCoroutine());
     }
@@ -44,7 +47,7 @@ public class Grenade : NetworkBehaviour
             float normalizedDistance = Mathf.Clamp01(distance / _blastRadius);
             float damageFalloff = 1f - normalizedDistance;
             int damage = (int)Mathf.Lerp(_minDamage, _maxDamage, damageFalloff);
-            health.TakeDamage(damage);
+            health.TakeDamage(damage, _ownerNetId);
 
             GamePlayer player = health.GetComponent<GamePlayer>();
             string who = player.Nickname;

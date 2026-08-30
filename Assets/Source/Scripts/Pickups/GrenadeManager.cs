@@ -97,7 +97,7 @@ public class GrenadeManager : NetworkBehaviour
 
         Grenade grenade = Instantiate(_grenadePrefab, origin, Quaternion.identity);
         NetworkServer.Spawn(grenade.gameObject);
-        grenade.Launch(direction * _throwSpeed);
+        grenade.Launch(direction * _throwSpeed, netId);
 
         string who = GetComponent<GamePlayer>().Nickname;
         Debug.Log($"{who} threw a grenade");

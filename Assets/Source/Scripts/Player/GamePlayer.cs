@@ -31,6 +31,11 @@ public class GamePlayer : NetworkBehaviour
         Debug.Log($"LobbyPlayer disconnected: nickname={_nickname}");
     }
 
+    public override void OnStartServer()
+    {
+        LeaderBoard.Instance?.RegisterPlayer(this);
+    }
+
     private void ApplyData()
     {
         _nicknameLabel.text = _nickname;

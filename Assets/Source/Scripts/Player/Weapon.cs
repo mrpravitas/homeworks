@@ -50,7 +50,7 @@ public class Weapon : NetworkBehaviour
             Health health = hitInfo.collider.GetComponentInParent<Health>();
             if (health != null)
             {
-                health.TakeDamage(_damage);
+                health.TakeDamage(_damage, netId);
             }
         }
 
