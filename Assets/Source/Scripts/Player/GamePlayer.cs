@@ -65,6 +65,11 @@ public class GamePlayer : NetworkBehaviour
             return;
         }
 
+        if (!isOwned)
+        {
+            return;
+        }
+
         PlayerController controller = GetComponent<PlayerController>();
         controller.UnlockCursor();
         controller.enabled = false;

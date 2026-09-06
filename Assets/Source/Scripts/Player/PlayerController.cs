@@ -12,8 +12,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private float _jumpForce;
 
     private Transform _transform;
-    [SyncVar] private Vector3 _serverMoveDirection;
-    [SyncVar] private float _serverRotationY;
+    private Vector3 _serverMoveDirection;
+    private float _serverRotationY;
     private float _cameraXRotation;
     private float _targetRotationY;
     private float _verticalVelocity;
@@ -56,7 +56,6 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         { 
-            _jumpPressed = true;
             CmdJump();
         }
     }
@@ -80,6 +79,11 @@ public class PlayerController : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        if (!isServer)
+        {
+            return;
+        }
+
         _transform.rotation = Quaternion.Euler(0, _serverRotationY, 0);
 
         if (_characterController.isGrounded && _verticalVelocity < 0)
@@ -103,14 +107,10 @@ public class PlayerController : NetworkBehaviour
     [Command]
     private void CmdJump()
     {
-        RpcJump();
-    }
-
-    [ClientRpc]
-    private void RpcJump()
-    {
-        if (isOwned) return; 
-        if (_characterController.isGrounded)
-            _verticalVelocity = _jumpForce;
+        if (!_characterController.isGrounded)
+        {
+            return;
+        }
+        _jumpPressed = true;
     }
 }
