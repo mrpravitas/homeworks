@@ -1,5 +1,6 @@
 ﻿using Mirror;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Grenade : NetworkBehaviour
@@ -34,11 +35,13 @@ public class Grenade : NetworkBehaviour
     [Server]
     private IEnumerator ExplodeCoroutine()
     {
+        HashSet<Health> affected = new();
+
         Collider[] hits = Physics.OverlapSphere(transform.position, _blastRadius, _targetMask);
         foreach (Collider hit in hits)
         {
             Health health = hit.GetComponentInParent<Health>();
-            if (health == null)
+            if (health == null || !affected.Add(health))
             {
                 continue;
             }
