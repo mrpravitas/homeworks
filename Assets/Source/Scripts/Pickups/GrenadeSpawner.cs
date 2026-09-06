@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-public class GernadeSpawner : MonoBehaviour
+public class GrenadeSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _grenadePickupPrefab;
     [SerializeField] private Transform[] _spawnPoints;

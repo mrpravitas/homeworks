@@ -58,7 +58,7 @@ public class Weapon : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcShotEffect(Vector3 origin, Vector3 endPoing)
+    private void RpcShotEffect(Vector3 origin, Vector3 endPoint)
     {
         if (isOwned)
         {
@@ -66,7 +66,7 @@ public class Weapon : NetworkBehaviour
         }
 
         _tracerRenderer.SetPosition(0, origin);
-        _tracerRenderer.SetPosition(1, endPoing);
+        _tracerRenderer.SetPosition(1, endPoint);
 
         if (_tracerCoroutine != null)
         {
