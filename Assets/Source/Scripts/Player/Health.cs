@@ -20,6 +20,7 @@ public class Health : NetworkBehaviour
 
     [SyncVar(hook = nameof(OnHpChanged))]
     private int _currentHealth;
+    private bool _isDead;
 
     public bool IsFull => _currentHealth >= _maxHealth;
 
@@ -28,12 +29,13 @@ public class Health : NetworkBehaviour
     public override void OnStartServer()
     {
         _currentHealth = _maxHealth;
+        _isDead = false;
     }
 
     [Server]
     public void TakeDamage(int damageAmount, uint attackerNetId = 0)
     {
-        if (damageAmount <= 0)
+        if (damageAmount <= 0 || _isDead)
         {
             return;
         }
@@ -42,6 +44,7 @@ public class Health : NetworkBehaviour
 
         if (_currentHealth <= 0)
         {
+            _isDead = true;
             OnPlayerDied?.Invoke(netId, attackerNetId);
             RpcRespawn();
         }
@@ -101,10 +104,18 @@ public class Health : NetworkBehaviour
     private void CmdResetHealth()
     {
         _currentHealth = _maxHealth;
+        _isDead = false;
     }
 
     private void OnHpChanged(int oldHp, int newHp)
     {
+        if (newHp <= 0)
+        {
+            _healthLabel.text = "Respawning...";
+            _healthBar.text = "Respawning...";
+            return;
+        }
+
         string text = $"{newHp}/{_maxHealth}";
 
         _healthLabel.text = text;
