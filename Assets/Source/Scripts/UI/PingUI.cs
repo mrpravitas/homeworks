@@ -6,9 +6,16 @@ public class PingUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _pingText;
 
+    private float _nextUpdate;
+
     private void Update()
     {
-        double rtt = NetworkTime.rtt * 1000;
-        _pingText.text = $"RTT: {rtt}";
+        if (Time.time < _nextUpdate)
+        {
+            return;
+        }
+
+        _nextUpdate = Time.time + 0.5f;
+        _pingText.text = $"RTT: {NetworkTime.rtt * 1000}";
     }
 }
