@@ -8,6 +8,7 @@ public class LobbyUI : MonoBehaviour
 {
     [SerializeField] private LobbyManager _lobbyManager;
     [SerializeField] private Transform _playerListContent;
+    [SerializeField] private GameObject _playerRowPrefab;
     [SerializeField] private Button _readyButton;
     [SerializeField] private Button _startButton;
     [SerializeField] private TMP_Text _readyButtonText;
@@ -18,6 +19,8 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private Color[] _paletteColors;
 
     private Color _selectedColor = Color.white;
+
+    private readonly List<LobbyRow> _rows = new();
 
     private void OnEnable()
     {
@@ -59,21 +62,19 @@ public class LobbyUI : MonoBehaviour
             return;
         }
 
-        foreach (Transform child in _playerListContent)
+        while (_rows.Count < players.Count)
         {
-            Destroy(child.gameObject);
+            _rows.Add(Instantiate(_playerRowPrefab, _playerListContent).GetComponent<LobbyRow>());
         }
 
-        foreach (PlayerInfo info in players)
+        for (int i = 0; i < _rows.Count; i++)
         {
-            GameObject go = new GameObject("Slot");
-            go.transform.SetParent(_playerListContent, false);
-
-            TMP_Text text = go.AddComponent<TextMeshProUGUI>();
-            string ready = info.IsReady ? " [Ready]" : "";
-            text.text = $"{info.Nickname}{ready}";
-            text.color = info.Color;
-            text.fontSize = 24;
+            bool isVisible = i < players.Count;
+            _rows[i].gameObject.SetActive(isVisible);
+            if (isVisible)
+            {
+                _rows[i].Set(players[i]);
+            }
         }
     }
 

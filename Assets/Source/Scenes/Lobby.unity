@@ -2527,6 +2527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lobbyManager: {fileID: 1336125356}
   _playerListContent: {fileID: 410027017}
+  _playerRowPrefab: {fileID: 4043496045572637033, guid: 02cfd2b695245144fb9ad31de67a46ef, type: 3}
   _readyButton: {fileID: 1031192586}
   _startButton: {fileID: 278468871}
   _readyButtonText: {fileID: 2010755229}
