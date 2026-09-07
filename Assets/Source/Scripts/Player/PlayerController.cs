@@ -13,6 +13,7 @@ public class PlayerController : NetworkBehaviour
 
     private Transform _transform;
     private Vector3 _serverMoveDirection;
+    private Vector3 _lastSentMoveDirection;
     private float _serverRotationY;
     private float _cameraXRotation;
     private float _targetRotationY;
@@ -43,11 +44,18 @@ public class PlayerController : NetworkBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 move = _transform.right * horizontal + _transform.forward * vertical;
-        CmdSetMoveDirection(move);
+        if (move != _lastSentMoveDirection)
+        {
+            _lastSentMoveDirection = move;
+            CmdSetMoveDirection(move);
+        }
 
         float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity;
-        _targetRotationY += mouseX;
-        CmdSetRotation(_targetRotationY);
+        if (mouseX != 0f)
+        {
+            _targetRotationY += mouseX;
+            CmdSetRotation(_targetRotationY);
+        }
 
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity;
         _cameraXRotation -= mouseY;
