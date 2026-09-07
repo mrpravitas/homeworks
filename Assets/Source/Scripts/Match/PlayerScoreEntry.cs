@@ -1,4 +1,6 @@
-﻿public struct PlayerScoreEntry
+﻿using System;
+
+public struct PlayerScoreEntry
 {
     public uint NetId;
     public string Nickname;

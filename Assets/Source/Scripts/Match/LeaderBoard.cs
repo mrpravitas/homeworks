@@ -70,9 +70,19 @@ public class LeaderBoard : NetworkBehaviour
         var order = _entries.Values
             .OrderByDescending(e => e.Score)
             .ThenBy(e => e.Deaths)
-            .ThenBy(e => e.Nickname);
+            .ThenBy(e => e.Nickname)
+            .ToList();
 
-        _synced.Clear();
-        _synced.AddRange(order);
+        if (!_synced.Select(e => e.NetId).SequenceEqual(order.Select(e => e.NetId)))
+        {
+            _synced.Clear();
+            _synced.AddRange(order);
+            return;
+        }
+
+        for (int i = 0; i < order.Count; i++)
+        {
+            _synced[i] = order[i];
+        }
     }
 }

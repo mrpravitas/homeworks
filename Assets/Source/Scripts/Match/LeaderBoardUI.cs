@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LeaderBoardUI : NetworkBehaviour
@@ -10,6 +11,9 @@ public class LeaderBoardUI : NetworkBehaviour
 
     [SyncVar(hook = nameof(OnGameOverChanged))]
     private bool _isGameOver;
+
+    private readonly List<LeaderBoardRow> _rows = new();
+    private LeaderBoardRow _headerRow;
 
     private void OnEnable()
     {
@@ -25,7 +29,7 @@ public class LeaderBoardUI : NetworkBehaviour
 
     private void Start()
     {
-        Rebuild();
+        Refresh();
     }
 
     private void Update()
@@ -54,30 +58,38 @@ public class LeaderBoardUI : NetworkBehaviour
     private void OnLeaderboardChanged(SyncList<PlayerScoreEntry>.Operation op, int index,
                                       PlayerScoreEntry oldItem, PlayerScoreEntry newItem)
     {
-        Rebuild();
+        Refresh();
     }
 
-    private void Rebuild()
+    private void Refresh()
     {
-        foreach (Transform child in _rowParent)
+        if (_headerRow == null)
         {
-            Destroy(child.gameObject);
+            _headerRow = Instantiate(_rowPrefab, _rowParent).GetComponent<LeaderBoardRow>();
+            _headerRow.SetHeader();
         }
 
-        GameObject header = Instantiate(_rowPrefab, _rowParent);
-        header.GetComponent<LeaderBoardRow>().SetHeader();
-
         var rows = _leaderBoard.Leaderboard;
-        for (int i = 0; i < rows.Count; i++)
+
+        while (_rows.Count < rows.Count)
         {
-            GameObject row = Instantiate(_rowPrefab, _rowParent);
-            row.GetComponent<LeaderBoardRow>().Set(rows[i], i == 0 && _isGameOver);
+            _rows.Add(Instantiate(_rowPrefab, _rowParent).GetComponent<LeaderBoardRow>());
+        }
+
+        for (int i = 0; i < _rows.Count; i++)
+        {
+            bool isVisible = i < rows.Count;
+            _rows[i].gameObject.SetActive(isVisible);
+            if (isVisible)
+            {
+                _rows[i].Set(rows[i], i == 0 && _isGameOver);
+            }
         }
     }
 
     private void OnGameOverChanged(bool oldValue, bool newValue)
     {
         _panel.SetActive(true);
-        Rebuild();
+        Refresh();
     }
 }
