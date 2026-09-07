@@ -1,26 +1,7 @@
-﻿using UnityEngine;
-
-public class MedKitPickup : Pickup
+﻿public class MedKitPickup : Pickup
 {
-    private void OnTriggerEnter(Collider other)
+    protected override ItemManager GetManager(GamePlayer player)
     {
-        if (!_isAvailable)
-        {
-            return;
-        }
-
-        GamePlayer player = other.GetComponent<GamePlayer>();
-        if (player == null)
-        {
-            return;
-        }
-
-        MedKitManager medKitManager = player.GetComponent<MedKitManager>();
-        if (medKitManager == null)
-        {
-            return;
-        }
-
-        medKitManager.TryPickup(this);  
+        return player.GetComponent<MedKitManager>();
     }
 }

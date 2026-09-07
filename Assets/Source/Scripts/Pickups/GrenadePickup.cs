@@ -1,26 +1,7 @@
-﻿using UnityEngine;
-
-public class GrenadePickup : Pickup
+﻿public class GrenadePickup : Pickup
 {
-    private void OnTriggerEnter(Collider other)
+    protected override ItemManager GetManager(GamePlayer player)
     {
-        if (!_isAvailable)
-        {
-            return;
-        }
-
-        GamePlayer player = other.GetComponent<GamePlayer>();
-        if (player == null)
-        {
-            return;
-        }
-
-        GrenadeManager grenadeManager = player.GetComponent<GrenadeManager>();
-        if (grenadeManager == null)
-        {
-            return;
-        }
-
-        grenadeManager.TryPickup(this);
+        return player.GetComponent<GrenadeManager>();
     }
 }

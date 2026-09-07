@@ -1236,13 +1236,16 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _maxMedKits: 2
+  _maxAmount: 2
+  _amountText: {fileID: 8361419428947455634}
+  _cooldown: 3
+  _noItemMessage: {fileID: 2159080114080910890}
+  _messageDuration: 0.5
+  _useKey: 104
+  _itemLabel: MedKits
+  _pickupName: medkit
   _health: {fileID: 668181428437012672}
   _healAmount: 8
-  _medKitText: {fileID: 8361419428947455634}
-  _healCooldown: 3
-  _noMedkitMessage: {fileID: 2159080114080910890}
-  _messageDuration: 0.5
 --- !u!114 &-5304245234247001976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1258,14 +1261,17 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _maxGrenades: 3
-  _grenadeText: {fileID: 6614398755801674877}
-  _grenadeCooldown: 4
+  _maxAmount: 3
+  _amountText: {fileID: 6614398755801674877}
+  _cooldown: 4
+  _noItemMessage: {fileID: 4377773120350681122}
+  _messageDuration: 0.5
+  _useKey: 103
+  _itemLabel: Grenades
+  _pickupName: grenade
   _grenadePrefab: {fileID: 5911598270688692224, guid: 1fa9fb125bad1e241a9020304de72f78, type: 3}
   _camera: {fileID: 7316475927191494120}
   _throwSpeed: 10
-  _noGrenadeMessage: {fileID: 4377773120350681122}
-  _messageDuration: 0.5
 --- !u!1 &6363129868276822666
 GameObject:
   m_ObjectHideFlags: 0

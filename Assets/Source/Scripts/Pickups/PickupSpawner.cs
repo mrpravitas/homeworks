@@ -1,9 +1,9 @@
-﻿using Mirror;
+using Mirror;
 using UnityEngine;
 
-public class GrenadeSpawner : MonoBehaviour
+public class PickupSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _grenadePickupPrefab;
+    [SerializeField] private Pickup _pickupPrefab;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private int _spawnCount;
 
@@ -16,13 +16,13 @@ public class GrenadeSpawner : MonoBehaviour
 
         for (int i = 0; i < _spawnCount && i < _spawnPoints.Length; i++)
         {
-            SpawnGrenade(_spawnPoints[i]);
+            SpawnPickup(_spawnPoints[i]);
         }
     }
 
-    private void SpawnGrenade(Transform point)
+    private void SpawnPickup(Transform point)
     {
-        GameObject gameObject = Instantiate(_grenadePickupPrefab, point.position, point.rotation);
+        GameObject gameObject = Instantiate(_pickupPrefab.gameObject, point.position, point.rotation);
         NetworkServer.Spawn(gameObject);
     }
 }

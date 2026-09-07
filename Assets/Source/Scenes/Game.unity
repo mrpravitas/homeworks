@@ -6961,15 +6961,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1828669135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d5a64f44335cb844a8dce8a6f8704cd, type: 3}
+  m_Script: {fileID: 11500000, guid: db660376d5475b341bd9300fccefb50b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _medKitPrefab: {fileID: 864628210912117990, guid: c6a7d43e70743ce49a619d38f81cfa87, type: 3}
+  _pickupPrefab: {fileID: 1495846124865431548, guid: acb5d550d00fe8f4ba7e7350329b909e, type: 3}
   _spawnPoints:
+  - {fileID: 712509344}
+  - {fileID: 1826557845}
+  - {fileID: 226686166}
   - {fileID: 1909181166}
-  - {fileID: 1749628473}
-  - {fileID: 1264328668}
-  - {fileID: 1931397380}
   _spawnCount: 4
 --- !u!114 &1828669138
 MonoBehaviour:
@@ -6980,14 +6980,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1828669135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33eccbcaf4647f7499e5354f70117ad2, type: 3}
+  m_Script: {fileID: 11500000, guid: db660376d5475b341bd9300fccefb50b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grenadePickupPrefab: {fileID: 31684134779914348, guid: acb5d550d00fe8f4ba7e7350329b909e, type: 3}
+  _pickupPrefab: {fileID: 2330561828412850552, guid: c6a7d43e70743ce49a619d38f81cfa87, type: 3}
   _spawnPoints:
-  - {fileID: 712509344}
-  - {fileID: 1826557845}
-  - {fileID: 226686166}
+  - {fileID: 1749628473}
+  - {fileID: 1264328668}
+  - {fileID: 1931397380}
   _spawnCount: 3
 --- !u!1 &1909181165
 GameObject:

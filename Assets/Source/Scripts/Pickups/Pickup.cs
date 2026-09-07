@@ -15,6 +15,30 @@ public abstract class Pickup : NetworkBehaviour
     public bool IsAvailable => _isAvailable;
     public int Amount => _amount;
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!_isAvailable)
+        {
+            return;
+        }
+
+        GamePlayer player = other.GetComponent<GamePlayer>();
+        if (player == null)
+        {
+            return;
+        }
+
+        ItemManager manager = GetManager(player);
+        if (manager == null)
+        {
+            return;
+        }
+
+        manager.TryPickup(this);
+    }
+
+    protected abstract ItemManager GetManager(GamePlayer player);
+
     [Server]
     public void SetUnavailable()
     {
