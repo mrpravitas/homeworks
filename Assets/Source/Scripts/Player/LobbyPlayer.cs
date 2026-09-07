@@ -16,6 +16,8 @@ public class LobbyPlayer : NetworkBehaviour
     private Color _color = Color.white;
     [SyncVar(hook = nameof(OnReadyChanged))]
     private bool _isReady;
+    [SyncVar(hook = nameof(OnSpawnedIntoGameChanged))]
+    private bool _spawnedIntoGame;
 
     public bool IsReady => _isReady;
 
@@ -37,9 +39,24 @@ public class LobbyPlayer : NetworkBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        if (IsGameScene())
+        NetworkServer.ReplaceHandler<AddPlayerMessage>(HandleAddPlayer);
+
+        if (!IsGameScene())
         {
-            SpawnGamePlayer();
+            return;
+        }
+
+        _nickname = "Player" + netId;
+        _color = Color.white;
+        SpawnGamePlayer();
+        _spawnedIntoGame = true;
+    }
+
+    private static void HandleAddPlayer(NetworkConnectionToClient conn, AddPlayerMessage msg)
+    {
+        if (conn.identity == null)
+        {
+            NetworkManager.singleton.OnServerAddPlayer(conn);
         }
     }
 
@@ -89,6 +106,14 @@ public class LobbyPlayer : NetworkBehaviour
     private void OnReadyChanged(bool oldFlag, bool newFlag)
     {
         Broadcast();
+    }
+
+    private void OnSpawnedIntoGameChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void Broadcast()
