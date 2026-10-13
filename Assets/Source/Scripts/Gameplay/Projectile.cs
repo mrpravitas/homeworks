@@ -4,6 +4,8 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _lifeTime;
     [SerializeField] private Color _hitColor;
+    [SerializeField] private GameObject _hitEffectPrefab;
+    [SerializeField] private float _hitEffectLifeTime;
 
     private Transform _transform;
     private Rigidbody _rigidbody;
@@ -40,6 +42,7 @@ public class Projectile : MonoBehaviour
         if (collision.collider.GetComponent<TargetMover>() != null)
         {
             ApplyColor(_hitColor);
+            SpawnHitEffect(collision.GetContact(0).point);
         }
     }
 
@@ -54,5 +57,11 @@ public class Projectile : MonoBehaviour
     private void ApplyColor(Color color)
     {
         _renderer.material.color = color;
+    }
+
+    private void SpawnHitEffect(Vector3 position)
+    {
+        GameObject effect = Instantiate(_hitEffectPrefab, position, Quaternion.identity);
+        Destroy(effect, _hitEffectLifeTime);
     }
 }
