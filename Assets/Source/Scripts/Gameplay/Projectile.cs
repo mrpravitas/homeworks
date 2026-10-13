@@ -3,9 +3,11 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _lifeTime;
+    [SerializeField] private Color _hitColor;
 
     private Transform _transform;
     private Rigidbody _rigidbody;
+    private Renderer _renderer;
     private float _lifeTimeRemaining;
     private bool _isFlying;
 
@@ -13,6 +15,7 @@ public class Projectile : MonoBehaviour
     {
         _transform = transform;
         _rigidbody = GetComponent<Rigidbody>();
+        _renderer = GetComponent<Renderer>();
     }
 
     private void Update()
@@ -33,6 +36,11 @@ public class Projectile : MonoBehaviour
 
         _isFlying = false;
         _rigidbody.useGravity = true;
+
+        if (collision.collider.GetComponent<TargetMover>() != null)
+        {
+            ApplyColor(_hitColor);
+        }
     }
 
     public void Launch(Vector3 direction, float speed)
@@ -41,5 +49,10 @@ public class Projectile : MonoBehaviour
         _rigidbody.velocity = direction * speed;
         _lifeTimeRemaining = _lifeTime;
         _isFlying = true;
+    }
+
+    private void ApplyColor(Color color)
+    {
+        _renderer.material.color = color;
     }
 }

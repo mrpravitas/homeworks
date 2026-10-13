@@ -147,3 +147,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifeTime: 3.5
+  _hitColor: {r: 0.024959564, g: 1, b: 0, a: 1}
