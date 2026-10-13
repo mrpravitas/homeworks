@@ -8,8 +8,9 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _hitEffectLifeTime;
 
     private Transform _transform;
-    private Rigidbody _rigidbody;
+    protected Rigidbody _rigidbody;
     private Renderer _renderer;
+    protected Color _defaultColor;
     private float _lifeTimeRemaining;
     private bool _isFlying;
 
@@ -18,6 +19,7 @@ public class Projectile : MonoBehaviour
         _transform = transform;
         _rigidbody = GetComponent<Rigidbody>();
         _renderer = GetComponent<Renderer>();
+        _defaultColor = _renderer.sharedMaterial.color;
     }
 
     private void Update()
@@ -25,7 +27,7 @@ public class Projectile : MonoBehaviour
         _lifeTimeRemaining -= Time.deltaTime;
         if (_lifeTimeRemaining <= 0f)
         {
-            Destroy(gameObject);
+            Despawn();
         }
     }
 
@@ -54,7 +56,7 @@ public class Projectile : MonoBehaviour
         _isFlying = true;
     }
 
-    private void ApplyColor(Color color)
+    protected void ApplyColor(Color color)
     {
         _renderer.material.color = color;
     }
@@ -63,5 +65,10 @@ public class Projectile : MonoBehaviour
     {
         GameObject effect = Instantiate(_hitEffectPrefab, position, Quaternion.identity);
         Destroy(effect, _hitEffectLifeTime);
+    }
+
+    protected virtual void Despawn()
+    {
+        Destroy(gameObject);
     }
 }
