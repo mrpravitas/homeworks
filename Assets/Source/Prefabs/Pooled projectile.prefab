@@ -147,6 +147,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifeTime: 3.5
-  _hitColor: {r: 0.023529414, g: 1, b: 0, a: 0}
+  _hitMaterial: {fileID: 2100000, guid: 4b37fea73f0f99348a10d74a28033c8d, type: 2}
   _hitEffectPrefab: {fileID: 3740087200418614343, guid: 07e7875a73e1ac04483bef3d10f4cc76, type: 3}
-  _hitEffectLifeTime: 0.5

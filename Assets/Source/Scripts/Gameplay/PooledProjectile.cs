@@ -4,7 +4,7 @@ public class PooledProjectile : Projectile, IPoolable
 {
     public void OnGet()
     {
-        ApplyColor(_defaultColor);
+        ResetMaterial();
     }
 
     public void OnReturn()

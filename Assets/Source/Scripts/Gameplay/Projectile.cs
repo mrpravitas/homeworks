@@ -3,13 +3,13 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _lifeTime;
-    [SerializeField] private Color _hitColor;
+    [SerializeField] private Material _hitMaterial;
     [SerializeField] private GameObject _hitEffectPrefab;
 
     private Transform _transform;
     protected Rigidbody _rigidbody;
     private Renderer _renderer;
-    protected Color _defaultColor;
+    private Material _defaultMaterial;
     private float _lifeTimeRemaining;
     private bool _isFlying;
 
@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour
         _transform = transform;
         _rigidbody = GetComponent<Rigidbody>();
         _renderer = GetComponent<Renderer>();
-        _defaultColor = _renderer.sharedMaterial.color;
+        _defaultMaterial = _renderer.sharedMaterial;
     }
 
     private void Update()
@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour
 
         if (collision.collider.GetComponent<TargetMover>() != null)
         {
-            ApplyColor(_hitColor);
+            ApplyHitMaterial();
             SpawnHitEffect(collision.GetContact(0).point);
         }
     }
@@ -55,9 +55,14 @@ public class Projectile : MonoBehaviour
         _isFlying = true;
     }
 
-    protected void ApplyColor(Color color)
+    protected void ApplyHitMaterial()
     {
-        _renderer.material.color = color;
+        _renderer.sharedMaterial = _hitMaterial;
+    }
+
+    protected void ResetMaterial()
+    {
+        _renderer.sharedMaterial = _defaultMaterial;
     }
 
     protected virtual void SpawnHitEffect(Vector3 position)
