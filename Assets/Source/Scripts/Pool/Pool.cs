@@ -22,7 +22,17 @@ public class Pool<T> where T : Component, IPoolable
 
     public T Get()
     {
-        T item = _items.Count > 0 ? _items.Pop() : Object.Instantiate(_prefab, _parent);
+        T item;
+        if (_items.Count > 0)
+        {
+            item = _items.Pop();
+        }
+        else
+        {
+            item = Object.Instantiate(_prefab, _parent);
+            Debug.Log($"Pool<{typeof(T).Name}> expanded");
+        }
+
         item.gameObject.SetActive(true);
         item.OnGet();
         return item;

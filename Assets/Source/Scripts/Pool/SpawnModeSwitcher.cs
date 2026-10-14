@@ -9,6 +9,11 @@ public class SpawnModeSwitcher : MonoBehaviour
 
     public static event Action<SpawnMode> ModeChanged;
 
+    private void Start()
+    {
+        Debug.Log($"Spawn mode switch key: {_key}");
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(_key))
