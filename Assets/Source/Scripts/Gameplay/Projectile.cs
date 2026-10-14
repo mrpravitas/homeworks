@@ -5,7 +5,6 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _lifeTime;
     [SerializeField] private Color _hitColor;
     [SerializeField] private GameObject _hitEffectPrefab;
-    [SerializeField] private float _hitEffectLifeTime;
 
     private Transform _transform;
     protected Rigidbody _rigidbody;
@@ -61,10 +60,9 @@ public class Projectile : MonoBehaviour
         _renderer.material.color = color;
     }
 
-    private void SpawnHitEffect(Vector3 position)
+    protected virtual void SpawnHitEffect(Vector3 position)
     {
-        GameObject effect = Instantiate(_hitEffectPrefab, position, Quaternion.identity);
-        Destroy(effect, _hitEffectLifeTime);
+        Instantiate(_hitEffectPrefab, position, Quaternion.identity);
     }
 
     protected virtual void Despawn()

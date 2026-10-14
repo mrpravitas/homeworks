@@ -18,4 +18,10 @@ public class PooledProjectile : Projectile, IPoolable
     {
         G.PoolManager.ReturnProjectile(this);
     }
+
+    protected override void SpawnHitEffect(Vector3 position)
+    {
+        PooledHitEffect effect = G.PoolManager.GetHitEffect();
+        effect.transform.position = position;
+    }
 }

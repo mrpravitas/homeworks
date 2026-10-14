@@ -705,6 +705,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _projectilePrefab: {fileID: 1420745690752121801, guid: 7dbe9b82e409f7e44818bfe29aef58e1, type: 3}
   _projectilePoolSize: 20
+  _hitEffectPrefab: {fileID: 2420914167868179075, guid: 7c3e90da18282334c8205583cb4b96d6, type: 3}
+  _hitEffectPoolSize: 10
 --- !u!114 &703902108
 MonoBehaviour:
   m_ObjectHideFlags: 0
