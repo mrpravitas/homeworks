@@ -24,7 +24,8 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(_spawnInterval);
 
             Transform point = _spawnPoints[Random.Range(0, _spawnPoints.Length)];
-            Instantiate(_enemyPrefab, point.position, Quaternion.identity);
+            Enemy enemy = Instantiate(_enemyPrefab, point.position, Quaternion.identity);
+            G.EnemySystem.Register(enemy);
         }
     }
 }

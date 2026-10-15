@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, ITickable
 {
     private Transform _transform;
     private float _speed;
@@ -10,9 +10,9 @@ public class Projectile : MonoBehaviour
         _transform = transform;
     }
 
-    private void Update()
+    public void Tick(float deltaTime)
     {
-        _transform.position += _transform.forward * (_speed * Time.deltaTime);
+        _transform.position += _transform.forward * (_speed * deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)

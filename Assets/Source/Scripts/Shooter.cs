@@ -31,5 +31,6 @@ public class Shooter : MonoBehaviour
     {
         Projectile projectile = Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
         projectile.SetSpeed(_projectileSpeed);
+        G.ProjectileSystem.Register(projectile);
     }
 }

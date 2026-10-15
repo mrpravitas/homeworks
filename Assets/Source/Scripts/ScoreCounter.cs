@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 public class ScoreCounter : MonoBehaviour
 {
-    [SerializeField] private ScoreUI _scoreUI;
+    public static event Action<int> OnScoreChanged;
 
     private int _score;
 
@@ -16,13 +17,9 @@ public class ScoreCounter : MonoBehaviour
         Enemy.OnDied -= OnEnemyDied;
     }
 
-    private void Update()
-    {
-        _scoreUI.SetScore(_score);
-    }
-
     private void OnEnemyDied(int points)
     {
         _score += points;
+        OnScoreChanged?.Invoke(_score);
     }
 }

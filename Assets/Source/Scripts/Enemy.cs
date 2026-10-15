@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ITickable
 {
     public static event Action<int> OnDied;
 
@@ -14,10 +14,10 @@ public class Enemy : MonoBehaviour
         _transform = transform;
     }
 
-    private void Update()
+    public void Tick(float deltaTime)
     {
         Vector3 position = _transform.position;
-        position.z -= _speed * Time.deltaTime;
+        position.z -= _speed * deltaTime;
         _transform.position = position;
     }
 
