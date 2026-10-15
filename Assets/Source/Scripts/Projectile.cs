@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float _destroyZ;
-
     private Transform _transform;
     private float _speed;
 
@@ -15,11 +13,6 @@ public class Projectile : MonoBehaviour
     private void Update()
     {
         _transform.position += _transform.forward * (_speed * Time.deltaTime);
-
-        if (_transform.position.z >= _destroyZ)
-        {
-            Destroy(gameObject);
-        }
     }
 
     private void OnCollisionEnter(Collision collision)

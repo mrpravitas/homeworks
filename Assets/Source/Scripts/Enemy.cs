@@ -6,7 +6,6 @@ public class Enemy : MonoBehaviour
     public static event Action<int> OnDied;
 
     [SerializeField] private float _speed;
-    [SerializeField] private float _destroyZ;
 
     private Transform _transform;
 
@@ -19,13 +18,6 @@ public class Enemy : MonoBehaviour
     {
         Vector3 position = _transform.position;
         position.z -= _speed * Time.deltaTime;
-
-        if (position.z <= _destroyZ)
-        {
-            Kill();
-            return;
-        }
-
         _transform.position = position;
     }
 
