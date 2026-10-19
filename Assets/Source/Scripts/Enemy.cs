@@ -14,6 +14,11 @@ public class Enemy : MonoBehaviour, ITickable
         _transform = transform;
     }
 
+    private void OnDestroy()
+    {
+        G.EnemySystem.Unregister(this);
+    }
+
     public void Tick(float deltaTime)
     {
         Vector3 position = _transform.position;

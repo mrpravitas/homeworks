@@ -10,6 +10,11 @@ public class Projectile : MonoBehaviour, ITickable
         _transform = transform;
     }
 
+    private void OnDestroy()
+    {
+        G.ProjectileSystem.Unregister(this);
+    }
+
     public void Tick(float deltaTime)
     {
         _transform.position += _transform.forward * (_speed * deltaTime);

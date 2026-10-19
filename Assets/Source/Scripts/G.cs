@@ -1,5 +1,5 @@
 public static class G
 {
-    public static ProjectileSystem ProjectileSystem;
-    public static EnemySystem EnemySystem;
+    public static TickSystem ProjectileSystem;
+    public static TickSystem EnemySystem;
 }

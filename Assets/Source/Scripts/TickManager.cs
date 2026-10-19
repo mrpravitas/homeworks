@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class TickManager : MonoBehaviour
 {
-    private EnemySystem _enemySystem;
-    private ProjectileSystem _projectileSystem;
+    [SerializeField] private float _nearBoundary;
+    [SerializeField] private float _farBoundary;
+
+    private TickSystem _enemySystem;
+    private TickSystem _projectileSystem;
 
     private void Awake()
     {
-        _enemySystem = new EnemySystem();
-        _projectileSystem = new ProjectileSystem();
+        _enemySystem = new TickSystem(_nearBoundary, _farBoundary);
+        _projectileSystem = new TickSystem(_nearBoundary, _farBoundary);
 
         G.EnemySystem = _enemySystem;
         G.ProjectileSystem = _projectileSystem;
