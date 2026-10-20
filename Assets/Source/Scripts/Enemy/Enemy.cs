@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, ITickable
+public class Enemy : MonoBehaviour, ITickable, IPoolable
 {
     public static event Action<int> OnDied;
 
@@ -14,9 +14,12 @@ public class Enemy : MonoBehaviour, ITickable
         _transform = transform;
     }
 
-    private void OnDestroy()
+    public void OnGet()
     {
-        G.EnemySystem.Unregister(this);
+    }
+
+    public void OnReturn()
+    {
     }
 
     public void Tick(float deltaTime)
@@ -29,6 +32,6 @@ public class Enemy : MonoBehaviour, ITickable
     public void Kill(bool fromPlayer = false)
     {
         OnDied?.Invoke(fromPlayer ? 1 : -1);
-        Destroy(gameObject);
+        G.EnemyPool.Release(this);
     }
 }

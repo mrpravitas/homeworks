@@ -6,11 +6,15 @@ public class Shooter : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] private float _fireRate;
     [SerializeField] private float _projectileSpeed;
+    [SerializeField] private int _initialPoolSize;
 
+    private Pool<Projectile> _pool;
     private float _fireTimer;
 
     private void Awake()
     {
+        _pool = new Pool<Projectile>(_projectilePrefab, _initialPoolSize);
+        G.ProjectilePool = _pool;
         _fireTimer = 1f / _fireRate;
     }
 
@@ -29,7 +33,8 @@ public class Shooter : MonoBehaviour
 
     private void Shoot()
     {
-        Projectile projectile = Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
+        Projectile projectile = _pool.Get();
+        projectile.transform.SetPositionAndRotation(_firePoint.position, _firePoint.rotation);
         projectile.SetSpeed(_projectileSpeed);
         G.ProjectileSystem.Register(projectile);
     }

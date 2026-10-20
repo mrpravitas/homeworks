@@ -6,7 +6,7 @@ public class ProjectileBoundary : MonoBehaviour
     {
         if (other.TryGetComponent(out Projectile projectile))
         {
-            Destroy(projectile.gameObject);
+            G.ProjectilePool.Release(projectile);
         }
     }
 }

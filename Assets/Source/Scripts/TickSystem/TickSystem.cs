@@ -17,6 +17,15 @@ public class TickSystem : ITickable
 
     public void Register(ITickable tickable)
     {
+        int index = _tickables.IndexOf(tickable);
+
+        if (index >= 0)
+        {
+            _frames[index] = 0;
+            _multipliers[index] = 1;
+            return;
+        }
+
         _tickables.Add(tickable);
         _multipliers.Add(1);
         _frames.Add(0);
@@ -45,6 +54,11 @@ public class TickSystem : ITickable
                 _tickables.RemoveAt(i);
                 _multipliers.RemoveAt(i);
                 _frames.RemoveAt(i);
+                continue;
+            }
+
+            if (tickable is Component component && !component.gameObject.activeSelf)
+            {
                 continue;
             }
 

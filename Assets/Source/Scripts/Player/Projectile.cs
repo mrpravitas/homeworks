@@ -1,18 +1,27 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour, ITickable
+public class Projectile : MonoBehaviour, ITickable, IPoolable
 {
     private Transform _transform;
+    private Rigidbody _rigidbody;
     private float _speed;
 
     private void Awake()
     {
         _transform = transform;
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void OnDestroy()
+    public void OnGet()
     {
-        G.ProjectileSystem.Unregister(this);
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+    }
+
+    public void OnReturn()
+    {
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 
     public void Tick(float deltaTime)
@@ -27,7 +36,7 @@ public class Projectile : MonoBehaviour, ITickable
             enemy.Kill(true);
         }
 
-        Destroy(gameObject);
+        G.ProjectilePool.Release(this);
     }
 
     public void SetSpeed(float speed)
