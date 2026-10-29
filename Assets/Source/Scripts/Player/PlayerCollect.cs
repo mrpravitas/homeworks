@@ -23,47 +23,49 @@ public class PlayerCollect : MonoBehaviour
         KeyStateChanged?.Invoke(_hasKey);
         ChestsRemainingChanged?.Invoke(_chestsToFind);
 
-        if (_collectButton != null)
-            _collectButton.SetActive(false);
+        _collectButton.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Pickup pickup = other.GetComponentInParent<Pickup>();
         if (pickup == null)
+        {
             return;
+        }
 
         _currentPickup = pickup;
 
-        if (_collectButton != null)
-            _collectButton.SetActive(true);
+        _collectButton.SetActive(true);
     }
 
     private void OnTriggerExit(Collider other)
     {
         Pickup pickup = other.GetComponentInParent<Pickup>();
         if (pickup == null)
+        { 
             return;
+        }
 
         if (_currentPickup == pickup)
         {
             _currentPickup = null;
 
-            if (_collectButton != null)
-                _collectButton.SetActive(false);
+            _collectButton.SetActive(false);
         }
     }
 
     public void Collect()
     {
         if (_currentPickup == null)
+        {
             return;
+        }
 
         Pickup pickup = _currentPickup;
         _currentPickup = null;
 
-        if (_collectButton != null)
-            _collectButton.SetActive(false);
+        _collectButton.SetActive(false);
 
         if (pickup._type == PickupType.Key)
         {
@@ -76,7 +78,9 @@ public class PlayerCollect : MonoBehaviour
         if (pickup._type == PickupType.Chest)
         {
             if (!_hasKey)
+            { 
                 return;
+            }
 
             _chestsFound++;
 

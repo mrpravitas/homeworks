@@ -34,7 +34,5 @@ public class SafeAreaAdapter : MonoBehaviour
 
         _rectTransform.anchorMin = anchorMin;
         _rectTransform.anchorMax = anchorMax;
-
-        Debug.Log($"Safe Area applied: {safeArea}");
     }
 }
