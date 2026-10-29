@@ -8,14 +8,5 @@ public enum PickupType
 
 public class Pickup : MonoBehaviour
 {
-    [SerializeField] private PickupType _type;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!other.TryGetComponent(out PlayerCollect player))
-            return;
-
-        if (player.TryCollect(_type))
-            Destroy(gameObject);
-    }
+    [SerializeField] public PickupType _type;
 }
