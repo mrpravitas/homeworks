@@ -10,9 +10,6 @@ public class GameInstaller : MonoBehaviour
     [Header("Entity")]
     [SerializeField] private EntitySpawnEntry[] _spawnEntries;
 
-    [Header("Player")]
-    [SerializeField] private PlayerController _player;
-
     [Header("UI")]
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
@@ -25,7 +22,6 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private bool _enableHighSpeed;
     [SerializeField] private bool _enabledHighSpawn;
 
-    private IInputService _inputService;
     private IMovementService _movementService;
     private IHealthService _healthService;
     private ILogger _logger;
@@ -41,31 +37,22 @@ public class GameInstaller : MonoBehaviour
     public void Construct(
         ILogger logger,
         IMessageBus bus,
-        IInputService inputService,
         IMovementService movementService,
         IHealthService healthService)
     {
         _logger = logger;
         _bus = bus;
-        _inputService = inputService;
         _movementService = movementService;
         _healthService = healthService;
 
         CreateFactories();
-        InitGame();
+        _bus.Publish(new GameStartedSignal());
         InitStates();
     }
 
     private void Update()
     {
         _stateMachine.Tick(Time.deltaTime);
-    }
-
-    private void InitGame()
-    {
-        _player.Init(_inputService, _movementService, _healthService);
-
-        _bus.Publish(new GameStartedSignal());
     }
 
     private void InitStates()

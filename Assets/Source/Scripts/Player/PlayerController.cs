@@ -1,4 +1,5 @@
 using UnityEngine;
+using VContainer;
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,17 +7,21 @@ public class PlayerController : MonoBehaviour
     private IMovementService _movementService;
     private IHealthService _healthService;
 
+    [Inject]
+    public void Construct(
+        IInputService inputService,
+        IMovementService movementService,
+        IHealthService healthService)
+    {
+        _inputService = inputService;
+        _movementService = movementService;
+        _healthService = healthService;
+    }
+
     private void Update()
     {
         Vector2 direction = _inputService.GetMovementDirection();
         _movementService.Move(direction);
-    }
-
-    public void Init(IInputService inputService, IMovementService movementService, IHealthService health)
-    {
-        _inputService = inputService;
-        _movementService = movementService;
-        _healthService = health;
     }
 
     public void TakeDamage(int amount)
