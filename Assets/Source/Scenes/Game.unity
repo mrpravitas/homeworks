@@ -654,6 +654,8 @@ MonoBehaviour:
     TypeName: GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+  _movementConfig: {fileID: 11400000, guid: f66288b5ca0deda4f868881752a9697e, type: 2}
+  _player: {fileID: 1037270710}
 --- !u!1 &350444885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,13 +1186,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthConfig: {fileID: 11400000, guid: 5523ce8fae9581f4396eeb02a3159d9d, type: 2}
-  movementConfig: {fileID: 11400000, guid: f66288b5ca0deda4f868881752a9697e, type: 2}
   _gameplayConfig: {fileID: 11400000, guid: 85688b2b654bfe54ba33cbf9684a167b, type: 2}
   _spawnEntries:
   - {fileID: 11400000, guid: 5889157e2a4dcba4f8c022cfa5709e6e, type: 2}
   - {fileID: 11400000, guid: c2d70612ed772cd41af7d79c0c382cbb, type: 2}
   _player: {fileID: 1037270710}
-  _switchInputCommand: {fileID: 126531352}
   _healthPresenter: {fileID: 789135069}
   _mainMenuView: {fileID: 67756525}
   _gameplayInputView: {fileID: 748063937}

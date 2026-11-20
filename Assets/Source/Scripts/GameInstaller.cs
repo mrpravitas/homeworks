@@ -6,7 +6,6 @@ public class GameInstaller : MonoBehaviour
 {
     [Header("Configs")]
     [SerializeField] private HealthConfig healthConfig;
-    [SerializeField] private MovementConfig movementConfig;
     [SerializeField] private GameplayConfig _gameplayConfig;
 
     [Header("Entity")]
@@ -41,11 +40,16 @@ public class GameInstaller : MonoBehaviour
     private List<IGameModifier> _gameModifiers;
 
     [Inject]
-    public void Construct(ILogger logger, IMessageBus bus, IInputService inputService)
+    public void Construct(
+        ILogger logger,
+        IMessageBus bus,
+        IInputService inputService,
+        IMovementService movementService)
     {
         _logger = logger;
         _bus = bus;
         _inputService = inputService;
+        _movementService = movementService;
 
         CreateServices();
         CreateFactories();
@@ -60,10 +64,6 @@ public class GameInstaller : MonoBehaviour
 
     private void CreateServices()
     {
-        TransformMovementService movementService = new TransformMovementService();
-        movementService.Init(movementConfig, _player.transform);
-        _movementService = movementService;
-
         _healthService = new HealthService(healthConfig, _logger, _healthPresenter);
     }
 

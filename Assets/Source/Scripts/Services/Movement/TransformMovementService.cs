@@ -2,16 +2,15 @@
 
 public class TransformMovementService : IMovementService
 {
-    private MovementConfig _movementConfig;
-
-    private Transform _transform;
+    private readonly MovementConfig _movementConfig;
+    private readonly Transform _transform;
 
     public float SpeedMultiplier { get; set; } = 1f;
 
-    public void Init(MovementConfig movementConfig, Transform transform)
+    public TransformMovementService(MovementConfig movementConfig, Transform transform)
     {
-        _transform = transform;
         _movementConfig = movementConfig;
+        _transform = transform;
     }
 
     public void Move(Vector2 direction)

@@ -19,11 +19,6 @@ public class PlayerController : MonoBehaviour
         _healthService = health;
     }
 
-    public void SetMovementService(IMovementService movementService)
-    {
-        _movementService = movementService;
-    }
-
     public void SetHealthService(IHealthService healthService)
     {
         _healthService = healthService;
