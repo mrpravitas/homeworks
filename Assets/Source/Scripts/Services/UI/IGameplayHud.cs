@@ -2,6 +2,6 @@
 
 public interface IGameplayHud
 {
-    void ShowModifiers(List<IGameModifier> modifiers);
+    void ShowModifiers(IReadOnlyList<IGameModifier> modifiers);
     void HideModifiers();
 }

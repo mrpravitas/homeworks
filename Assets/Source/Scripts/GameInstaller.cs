@@ -14,12 +14,6 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private PauseView _pauseView;
     [SerializeField] private GameOverView _gameOverView;
 
-    [Header("Modifiers")]
-    [SerializeField] private bool _enableDoubleDamage;
-    [SerializeField] private bool _enableHighSpeed;
-    [SerializeField] private bool _enabledHighSpawn;
-
-    private IMovementService _movementService;
     private IHealthService _healthService;
     private ILogger _logger;
     private IMessageBus _bus;
@@ -27,22 +21,21 @@ public class GameInstaller : MonoBehaviour
     private GameStateMachine _stateMachine;
 
     private IReadOnlyList<IEntityFactory> _factories;
-
-    private List<IGameModifier> _gameModifiers;
+    private IReadOnlyList<IGameModifier> _gameModifiers;
 
     [Inject]
     public void Construct(
         ILogger logger,
         IMessageBus bus,
-        IMovementService movementService,
         IHealthService healthService,
-        IReadOnlyList<IEntityFactory> factories)
+        IReadOnlyList<IEntityFactory> factories,
+        IReadOnlyList<IGameModifier> modifiers)
     {
         _logger = logger;
         _bus = bus;
-        _movementService = movementService;
         _healthService = healthService;
         _factories = factories;
+        _gameModifiers = modifiers;
 
         _bus.Publish(new GameStartedSignal());
         InitStates();
@@ -59,32 +52,11 @@ public class GameInstaller : MonoBehaviour
         _stateMachine.Init(_logger, _healthService);
 
         _stateMachine.Register(new MainMenuState(_stateMachine, _mainMenuView));
-
-        CreateModifiers();
-        _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView, 
+        _stateMachine.Register(new GameplayState(_stateMachine, _gameplayInputView,
             _gameplayConfig, _factories, _gameModifiers, _hud));
-
         _stateMachine.Register(new PauseState(_stateMachine, _pauseView));
         _stateMachine.Register(new GameOverState(_stateMachine, _gameOverView));
 
         _stateMachine.ChangeState<MainMenuState>();
-    }
-
-    private void CreateModifiers()
-    {
-        _gameModifiers = new List<IGameModifier>();
-
-        if (_enableDoubleDamage)
-        {
-            _gameModifiers.Add(new DoubleDamageModifier(_healthService, _logger));
-        }
-        if (_enableHighSpeed)
-        {
-            _gameModifiers.Add(new HighSpeedModifier(_movementService, _logger));
-        }
-        if (_enabledHighSpawn)
-        {
-            _gameModifiers.Add(new HighSpawnMultiplier(_factories, _logger));
-        }
     }
 }

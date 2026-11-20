@@ -7,7 +7,7 @@ public class GameplayHud : MonoBehaviour, IGameplayHud
 {
     [SerializeField] private TextMeshProUGUI _modifiersLabel;
 
-    public void ShowModifiers(List<IGameModifier> modifiers)
+    public void ShowModifiers(IReadOnlyList<IGameModifier> modifiers)
     {
         if (modifiers == null || modifiers.Count == 0)
         {
