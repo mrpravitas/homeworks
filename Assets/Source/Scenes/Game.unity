@@ -656,10 +656,14 @@ MonoBehaviour:
   autoInjectGameObjects: []
   _movementConfig: {fileID: 11400000, guid: f66288b5ca0deda4f868881752a9697e, type: 2}
   _healthConfig: {fileID: 11400000, guid: 5523ce8fae9581f4396eeb02a3159d9d, type: 2}
+  _gameplayConfig: {fileID: 11400000, guid: 85688b2b654bfe54ba33cbf9684a167b, type: 2}
   _spawnEntries:
   - {fileID: 11400000, guid: 5889157e2a4dcba4f8c022cfa5709e6e, type: 2}
   - {fileID: 11400000, guid: c2d70612ed772cd41af7d79c0c382cbb, type: 2}
   _player: {fileID: 1037270710}
+  _enableDoubleDamage: 1
+  _enableHighSpeed: 1
+  _enableHighSpawn: 1
 --- !u!1 &350444885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1189,15 +1193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b91a6230763f12c40a8e55cf9b0dc6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameplayConfig: {fileID: 11400000, guid: 85688b2b654bfe54ba33cbf9684a167b, type: 2}
-  _mainMenuView: {fileID: 67756525}
-  _gameplayInputView: {fileID: 748063937}
-  _hud: {fileID: 2143578177}
-  _pauseView: {fileID: 1741395763}
-  _gameOverView: {fileID: 1271251241}
-  _enableDoubleDamage: 1
-  _enableHighSpeed: 1
-  _enabledHighSpawn: 1
 --- !u!1 &843677855
 GameObject:
   m_ObjectHideFlags: 0

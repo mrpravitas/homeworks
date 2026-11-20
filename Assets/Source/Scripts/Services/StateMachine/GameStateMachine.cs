@@ -1,29 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
+using VContainer.Unity;
 
-public class GameStateMachine : IDisposable
+public sealed class GameStateMachine : IInitializable, ITickable, IDisposable
 {
     private readonly Dictionary<Type, IGameState> _states = new Dictionary<Type, IGameState>();
-    private IGameState _current;
-    private ILogger _logger;
-    private IHealthService _healthService;
+    private readonly IReadOnlyList<IGameState> _initialStates;
+    private readonly ILogger _logger;
+    private readonly IHealthService _healthService;
+    private readonly IMessageBus _bus;
 
-    public void Init(ILogger logger, IHealthService healthService)
-    { 
-        _logger = logger; 
+    private IDisposable _changeStateSubscription;
+    private IGameState _current;
+
+    public GameStateMachine(
+        IReadOnlyList<IGameState> states,
+        ILogger logger,
+        IHealthService healthService,
+        IMessageBus bus)
+    {
+        _initialStates = states;
+        _logger = logger;
         _healthService = healthService;
-        _healthService.OnDied += GameOver;
+        _bus = bus;
     }
 
-    public void Register<TState>(TState state) where TState : IGameState
+    public void Initialize()
     {
-        _states[state.GetType()] = state;
+        for (int i = 0; i < _initialStates.Count; i++)
+        {
+            Register(_initialStates[i]);
+        }
+
+        _changeStateSubscription = _bus.Subscribe<ChangeStateSignal>(OnChangeStateRequested);
+        _healthService.OnDied += GameOver;
+
+        ChangeState<MainMenuState>();
     }
 
     public void ChangeState<TState>() where TState : IGameState
     {
-        var type = typeof(TState);
+        ChangeState(typeof(TState));
+    }
 
+    public void Tick()
+    {
+        if (_current is IUpdatableState updatable)
+        {
+            updatable.Tick(Time.deltaTime);
+        }
+    }
+
+    public void Dispose()
+    {
+        _changeStateSubscription.Dispose();
+        _healthService.OnDied -= GameOver;
+    }
+
+    private void Register<TState>(TState state) where TState : IGameState
+    {
+        _states[state.GetType()] = state;
+    }
+
+    private void ChangeState(Type type)
+    {
         if (_states.TryGetValue(type, out IGameState next))
         {
             _current?.Exit();
@@ -33,17 +74,9 @@ public class GameStateMachine : IDisposable
         }
     }
 
-    public void Tick(float deltaTime)
+    private void OnChangeStateRequested(ChangeStateSignal signal)
     {
-        if (_current is IUpdatableState updatable)
-        {
-            updatable.Tick(deltaTime); 
-        }
-    }
-
-    public void Dispose()
-    {
-        _healthService.OnDied -= GameOver;
+        ChangeState(signal.StateType);
     }
 
     private void GameOver()

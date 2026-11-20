@@ -1,3 +1,5 @@
+using System;
+
 public readonly struct GameStartedSignal
 {
 }
@@ -41,5 +43,15 @@ public readonly struct ZoneEventSignal
     public ZoneEventSignal(string message)
     {
         Message = message;
+    }
+}
+
+public readonly struct ChangeStateSignal
+{
+    public readonly Type StateType;
+
+    public ChangeStateSignal(Type stateType)
+    {
+        StateType = stateType;
     }
 }

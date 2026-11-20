@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 public class GameplayState : IUpdatableState
 {
-    private GameStateMachine _stateMashine;
+    private IMessageBus _bus;
     private IGameplayInput _gameplayInput;
     private IGameplayHud _gameplayHud;
     private GameplayConfig _config;
@@ -13,11 +14,11 @@ public class GameplayState : IUpdatableState
 
     private float _timer;
 
-    public GameplayState(GameStateMachine stateMashine, IGameplayInput gameplayInput, 
+    public GameplayState(IMessageBus bus, IGameplayInput gameplayInput, 
         GameplayConfig config, IReadOnlyList<IEntityFactory> factories, 
         IReadOnlyList<IGameModifier> gameModifiers, IGameplayHud hud)
     {
-        _stateMashine = stateMashine;
+        _bus = bus;
         _gameplayInput = gameplayInput;
         _config = config;
         _factories = factories;
@@ -74,7 +75,7 @@ public class GameplayState : IUpdatableState
 
     private void OnPause()
     {
-        _stateMashine.ChangeState<PauseState>();
+        _bus.Publish(new ChangeStateSignal(typeof(PauseState)));
     }
 
     private Vector3 GetRandomPosition()

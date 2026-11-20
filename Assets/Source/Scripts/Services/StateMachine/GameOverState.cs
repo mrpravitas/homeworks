@@ -2,12 +2,10 @@
 
 public class GameOverState : IGameState
 {
-    private GameStateMachine _stateMashine;
     private IGameOverView _gameOverView;
 
-    public GameOverState(GameStateMachine stateMashine, IGameOverView gameOverView)
+    public GameOverState(IGameOverView gameOverView)
     {
-        _stateMashine = stateMashine;
         _gameOverView = gameOverView;
     }
 

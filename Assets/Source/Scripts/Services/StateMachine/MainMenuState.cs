@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
+using VContainer;
 
 public class MainMenuState : IGameState
 {
-    private GameStateMachine _stateMashine;
+    private IMessageBus _bus;
     private IMainMenuView _mainMenuView;
 
-    public MainMenuState(GameStateMachine stateMashine, IMainMenuView mainMenuView)
+    public MainMenuState(IMessageBus bus, IMainMenuView mainMenuView)
     {
-        _stateMashine = stateMashine;
+        _bus = bus;
         _mainMenuView = mainMenuView;
     }
 
@@ -26,7 +27,7 @@ public class MainMenuState : IGameState
 
     private void OnStartGame()
     {
-        _stateMashine.ChangeState<GameplayState>();
+        _bus.Publish(new ChangeStateSignal(typeof(GameplayState)));
     }
 
     private void OnExitGame()

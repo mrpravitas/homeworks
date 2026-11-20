@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using VContainer;
 
 public class PauseState : IGameState
 {
-    private GameStateMachine _stateMashine;
+    private IMessageBus _bus;
     private IPauseView _pauseView;
 
-    public PauseState(GameStateMachine stateMashine, IPauseView pauseView)
+    public PauseState(IMessageBus bus, IPauseView pauseView)
     {
-        _stateMashine = stateMashine;
+        _bus = bus;
         _pauseView = pauseView;
     }
 
@@ -30,7 +31,7 @@ public class PauseState : IGameState
 
     private void OnResume()
     {
-        _stateMashine.ChangeState<GameplayState>();
+        _bus.Publish(new ChangeStateSignal(typeof(GameplayState)));
     }
 
     private void OnExitToMenu()

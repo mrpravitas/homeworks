@@ -6,6 +6,7 @@ public class SceneLifetimeScope : LifetimeScope
 {
     [SerializeField] private MovementConfig _movementConfig;
     [SerializeField] private HealthConfig _healthConfig;
+    [SerializeField] private GameplayConfig _gameplayConfig;
     [SerializeField] private EntitySpawnEntry[] _spawnEntries;
     [SerializeField] private PlayerController _player;
 
@@ -20,8 +21,15 @@ public class SceneLifetimeScope : LifetimeScope
         builder.RegisterComponentInHierarchy<SwitchInputButton>();
         builder.RegisterComponent(_player);
 
+        builder.RegisterComponentInHierarchy<MainMenuView>().As<IMainMenuView>();
+        builder.RegisterComponentInHierarchy<GameplayInputView>().As<IGameplayInput>();
+        builder.RegisterComponentInHierarchy<GameplayHud>().As<IGameplayHud>();
+        builder.RegisterComponentInHierarchy<PauseView>().As<IPauseView>();
+        builder.RegisterComponentInHierarchy<GameOverView>().As<IGameOverView>();
+
         builder.RegisterInstance(_movementConfig);
         builder.RegisterInstance(_healthConfig);
+        builder.RegisterInstance(_gameplayConfig);
         builder.RegisterInstance(_player.transform);
 
         builder.Register<IMovementService, TransformMovementService>(Lifetime.Scoped);
@@ -48,5 +56,12 @@ public class SceneLifetimeScope : LifetimeScope
         {
             builder.Register<IGameModifier, HighSpawnMultiplier>(Lifetime.Scoped);
         }
+
+        builder.RegisterEntryPoint<GameStateMachine>(Lifetime.Scoped);
+
+        builder.Register<IGameState, MainMenuState>(Lifetime.Scoped);
+        builder.Register<IGameState, GameplayState>(Lifetime.Scoped);
+        builder.Register<IGameState, PauseState>(Lifetime.Scoped);
+        builder.Register<IGameState, GameOverState>(Lifetime.Scoped);
     }
 }
