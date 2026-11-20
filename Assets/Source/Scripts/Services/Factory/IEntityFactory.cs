@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public interface IEntityFactory<T> where T : Object
+public interface IEntityFactory
 {
-    public float SpawnChance { get; set; }
+    float SpawnChance { get; set; }
 
     void Create(Vector3 position);
 }

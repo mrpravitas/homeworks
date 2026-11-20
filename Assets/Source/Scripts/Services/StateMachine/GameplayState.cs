@@ -8,13 +8,13 @@ public class GameplayState : IUpdatableState
     private IGameplayHud _gameplayHud;
     private GameplayConfig _config;
 
-    private IEntityFactory<Object>[] _factories;
+    private IReadOnlyList<IEntityFactory> _factories;
     private List<IGameModifier> _modifiers;
 
     private float _timer;
 
     public GameplayState(GameStateMachine stateMashine, IGameplayInput gameplayInput, 
-        GameplayConfig config, IEntityFactory<Object>[] factories, 
+        GameplayConfig config, IReadOnlyList<IEntityFactory> factories, 
         List<IGameModifier> gameModifiers, IGameplayHud hud)
     {
         _stateMashine = stateMashine;
@@ -65,7 +65,7 @@ public class GameplayState : IUpdatableState
 
             Vector3 position = GetRandomPosition();
 
-            for (int i = 0; i < _factories.Length; i++)
+            for (int i = 0; i < _factories.Count; i++)
             {
                 _factories[i].Create(position);
             }

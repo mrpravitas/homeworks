@@ -7,9 +7,6 @@ public class GameInstaller : MonoBehaviour
     [Header("Configs")]
     [SerializeField] private GameplayConfig _gameplayConfig;
 
-    [Header("Entity")]
-    [SerializeField] private EntitySpawnEntry[] _spawnEntries;
-
     [Header("UI")]
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
@@ -29,7 +26,7 @@ public class GameInstaller : MonoBehaviour
 
     private GameStateMachine _stateMachine;
 
-    private IEntityFactory<Object>[] _factories;
+    private IReadOnlyList<IEntityFactory> _factories;
 
     private List<IGameModifier> _gameModifiers;
 
@@ -38,14 +35,15 @@ public class GameInstaller : MonoBehaviour
         ILogger logger,
         IMessageBus bus,
         IMovementService movementService,
-        IHealthService healthService)
+        IHealthService healthService,
+        IReadOnlyList<IEntityFactory> factories)
     {
         _logger = logger;
         _bus = bus;
         _movementService = movementService;
         _healthService = healthService;
+        _factories = factories;
 
-        CreateFactories();
         _bus.Publish(new GameStartedSignal());
         InitStates();
     }
@@ -70,21 +68,6 @@ public class GameInstaller : MonoBehaviour
         _stateMachine.Register(new GameOverState(_stateMachine, _gameOverView));
 
         _stateMachine.ChangeState<MainMenuState>();
-    }
-
-    private void CreateFactories()
-    {
-        _factories = new IEntityFactory<Object>[_spawnEntries.Length];
-
-        for (int i = 0; i < _factories.Length; i++)
-        {
-            var entry = _spawnEntries[i];
-
-            _factories[i] = new EntityFactory<Object>(
-                entry.Prefab,
-                entry.Config,
-                entry.SpawnChance);
-        }
     }
 
     private void CreateModifiers()

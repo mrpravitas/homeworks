@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
-public class EntityFactory<T> : IEntityFactory<T> where T : Object
+public sealed class EntityFactory : IEntityFactory
 {
-    private T _prefab;
-    private ScriptableObject _config;
+    private readonly IObjectResolver _resolver;
+    private readonly MonoBehaviour _prefab;
+    private readonly ScriptableObject _config;
 
     public float SpawnChance { get; set; }
 
-    public EntityFactory(T prefab, ScriptableObject config, float spawnChance)
+    public EntityFactory(IObjectResolver resolver, MonoBehaviour prefab, ScriptableObject config, float spawnChance)
     {
+        _resolver = resolver;
         _prefab = prefab;
         _config = config;
         SpawnChance = spawnChance;
@@ -21,7 +25,7 @@ public class EntityFactory<T> : IEntityFactory<T> where T : Object
             return;
         }
 
-        T entity = Object.Instantiate(_prefab, position, Quaternion.Euler(90f, 0f, 0f));
+        var entity = _resolver.Instantiate(_prefab, position, Quaternion.Euler(90f, 0f, 0f));
 
         if (entity is IEntityWithConfig entityWithConfig)
         {

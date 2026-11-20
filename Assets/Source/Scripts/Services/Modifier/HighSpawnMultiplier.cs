@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class HighSpawnMultiplier : IGameModifier
 {
-    private IEntityFactory<Object>[] _factories;
+    private IReadOnlyList<IEntityFactory> _factories;
     private ILogger _logger;
 
     private float[] _previousChances;
 
-    public HighSpawnMultiplier(IEntityFactory<Object>[] factories, ILogger logger)
+    public HighSpawnMultiplier(IReadOnlyList<IEntityFactory> factories, ILogger logger)
     {
         _factories = factories;
         _logger = logger;
@@ -15,9 +16,9 @@ public class HighSpawnMultiplier : IGameModifier
 
     public void OnEnterGameplay()
     {
-        _previousChances = new float[_factories.Length];
+        _previousChances = new float[_factories.Count];
 
-        for (int i = 0; i < _factories.Length; i++)
+        for (int i = 0; i < _factories.Count; i++)
         {
             var factory = _factories[i];
 
@@ -31,7 +32,7 @@ public class HighSpawnMultiplier : IGameModifier
 
     public void OnExitGameplay()
     {
-        for (int i = 0; i < _factories.Length; i++)
+        for (int i = 0; i < _factories.Count; i++)
         {
             _factories[i].SpawnChance = _previousChances[i];
         }
