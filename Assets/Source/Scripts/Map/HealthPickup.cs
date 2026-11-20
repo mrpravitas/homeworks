@@ -1,22 +1,26 @@
-using System;
 using UnityEngine;
+using VContainer;
 
-public class HealthPickup :  MonoBehaviour, IEntityWithConfig
+public class HealthPickup : MonoBehaviour, IEntityWithConfig
 {
-    public static event Action<string> OnEvent;
-
+    private IMessageBus _bus;
     private int _healthAmount;
+
+    [Inject]
+    public void Construct(IMessageBus bus)
+    {
+        _bus = bus;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-
-        if (player != null )
+        if (other.GetComponent<PlayerController>() == null)
         {
-            OnEvent?.Invoke("Heal pickup collected");
-            player.Heal(_healthAmount);
-            Destroy(gameObject);
+            return;
         }
+
+        _bus.Publish(new HealthPickupCollectedSignal(_healthAmount));
+        Destroy(gameObject);
     }
 
     public void Init(ScriptableObject config)

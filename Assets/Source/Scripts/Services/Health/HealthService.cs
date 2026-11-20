@@ -1,10 +1,13 @@
 ﻿using System;
 
-public class HealthService : IHealthService
+public class HealthService : IHealthService, IDisposable
 {
     private IHealthPresenter _healthPresenter;
     private ILogger _logger;
     private HealthConfig _healthConfig;
+
+    private IDisposable _damageSubscription;
+    private IDisposable _healSubscription;
 
     private int _current;
 
@@ -15,12 +18,22 @@ public class HealthService : IHealthService
 
     public float DamageMultiplier { get; set; } = 1f;
 
-    public HealthService(HealthConfig healthConfig, ILogger logger, IHealthPresenter healthPresenter = null)
+    public HealthService(HealthConfig healthConfig, ILogger logger, IMessageBus bus,
+        IHealthPresenter healthPresenter = null)
     {
         _healthConfig = healthConfig;
         _current = _healthConfig.MaxHealth;
         _healthPresenter = healthPresenter;
         _logger = logger;
+
+        _damageSubscription = bus.Subscribe<PlayerDamagedSignal>(OnDamaged);
+        _healSubscription = bus.Subscribe<HealthPickupCollectedSignal>(OnHealed);
+    }
+
+    public void Dispose()
+    {
+        _damageSubscription.Dispose();
+        _healSubscription.Dispose();
     }
 
     public void TakeDamage(int amout)
@@ -33,7 +46,6 @@ public class HealthService : IHealthService
         int finalAmount = (int)(amout * DamageMultiplier);
 
         _current -= finalAmount;
-        _logger.Log("You took damage");
 
         if (_current <= 0)
         {
@@ -53,7 +65,6 @@ public class HealthService : IHealthService
         }
 
         _current += amout;
-        _logger.Log("You healed");
 
         if (_current > _healthConfig.MaxHealth)
         {
@@ -61,6 +72,16 @@ public class HealthService : IHealthService
         }
 
         UpdatePresent();
+    }
+
+    private void OnDamaged(PlayerDamagedSignal signal)
+    {
+        TakeDamage(signal.Amount);
+    }
+
+    private void OnHealed(HealthPickupCollectedSignal signal)
+    {
+        Heal(signal.Amount);
     }
 
     private void UpdatePresent()

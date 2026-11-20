@@ -1,46 +1,51 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
+using VContainer;
 
 public class DangerZone : MonoBehaviour, IEntityWithConfig
 {
-    public static event Action<string> OnEvent;
-
-    private int _damagePerTick; 
+    private IMessageBus _bus;
+    private int _damagePerTick;
     private float _timePerTick;
 
     private Coroutine _damageCoroutine;
 
+    [Inject]
+    public void Construct(IMessageBus bus)
+    {
+        _bus = bus;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-        
-        if (player != null )
+        if (other.GetComponent<PlayerController>() == null)
         {
-            OnEvent?.Invoke("You enter danger zone");
-            _damageCoroutine = StartCoroutine(DamageCoroutine(player));
+            return;
         }
+
+        _bus.Publish(new ZoneEventSignal("You enter danger zone"));
+        _damageCoroutine = StartCoroutine(DamageCoroutine());
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
-
-        if (player != null && _damageCoroutine != null)
+        if (other.GetComponent<PlayerController>() == null || _damageCoroutine == null)
         {
-            OnEvent?.Invoke("You exit danger zone");
-
-            StopCoroutine(_damageCoroutine);
-            _damageCoroutine = null;
+            return;
         }
+
+        _bus.Publish(new ZoneEventSignal("You exit danger zone"));
+
+        StopCoroutine(_damageCoroutine);
+        _damageCoroutine = null;
     }
 
-    private IEnumerator DamageCoroutine(PlayerController player)
+    private IEnumerator DamageCoroutine()
     {
         while (true)
         {
             yield return new WaitForSeconds(_timePerTick);
-            player.TakeDamage(_damagePerTick);
+            _bus.Publish(new PlayerDamagedSignal(_damagePerTick, "Danger zone"));
         }
     }
 
