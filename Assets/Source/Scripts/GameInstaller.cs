@@ -16,7 +16,6 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private PlayerController _player;
 
     [Header("UI")]
-    [SerializeField] private SwitchInputButton _switchInputCommand;
     [SerializeField] private UITextHealthPresenter _healthPresenter;
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
@@ -29,10 +28,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private bool _enableHighSpeed;
     [SerializeField] private bool _enabledHighSpawn;
 
-    private IInputService _keyboardInput;
-    private IInputService _mouseInput;
-    private IInputService _currentInput;
-
+    private IInputService _inputService;
     private IMovementService _movementService;
     private IHealthService _healthService;
     private ILogger _logger;
@@ -45,10 +41,11 @@ public class GameInstaller : MonoBehaviour
     private List<IGameModifier> _gameModifiers;
 
     [Inject]
-    public void Construct(ILogger logger, IMessageBus bus)
+    public void Construct(ILogger logger, IMessageBus bus, IInputService inputService)
     {
         _logger = logger;
         _bus = bus;
+        _inputService = inputService;
 
         CreateServices();
         CreateFactories();
@@ -63,10 +60,6 @@ public class GameInstaller : MonoBehaviour
 
     private void CreateServices()
     {
-        _keyboardInput = new KeyboardInputService();
-        _mouseInput = new MouseInputService();
-        _currentInput = _keyboardInput;
-
         TransformMovementService movementService = new TransformMovementService();
         movementService.Init(movementConfig, _player.transform);
         _movementService = movementService;
@@ -76,24 +69,9 @@ public class GameInstaller : MonoBehaviour
 
     private void InitGame()
     {
-        _player.Init(_currentInput, _movementService, _healthService);
-        _switchInputCommand.SetHandler(SwitchInput);
+        _player.Init(_inputService, _movementService, _healthService);
 
         _bus.Publish(new GameStartedSignal());
-    }
-
-    private void SwitchInput()
-    {
-        _currentInput = _currentInput == _keyboardInput 
-            ? _mouseInput 
-            : _keyboardInput;
-
-        _player.SetInputService(_currentInput);
-
-        string inputName = _currentInput == _keyboardInput
-            ? nameof(KeyboardInputService)
-            : nameof(MouseInputService);
-        _bus.Publish(new InputSwitchedSignal(inputName));
     }
 
     private void InitStates()

@@ -19,11 +19,6 @@ public class PlayerController : MonoBehaviour
         _healthService = health;
     }
 
-    public void SetInputService(IInputService inputService)
-    {
-        _inputService = inputService;
-    }
-
     public void SetMovementService(IMovementService movementService)
     {
         _movementService = movementService;

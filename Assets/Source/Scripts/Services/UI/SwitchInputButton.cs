@@ -1,12 +1,18 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
-public class SwitchInputButton : MonoBehaviour, ISwithInput
+public class SwitchInputButton : MonoBehaviour
 {
     [SerializeField] private Button _button;
 
-    private Action _handler;
+    private IInputSwitcher _inputSwitcher;
+
+    [Inject]
+    public void Construct(IInputSwitcher inputSwitcher)
+    {
+        _inputSwitcher = inputSwitcher;
+    }
 
     private void OnEnable()
     {
@@ -18,13 +24,8 @@ public class SwitchInputButton : MonoBehaviour, ISwithInput
         _button?.onClick.RemoveListener(HandleClick);
     }
 
-    public void SetHandler(Action hadler)
-    {
-        _handler = hadler;
-    }
-
     private void HandleClick()
     {
-        _handler?.Invoke();
+        _inputSwitcher.Switch();
     }
 }
