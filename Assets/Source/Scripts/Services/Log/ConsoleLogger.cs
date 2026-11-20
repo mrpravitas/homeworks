@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
+using VContainer;
 
-public class ConsoleLogger : ILogger
+public sealed class ConsoleLogger : ILogger
 {
-    public void Init()
+    [Inject]
+    public void Construct()
     {
         DangerZone.OnEvent += Log;
         HealthPickup.OnEvent += Log;
     }
-    
+
     public void Dispose()
     {
         DangerZone.OnEvent -= Log;

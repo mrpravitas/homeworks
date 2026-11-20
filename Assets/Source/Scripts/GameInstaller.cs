@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 public class GameInstaller : MonoBehaviour
 {
@@ -42,8 +43,11 @@ public class GameInstaller : MonoBehaviour
 
     private List<IGameModifier> _gameModifiers;
 
-    private void Awake()
+    [Inject]
+    public void Construct(ILogger logger)
     {
+        _logger = logger;
+
         CreateServices();
         CreateFactories();
         InitGame();
@@ -53,11 +57,6 @@ public class GameInstaller : MonoBehaviour
     private void Update()
     {
         _stateMachine.Tick(Time.deltaTime);
-    }
-
-    private void OnDisable()
-    {
-        _logger.Dispose();
     }
 
     private void CreateServices()
@@ -70,14 +69,11 @@ public class GameInstaller : MonoBehaviour
         movementService.Init(movementConfig, _player.transform);
         _movementService = movementService;
 
-        _logger = new ConsoleLogger();
-
         _healthService = new HealthService(healthConfig, _logger, _healthPresenter);
     }
 
     private void InitGame()
     {
-        _logger.Init();
         _player.Init(_currentInput, _movementService, _healthService);
         _switchInputCommand.SetHandler(SwitchInput);
 
