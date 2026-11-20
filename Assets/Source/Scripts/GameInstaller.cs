@@ -36,6 +36,7 @@ public class GameInstaller : MonoBehaviour
     private IMovementService _movementService;
     private IHealthService _healthService;
     private ILogger _logger;
+    private IMessageBus _bus;
 
     private GameStateMachine _stateMachine;
 
@@ -44,9 +45,10 @@ public class GameInstaller : MonoBehaviour
     private List<IGameModifier> _gameModifiers;
 
     [Inject]
-    public void Construct(ILogger logger)
+    public void Construct(ILogger logger, IMessageBus bus)
     {
         _logger = logger;
+        _bus = bus;
 
         CreateServices();
         CreateFactories();
@@ -77,7 +79,7 @@ public class GameInstaller : MonoBehaviour
         _player.Init(_currentInput, _movementService, _healthService);
         _switchInputCommand.SetHandler(SwitchInput);
 
-        _logger.Log("Game has started");
+        _bus.Publish(new GameStartedSignal());
     }
 
     private void SwitchInput()
@@ -88,7 +90,10 @@ public class GameInstaller : MonoBehaviour
 
         _player.SetInputService(_currentInput);
 
-        _logger.Log("Input method switched");
+        string inputName = _currentInput == _keyboardInput
+            ? nameof(KeyboardInputService)
+            : nameof(MouseInputService);
+        _bus.Publish(new InputSwitchedSignal(inputName));
     }
 
     private void InitStates()
