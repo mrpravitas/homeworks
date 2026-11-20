@@ -5,7 +5,6 @@ using VContainer;
 public class GameInstaller : MonoBehaviour
 {
     [Header("Configs")]
-    [SerializeField] private HealthConfig healthConfig;
     [SerializeField] private GameplayConfig _gameplayConfig;
 
     [Header("Entity")]
@@ -15,7 +14,6 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private PlayerController _player;
 
     [Header("UI")]
-    [SerializeField] private UITextHealthPresenter _healthPresenter;
     [SerializeField] private MainMenuView _mainMenuView;
     [SerializeField] private GameplayInputView _gameplayInputView;
     [SerializeField] private GameplayHud _hud;
@@ -44,14 +42,15 @@ public class GameInstaller : MonoBehaviour
         ILogger logger,
         IMessageBus bus,
         IInputService inputService,
-        IMovementService movementService)
+        IMovementService movementService,
+        IHealthService healthService)
     {
         _logger = logger;
         _bus = bus;
         _inputService = inputService;
         _movementService = movementService;
+        _healthService = healthService;
 
-        CreateServices();
         CreateFactories();
         InitGame();
         InitStates();
@@ -60,11 +59,6 @@ public class GameInstaller : MonoBehaviour
     private void Update()
     {
         _stateMachine.Tick(Time.deltaTime);
-    }
-
-    private void CreateServices()
-    {
-        _healthService = new HealthService(healthConfig, _logger, _healthPresenter);
     }
 
     private void InitGame()

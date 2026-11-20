@@ -19,11 +19,6 @@ public class PlayerController : MonoBehaviour
         _healthService = health;
     }
 
-    public void SetHealthService(IHealthService healthService)
-    {
-        _healthService = healthService;
-    }
-
     public void TakeDamage(int amount)
     {
         _healthService.TakeDamage(amount);
