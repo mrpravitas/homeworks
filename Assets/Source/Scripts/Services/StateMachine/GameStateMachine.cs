@@ -36,6 +36,7 @@ public sealed class GameStateMachine : IInitializable, ITickable, IDisposable
         _changeStateSubscription = _bus.Subscribe<ChangeStateSignal>(OnChangeStateRequested);
         _healthService.OnDied += GameOver;
 
+        _bus.Publish(new GameStartedSignal());
         ChangeState<MainMenuState>();
     }
 
